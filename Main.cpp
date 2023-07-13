@@ -22,8 +22,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// フォントのロード
-	LPCSTR font_path = "Data/Fonts/Senobi-Gothic-Bold.ttf"; // 読み込むフォントファイルのパス
-	if (AddFontResourceEx(font_path, FR_PRIVATE, NULL) > 0) 
+	LPCSTR fontPath = "Data/Fonts/Senobi-Gothic-Bold.ttf"; // 読み込むフォントファイルのパス
+	if (AddFontResourceEx(fontPath, FR_PRIVATE, NULL) > 0) 
 	{
 		ChangeFont("せのびゴシック Bold", DX_CHARSET_DEFAULT);
 	}
@@ -62,7 +62,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	pScene->End();
 
 	// フォントのアンロード
-	if (RemoveFontResourceEx(font_path, FR_PRIVATE, NULL)) 
+	if (RemoveFontResourceEx(fontPath, FR_PRIVATE, NULL)) 
 	{
 	}
 	else

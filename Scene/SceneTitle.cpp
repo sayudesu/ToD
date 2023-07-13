@@ -6,8 +6,16 @@
 
 namespace
 {
-	// タイトルロゴのパス
-	const char* titlePath = "Data/Image/VitalFortress.png";
+	// タイトル関連
+	// パス
+	const char* kTitlePath = "Data/Image/VitalFortress.png";
+	// 位置
+	constexpr int kTitlePosX = Game::kScreenWidth / 2;
+	constexpr int kTitlePosY = Game::kScreenHeight / 2 - 200;
+	// 大きさ
+	constexpr int kTitleScale = 2;
+	// 角度
+	constexpr int kAngle = DX_PI / 180;
 }
 
 SceneTitle::SceneTitle():
@@ -22,7 +30,7 @@ SceneTitle::~SceneTitle()
 void SceneTitle::Init()
 {
 	// 画像ファイルをメモリにロードします。
-	m_hTitleLogo = LoadGraph(titlePath);
+	m_hTitleLogo = LoadGraph(kTitlePath);
 	// 画像サイズを取得
 	GetGraphSize(m_hTitleLogo, &m_logoImageSizeX, &m_logoImageSizeY);
 }
@@ -46,9 +54,7 @@ void SceneTitle::Draw()
 {
 	// 背景色
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xaaaaaa, true);
-	static int x = Game::kScreenWidth/2;
-	static int y = Game::kScreenHeight/2 - 200.0f;
-	static int scale = 2;
+
 	// タイトルロゴを描画
-	DrawRotaGraph(x, y, scale, DX_PI * 180, m_hTitleLogo, true);
+	DrawRotaGraph(kTitlePosX, kTitlePosY, kTitleScale, kAngle, m_hTitleLogo, true);
 }
