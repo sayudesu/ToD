@@ -43,10 +43,24 @@ void SceneTitle::End()
 
 SceneBase* SceneTitle::Update()
 {
-	if (Pad::isTrigger(PAD_INPUT_1))
+	if (Pad::isTrigger(PAD_INPUT_8))
 	{
-		return new SceneMain;
+		m_isChangeScene = true;
+		m_isSliderOpen = true;
 	}
+
+	if (m_isChangeScene)
+	{
+		if (SceneBase::UpdateSliderClose())
+		{
+			return new SceneMain;
+		}
+	}
+
+
+	// スライドを開ける
+	SceneBase::UpdateSlider(m_isSliderOpen);
+
 	return this;
 }
 
@@ -57,4 +71,6 @@ void SceneTitle::Draw()
 
 	// タイトルロゴを描画
 	DrawRotaGraph(kTitlePosX, kTitlePosY, kTitleScale, kAngle, m_hTitleLogo, true);
+
+	SceneBase::DrawSliderDoor();
 }

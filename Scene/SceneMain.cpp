@@ -1,5 +1,6 @@
 #include <DxLib.h>
 #include "SceneMain.h"
+#include "SceneTitle.h"
 #include "Object/Camera/Camera.h"
 #include "Object/Enemy/EnemyManager.h"
 #include "Object/ObstacleManager.h"
@@ -84,8 +85,21 @@ SceneBase* SceneMain::Update()
 		m_pObstacle->Create(m_pPlayer->SetMouseScreenPos());
 	}
 
+	if (Pad::isTrigger(PAD_INPUT_8))
+	{
+		m_isChangeScene = true;
+		m_isSliderOpen = true;
+	}
 
-	UpdateFade();
+	if (m_isChangeScene)
+	{
+		if (SceneBase::UpdateSliderClose())
+		{
+			return new SceneTitle;
+		}
+	}
+	// スライドを開ける
+	SceneBase::UpdateSlider(m_isSliderOpen);
 	return this;
 }
 
@@ -112,6 +126,6 @@ void SceneMain::Draw()
 		DrawLine3D(a, b, 0xffffff);
 	}
 
-	SceneBase::DrawFade();
+	SceneBase::DrawSliderDoor();
 }
 

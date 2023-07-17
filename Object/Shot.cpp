@@ -20,8 +20,17 @@ void Shot::Update()
 
 	if (!m_isScreenOut)
 	{
-		m_pos.x += 30.0f;
+		//m_pos.x += 30.0f;
 	}
+
+	const VECTOR enemy = VGet(-300.0f, 0.0f, 300.0f);
+
+	const VECTOR d = VSub(m_pos, enemy);
+
+	VSquareSize(d);
+
+	m_pos = VAdd(m_pos, d);
+
 }
 
 void Shot::Draw()

@@ -82,8 +82,7 @@ void Player::UpdateControl()
 	m_isResultObject = false;
 	// 設置します
 	if (Pad::isTrigger(PAD_INPUT_2))
-	{
-		
+	{		
 		// すでにその場所にオブジェクトが存在しないか確認
 		for (int i = 0; i < m_posHistory.size(); i++)
 		{

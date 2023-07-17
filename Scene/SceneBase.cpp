@@ -4,59 +4,65 @@
 
 namespace
 {
-	// フェード速度
-	constexpr int kFadeSpeed = 8;
+	// スライドスピード
+	constexpr int kSliderSpeed = 20;
 }
 
 SceneBase::SceneBase()
 {
-	// 初期設定はフェードアウト状態
-	m_fadeColor = GetColor(0, 0, 0);
-	m_fadeBright = 255;
-	m_fadeSpeed = -kFadeSpeed;
+	// スライダー関連
+	m_hDoor = LoadGraph("Data/Image/DoorH.png");
+	m_sliderPos = 0;
+	m_pos = { 0.0f,0.0f };
+	m_isSliderOpen = false;
+	m_isChangeScene = false;
 }
-
-void SceneBase::UpdateFade()
+void SceneBase::UpdateSlider(bool& open)
 {
-	m_fadeBright += m_fadeSpeed;
-	if (m_fadeBright >= 255)
+	// スライドを開ける
+	if (!open)
 	{
-		m_fadeBright = 255;
-		if (m_fadeSpeed > 0)
+		if (SceneBase::UpdateSliderOpen())
 		{
-			m_fadeSpeed = 0;
-		}
-	}
-	if (m_fadeBright <= 0)
-	{
-		m_fadeBright = 0;
-		if (m_fadeSpeed < 0)
-		{
-			m_fadeSpeed = 0;
+			open = true;
 		}
 	}
 }
 
-void SceneBase::DrawFade() const
+// スライドを開けるとき
+bool SceneBase::UpdateSliderOpen()
 {
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, m_fadeBright);
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, m_fadeColor, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	// 画面の端でスライドを止める
+	if (m_sliderPos < Game::kScreenWidth / 2)
+	{
+		m_sliderPos += kSliderSpeed;
+		return false;
+	}
+	return true;
 }
 
-bool SceneBase::IsFadingIn() const
+// スライドを閉じるとき
+bool SceneBase::UpdateSliderClose()
 {
-	if (m_fadeSpeed < 0)	return true;
-	return false;
+	if (m_sliderPos > 0)
+	{
+		m_sliderPos -= kSliderSpeed;
+		return false;
+	}
+
+	return true;
 }
 
-bool SceneBase::IsFadingOut() const
+// スライド関連
+void SceneBase::DrawSliderDoor()
 {
-	if (m_fadeSpeed > 0)	return true;
-	return false;
-}
+	DrawRotaGraph(Game::kScreenWidth / 2 - ((Game::kScreenWidth / 2) / 2) - m_sliderPos,
+		Game::kScreenHeight / 2,
+		1, DX_PI_F * 180.0f,
+		m_hDoor, true, false);
 
-void SceneBase::StartFadeOut()
-{
-	m_fadeSpeed = kFadeSpeed;
+	DrawRotaGraph(Game::kScreenWidth / 2 + ((Game::kScreenWidth / 2) / 2) + m_sliderPos,
+		Game::kScreenHeight / 2,
+		1, DX_PI_F * 180.0f,
+		m_hDoor, true, true);
 }
