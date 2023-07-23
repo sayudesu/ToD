@@ -146,9 +146,9 @@
     <ClCompile Include="Object\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Object\Enemy\EnemyNormal.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Object\Shot\ObstacleBase.cpp" />
-    <ClCompile Include="Object\Shot\ObstacleShot.cpp" />
-    <ClCompile Include="Object\ObstacleManager.cpp" />
+    <ClCompile Include="Object\Obstacle\ObstacleBase.cpp" />
+    <ClCompile Include="Object\Obstacle\ObstacleShot.cpp" />
+    <ClCompile Include="Object\Obstacle\ObstacleManager.cpp" />
     <ClCompile Include="Object\Player\Player.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
@@ -164,9 +164,9 @@
     <ClInclude Include="Object\Enemy\EnemyBase.h" />
     <ClInclude Include="Object\Enemy\EnemyManager.h" />
     <ClInclude Include="Object\Enemy\EnemyNormal.h" />
-    <ClInclude Include="Object\Shot\ObstacleBase.h" />
-    <ClInclude Include="Object\Shot\ObstacleShot.h" />
-    <ClInclude Include="Object\ObstacleManager.h" />
+    <ClInclude Include="Object\Obstacle\ObstacleBase.h" />
+    <ClInclude Include="Object\Obstacle\ObstacleShot.h" />
+    <ClInclude Include="Object\Obstacle\ObstacleManager.h" />
     <ClInclude Include="Object\Player\Player.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
     <ClInclude Include="scene\SceneBase.h" />

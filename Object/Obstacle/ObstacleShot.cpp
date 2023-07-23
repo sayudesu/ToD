@@ -1,5 +1,5 @@
 #include "ObstacleShot.h"
-#include "ShotBase.h"
+#include "Object/Shot/ShotBase.h"
 
 ObstacleShot::ObstacleShot(VECTOR pos):
 	m_shotCount(0)

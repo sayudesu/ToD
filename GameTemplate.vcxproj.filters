@@ -57,13 +57,13 @@
     <ClCompile Include="Object\Camera\Camera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Shot\ObstacleBase.cpp">
+    <ClCompile Include="Object\Obstacle\ObstacleBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Shot\ObstacleShot.cpp">
+    <ClCompile Include="Object\Obstacle\ObstacleShot.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Object\ObstacleManager.cpp">
+    <ClCompile Include="Object\Obstacle\ObstacleManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Object\Shot\ShotBase.cpp">
@@ -110,13 +110,13 @@
     <ClInclude Include="Object\Camera\Camera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Shot\ObstacleBase.h">
+    <ClInclude Include="Object\Obstacle\ObstacleBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Shot\ObstacleShot.h">
+    <ClInclude Include="Object\Obstacle\ObstacleShot.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Object\ObstacleManager.h">
+    <ClInclude Include="Object\Obstacle\ObstacleManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Object\Shot\ShotBase.h">

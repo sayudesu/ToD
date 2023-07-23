@@ -3,7 +3,7 @@
 #include "SceneTitle.h"
 #include "Object/Camera/Camera.h"
 #include "Object/Enemy/EnemyManager.h"
-#include "Object/ObstacleManager.h"
+#include "Object/Obstacle/ObstacleManager.h"
 #include "Object/Player/Player.h"
 #include "Object/Map/Map.h"
 #include "Util/game.h"
