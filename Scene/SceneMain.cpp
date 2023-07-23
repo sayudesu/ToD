@@ -6,14 +6,16 @@
 #include "Object/ObstacleManager.h"
 #include "Object/Player/Player.h"
 #include "Object/Map/Map.h"
-
+#include "Util/game.h"
 // あとで消す
 #include "Util/Pad.h"
 
 SceneMain::SceneMain():
 	m_pCamera(nullptr),
 	m_pEnemy(nullptr),
-	m_pObstacle(nullptr)
+	m_pObstacle(nullptr),
+	m_pPlayer(nullptr),
+	m_pMap(nullptr)
 {
 	// カメラクラスのインスタンス作成
 	m_pCamera = new Camera;
@@ -31,10 +33,15 @@ SceneMain::~SceneMain()
 {
 	// メモリの解放
 	delete m_pCamera;
+	m_pCamera = nullptr;
 	delete m_pEnemy;
+	m_pEnemy = nullptr;
 	delete m_pObstacle;
+	m_pObstacle = nullptr;
 	delete m_pPlayer;
+	m_pPlayer = nullptr;
 	delete m_pMap;
+	m_pMap = nullptr;
 }
 
 void SceneMain::Init()
@@ -46,6 +53,7 @@ void SceneMain::Init()
 	SetWriteZBuffer3D(true);
 	// ポリゴンの裏面を描画しない
 	SetUseBackCulling(true);
+
 	m_pCamera->Init();
 	m_pEnemy->Init();
 	m_pObstacle->Init();
@@ -64,14 +72,17 @@ void SceneMain::End()
 
 SceneBase* SceneMain::Update()
 {
+	// プレイヤー操作
+	m_pPlayer->Update();
+	// プレイヤーの設置するオブジェクト
+	m_pObstacle->Update();
+	// カメラ
+	m_pCamera->Update();
 	m_pCamera->GetMouseScreenPos(m_pPlayer->SetMouseScreenPos());
 	m_pCamera->GetMouseWorldPos(m_pPlayer->SetMouseWorldPos());
-
-
-	m_pCamera->Update();
+	// 敵
 	m_pEnemy->Update();
-	m_pObstacle->Update();
-	m_pPlayer->Update();
+	// マップ
 	m_pMap->Update();
 	
 	// 敵を生成(デバッグ用)
@@ -98,6 +109,7 @@ SceneBase* SceneMain::Update()
 			return new SceneTitle;
 		}
 	}
+
 	// スライドを開ける
 	SceneBase::UpdateSlider(m_isSliderOpen);
 	return this;
@@ -105,12 +117,13 @@ SceneBase* SceneMain::Update()
 
 void SceneMain::Draw()
 {
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xaaaaaa, true);
 	m_pMap->Draw();
 	m_pEnemy->Draw();
 	m_pObstacle->Draw();
 	m_pPlayer->Draw();
 
-	float lineScale = 300.0f;
+	constexpr float lineScale = 300.0f;
 	for (int X = -150; X < 1000; X += 30)
 	{
 		const VECTOR a = VGet(-lineScale, 0, X);

@@ -146,15 +146,15 @@
     <ClCompile Include="Object\Enemy\EnemyManager.cpp" />
     <ClCompile Include="Object\Enemy\EnemyNormal.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Object\ObstacleBase.cpp" />
-    <ClCompile Include="Object\ObstacleShot.cpp" />
+    <ClCompile Include="Object\Shot\ObstacleBase.cpp" />
+    <ClCompile Include="Object\Shot\ObstacleShot.cpp" />
     <ClCompile Include="Object\ObstacleManager.cpp" />
     <ClCompile Include="Object\Player\Player.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneMain.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
-    <ClCompile Include="Object\Shot.cpp" />
+    <ClCompile Include="Object\Shot\ShotBase.cpp" />
     <ClCompile Include="util\Pad.cpp" />
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
@@ -164,15 +164,15 @@
     <ClInclude Include="Object\Enemy\EnemyBase.h" />
     <ClInclude Include="Object\Enemy\EnemyManager.h" />
     <ClInclude Include="Object\Enemy\EnemyNormal.h" />
-    <ClInclude Include="Object\ObstacleBase.h" />
-    <ClInclude Include="Object\ObstacleShot.h" />
+    <ClInclude Include="Object\Shot\ObstacleBase.h" />
+    <ClInclude Include="Object\Shot\ObstacleShot.h" />
     <ClInclude Include="Object\ObstacleManager.h" />
     <ClInclude Include="Object\Player\Player.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
     <ClInclude Include="scene\SceneBase.h" />
     <ClInclude Include="scene\SceneMain.h" />
     <ClInclude Include="scene\SceneManager.h" />
-    <ClInclude Include="Object\Shot.h" />
+    <ClInclude Include="Object\Shot\ShotBase.h" />
     <ClInclude Include="Util\game.h" />
     <ClInclude Include="util\Pad.h" />
     <ClInclude Include="util\Vec2.h" />

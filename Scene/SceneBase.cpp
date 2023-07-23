@@ -1,7 +1,7 @@
 #include "SceneBase.h"
 #include <DxLib.h>
 #include "game.h"
-
+#include <cassert>
 namespace
 {
 	// スライドスピード
@@ -12,8 +12,8 @@ SceneBase::SceneBase()
 {
 	// スライダー関連
 	m_hDoor = LoadGraph("Data/Image/DoorH.png");
-	m_sliderPos = 0;
-	m_pos = { 0.0f,0.0f };
+	assert(m_hDoor != -1);
+	m_sliderPosX = 0;
 	m_isSliderOpen = false;
 	m_isChangeScene = false;
 }
@@ -33,9 +33,9 @@ void SceneBase::UpdateSlider(bool& open)
 bool SceneBase::UpdateSliderOpen()
 {
 	// 画面の端でスライドを止める
-	if (m_sliderPos < Game::kScreenWidth / 2)
+	if (m_sliderPosX < Game::kScreenWidth / 2)
 	{
-		m_sliderPos += kSliderSpeed;
+		m_sliderPosX += kSliderSpeed;
 		return false;
 	}
 	return true;
@@ -44,9 +44,9 @@ bool SceneBase::UpdateSliderOpen()
 // スライドを閉じるとき
 bool SceneBase::UpdateSliderClose()
 {
-	if (m_sliderPos > 0)
+	if (m_sliderPosX > 0)
 	{
-		m_sliderPos -= kSliderSpeed;
+		m_sliderPosX -= kSliderSpeed;
 		return false;
 	}
 
@@ -56,12 +56,12 @@ bool SceneBase::UpdateSliderClose()
 // スライド関連
 void SceneBase::DrawSliderDoor()
 {
-	DrawRotaGraph(Game::kScreenWidth / 2 - ((Game::kScreenWidth / 2) / 2) - m_sliderPos,
+	DrawRotaGraph(Game::kScreenWidth / 2 - ((Game::kScreenWidth / 2) / 2) - m_sliderPosX,
 		Game::kScreenHeight / 2,
 		1, DX_PI_F * 180.0f,
 		m_hDoor, true, false);
 
-	DrawRotaGraph(Game::kScreenWidth / 2 + ((Game::kScreenWidth / 2) / 2) + m_sliderPos,
+	DrawRotaGraph(Game::kScreenWidth / 2 + ((Game::kScreenWidth / 2) / 2) + m_sliderPosX,
 		Game::kScreenHeight / 2,
 		1, DX_PI_F * 180.0f,
 		m_hDoor, true, true);

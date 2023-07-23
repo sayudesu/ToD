@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 
-class Shot;
+class ShotBase;
 class ObstacleShot : public ObstacleBase
 {
 public:
@@ -15,7 +15,7 @@ public:
 	void Update();
 	void Draw();
 private:
-	std::vector<std::shared_ptr<Shot>>m_pShot;
+	std::vector<std::shared_ptr<ShotBase>>m_pShot;
 
 	int m_shotCount;
 };

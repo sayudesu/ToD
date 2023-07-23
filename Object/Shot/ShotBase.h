@@ -2,11 +2,11 @@
 #include <DxLib.h>
 
 // ショットクラス
-class Shot
+class ShotBase
 {
 public:
-	Shot(VECTOR pos);
-	virtual~Shot();
+	ShotBase(VECTOR pos);
+	virtual~ShotBase();
 
 	void Update();
 	void Draw();

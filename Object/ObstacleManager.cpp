@@ -1,5 +1,5 @@
 #include "ObstacleManager.h"
-#include "Object/ObstacleShot.h"
+#include "Object/Shot/ObstacleShot.h"
 
 ObstacleManager::ObstacleManager():
 	m_count(-1)

@@ -1,5 +1,5 @@
 #include "ObstacleShot.h"
-#include "Shot.h"
+#include "ShotBase.h"
 
 ObstacleShot::ObstacleShot(VECTOR pos):
 	m_shotCount(0)
@@ -25,7 +25,7 @@ void ObstacleShot::Update()
 	m_shotCount++;
 	if (m_shotCount == 60)
 	{
-		m_pShot.push_back(std::make_shared<Shot>(m_pos));
+		m_pShot.push_back(std::make_shared<ShotBase>(m_pos));
 		m_shotCount = 0;
 	}
 
