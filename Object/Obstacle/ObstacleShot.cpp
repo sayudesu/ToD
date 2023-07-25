@@ -21,7 +21,6 @@ void ObstacleShot::End()
 
 void ObstacleShot::Update()
 {
-	m_pos.y = 0.0f;
 	m_shotCount++;
 	if (m_shotCount == 60)
 	{
