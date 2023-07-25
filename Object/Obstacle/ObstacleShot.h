@@ -14,9 +14,10 @@ public:
 	void End();
 	void Update();
 	void Draw();
+
+	void GetTarGetPos(VECTOR pos);
 private:
 	std::vector<std::shared_ptr<ShotBase>>m_pShot;
-
 	int m_shotCount;
 };
 

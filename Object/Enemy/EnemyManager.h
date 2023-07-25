@@ -15,6 +15,7 @@ public:
 	void Update();
 	void Draw();
 private:
-	std::vector<std::shared_ptr<EnemyBase>>m_pEnemy;
+	// ノーマルエネミー
+	std::vector<std::shared_ptr<EnemyBase>>m_pEnemyNormal;
 };
 

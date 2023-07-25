@@ -43,3 +43,11 @@ void ObstacleShot::Draw()
 		shot->Draw();
 	}
 }
+
+void ObstacleShot::GetTarGetPos(VECTOR pos)
+{
+	for (int i = 0; i < m_pShot.size(); i++)
+	{
+		m_pShot[i]->GetTargetPos(pos);
+	}
+}

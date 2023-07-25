@@ -72,6 +72,15 @@ void SceneMain::End()
 
 SceneBase* SceneMain::Update()
 {
+#if true
+	static VECTOR pos = VGet(0,0,0);
+	static float speed = 10.0f;
+	if (Pad::isPress(PAD_INPUT_LEFT))	pos.x -= speed;
+	if (Pad::isPress(PAD_INPUT_RIGHT))pos.x += speed;
+	if (Pad::isPress(PAD_INPUT_UP))	pos.z += speed;
+	if (Pad::isPress(PAD_INPUT_DOWN))	pos.z -= speed;
+	m_pObstacle->GetTarGetPos(pos);
+#endif
 	// プレイヤー操作
 	m_pPlayer->Update();
 	// プレイヤーの設置するオブジェクト

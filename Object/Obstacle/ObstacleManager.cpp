@@ -40,3 +40,11 @@ void ObstacleManager::Draw()
 		obstacle->Draw();
 	}
 }
+
+void ObstacleManager::GetTarGetPos(VECTOR pos)
+{
+	for (auto& obstacle : m_pObstacle)
+	{
+		obstacle->GetTarGetPos(pos);
+	}
+}

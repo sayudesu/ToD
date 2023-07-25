@@ -15,6 +15,8 @@ public:
 	void Create(VECTOR pos);
 	void Update();
 	void Draw();
+
+	void GetTarGetPos(VECTOR pos);
 private:
 	std::vector<std::shared_ptr<ObstacleBase>>m_pObstacle;
 	int m_count;

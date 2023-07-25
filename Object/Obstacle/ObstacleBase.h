@@ -15,7 +15,9 @@ public:
 
 	// è·äQï®ÇÃà íu
 	VECTOR SetPos() const { return m_pos; }
+	virtual void GetTarGetPos(VECTOR pos) { m_targetPos = pos; }
 
 protected:
 	VECTOR m_pos = VGet(0.0f, 0.0f, 0.0f);
+	VECTOR m_targetPos = VGet(0.0f, 0.0f, 0.0f);
 };

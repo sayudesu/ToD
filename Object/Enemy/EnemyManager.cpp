@@ -21,14 +21,14 @@ void EnemyManager::Create(int num)
 {
 	for (int i = 0; i < num; i++)
 	{
-		m_pEnemy.push_back(std::make_shared<EnemyNormal>());
-		m_pEnemy[i]->Init();
+		m_pEnemyNormal.push_back(std::make_shared<EnemyNormal>());
+		m_pEnemyNormal[i]->Init();
 	}
 }
 
 void EnemyManager::Update()
 {
-	for (auto& enemyNormal : m_pEnemy)
+	for (auto& enemyNormal : m_pEnemyNormal)
 	{
 		enemyNormal->Update();
 	}
@@ -36,7 +36,7 @@ void EnemyManager::Update()
 
 void EnemyManager::Draw()
 {
-	for (auto& enemyNormal : m_pEnemy)
+	for (auto& enemyNormal : m_pEnemyNormal)
 	{
 		enemyNormal->Draw();
 	}
