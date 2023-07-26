@@ -18,6 +18,6 @@ public:
 	void GetTarGetPos(VECTOR pos);
 private:
 	std::vector<std::shared_ptr<ShotBase>>m_pShot;
-	int m_shotCount;
+	int m_shootFrameCount;
 };
 

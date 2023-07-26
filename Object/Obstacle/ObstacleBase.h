@@ -15,6 +15,7 @@ public:
 
 	// 障害物の位置
 	VECTOR SetPos() const { return m_pos; }
+	// ターゲットの位置
 	virtual void GetTarGetPos(VECTOR pos) { m_targetPos = pos; }
 
 protected:

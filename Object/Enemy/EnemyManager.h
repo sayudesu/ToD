@@ -1,4 +1,5 @@
 #pragma once
+#include <DxLib.h>
 #include <vector>
 #include <memory>
 
@@ -14,6 +15,10 @@ public:
 	void Create(int num);
 	void Update();
 	void Draw();
+	// ノーマルエネミーの位置
+	VECTOR SetNormalPos(int num);
+	int SetNormalNum();
+
 private:
 	// ノーマルエネミー
 	std::vector<std::shared_ptr<EnemyBase>>m_pEnemyNormal;

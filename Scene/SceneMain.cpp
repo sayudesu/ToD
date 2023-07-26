@@ -59,6 +59,9 @@ void SceneMain::Init()
 	m_pObstacle->Init();
 	m_pPlayer->Init();
 	m_pMap->Init();
+
+	m_pEnemy->Create(1);
+
 }
 
 void SceneMain::End()
@@ -79,7 +82,7 @@ SceneBase* SceneMain::Update()
 	if (Pad::isPress(PAD_INPUT_RIGHT))pos.x += speed;
 	if (Pad::isPress(PAD_INPUT_UP))	pos.z += speed;
 	if (Pad::isPress(PAD_INPUT_DOWN))	pos.z -= speed;
-	m_pObstacle->GetTarGetPos(pos);
+	m_pObstacle->GetTarGetPos(m_pEnemy->SetNormalPos(m_pEnemy->SetNormalNum()));
 #endif
 	// ƒvƒŒƒCƒ„[‘€ì
 	m_pPlayer->Update();

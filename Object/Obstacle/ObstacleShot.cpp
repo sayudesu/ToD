@@ -1,8 +1,13 @@
 #include "ObstacleShot.h"
 #include "Object/Shot/ShotBase.h"
 
+namespace
+{
+	constexpr int kShootFrameMax = 4;
+}
+
 ObstacleShot::ObstacleShot(VECTOR pos):
-	m_shotCount(0)
+	m_shootFrameCount(0)
 {
 	m_pos = pos;
 }
@@ -21,11 +26,11 @@ void ObstacleShot::End()
 
 void ObstacleShot::Update()
 {
-	m_shotCount++;
-	if (m_shotCount == 60)
+	m_shootFrameCount++;
+	if (m_shootFrameCount == kShootFrameMax)
 	{
 		m_pShot.push_back(std::make_shared<ShotBase>(m_pos));
-		m_shotCount = 0;
+		m_shootFrameCount = 0;
 	}
 
 	for (auto& shot : m_pShot)

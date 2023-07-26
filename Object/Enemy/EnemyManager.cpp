@@ -41,3 +41,19 @@ void EnemyManager::Draw()
 		enemyNormal->Draw();
 	}
 }
+
+VECTOR EnemyManager::SetNormalPos(int num)
+{
+	for (int i = 0; i < num; i++)
+	{
+		return m_pEnemyNormal[i]->SetPos();
+	}
+}
+
+int EnemyManager::SetNormalNum()
+{
+	for (auto& size : m_pEnemyNormal)
+	{
+		return m_pEnemyNormal.size();
+	}
+}
