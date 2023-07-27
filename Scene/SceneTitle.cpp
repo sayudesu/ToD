@@ -46,7 +46,7 @@ SceneBase* SceneTitle::Update()
 	if (Pad::isTrigger(PAD_INPUT_8))
 	{
 		m_isChangeScene = true;
-		m_isSliderOpen = true;
+		//m_isSliderOpen = true;
 	}
 
 	if (m_isChangeScene)
