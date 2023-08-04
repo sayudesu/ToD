@@ -1,14 +1,14 @@
 #include <DxLib.h>
 #include "SceneMain.h"
 #include "SceneTitle.h"
-#include "Object/Camera/Camera.h"
-#include "Object/Enemy/EnemyManager.h"
-#include "Object/Obstacle/ObstacleManager.h"
-#include "Object/Player/Player.h"
-#include "Object/Map/Map.h"
-#include "Util/game.h"
+#include "../Object/Camera/Camera.h"
+#include "../Object/Enemy/EnemyManager.h"
+#include "../Object/Obstacle/ObstacleManager.h"
+#include "../Object/Player/Player.h"
+#include "../Object/Map/Map.h"
+#include "../Util/game.h"
 // ‚ ‚Æ‚ÅÁ‚·
-#include "Util/Pad.h"
+#include "../Util/Pad.h"
 
 SceneMain::SceneMain():
 	m_pCamera(nullptr),
@@ -135,7 +135,7 @@ void SceneMain::Draw()
 	m_pObstacle->Draw();
 	m_pPlayer->Draw();
 
-	constexpr float lineScale = 300.0f;
+	constexpr int lineScale = 300;
 	for (int X = -150; X < 1000; X += 30)
 	{
 		const VECTOR a = VGet(-lineScale, 0, X);

@@ -1,6 +1,6 @@
 #include "Player.h"
 #include <DxLib.h>
-#include "Util/Pad.h"
+#include "../../Util/Pad.h"
 
 
 Player::Player() :

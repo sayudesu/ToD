@@ -1,19 +1,19 @@
 #include "SceneTitle.h"
-#include "Scene/SceneMain.h"
+#include "SceneMain.h"
 #include <DxLib.h>
-#include "Util/Pad.h"
-#include "Util/game.h"
+#include "../Util/Pad.h"
+#include "../Util/game.h"
 
 namespace
 {
 	// タイトル関連
 	// パス
-	const char* kTitlePath = "Data/Image/VitalFortress.png";
+	const char* kTitlePath = "Data/Image/VitalFortress2.png";
 	// 位置
 	constexpr int kTitlePosX = Game::kScreenWidth / 2;
-	constexpr int kTitlePosY = Game::kScreenHeight / 2 - 200;
+	constexpr int kTitlePosY = Game::kScreenHeight / 2 - 150;
 	// 大きさ
-	constexpr int kTitleScale = 2;
+	constexpr float kTitleScale = 1.0f;
 	// 角度
 	constexpr int kAngle = DX_PI / 180;
 }
@@ -46,7 +46,7 @@ SceneBase* SceneTitle::Update()
 	if (Pad::isTrigger(PAD_INPUT_8))
 	{
 		m_isChangeScene = true;
-		//m_isSliderOpen = true;
+		m_isSliderOpen = true;
 	}
 
 	if (m_isChangeScene)

@@ -1,7 +1,8 @@
 #include "SceneBase.h"
 #include <DxLib.h>
-#include "game.h"
 #include <cassert>
+#include "../Util/game.h"
+
 namespace
 {
 	// スライドスピード

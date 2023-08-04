@@ -1,9 +1,9 @@
-#include "Scene/SceneManager.h"
+#include "SceneManager.h"
 #include <cassert>
-#include "Scene/SceneBase.h"
-#include "Scene/SceneMain.h"
-#include "Scene/SceneTitle.h"
-#include "Util/Pad.h"
+#include "SceneBase.h"
+#include "SceneMain.h"
+#include "SceneTitle.h"
+#include "../Util/Pad.h"
 
 SceneManager::SceneManager():
 	m_pScene()

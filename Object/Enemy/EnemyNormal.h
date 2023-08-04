@@ -9,6 +9,12 @@ public:
 	void Init();
 	void End();
 	void Update();
+	void NextPosChange();
 	void Draw();
+private:
+	// 向き
+	VECTOR m_dir;
+	// ターゲット位置
+	VECTOR m_targetPos;
 };
 

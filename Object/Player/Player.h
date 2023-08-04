@@ -1,6 +1,6 @@
 #pragma once
 #include <DxLib.h>
-#include "Util/Vec2.h"
+#include "../../Util/Vec2.h"
 #include <vector>
 
 // プレイヤークラス
