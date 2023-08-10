@@ -156,6 +156,7 @@
     <ClCompile Include="Scene\SceneMain.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Object\Shot\ShotBase.cpp" />
+    <ClCompile Include="Util\SelectDrawer.cpp" />
     <ClCompile Include="Util\SoundFunctions.cpp" />
     <ClCompile Include="util\Pad.cpp" />
     <ClCompile Include="util\Vec2.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="scene\SceneMain.h" />
     <ClInclude Include="scene\SceneManager.h" />
     <ClInclude Include="Object\Shot\ShotBase.h" />
+    <ClInclude Include="Util\SelectDrawer.h" />
     <ClInclude Include="Util\SoundFunctions.h" />
     <ClInclude Include="Util\game.h" />
     <ClInclude Include="util\Pad.h" />

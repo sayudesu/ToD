@@ -32,12 +32,6 @@ void ObstacleManager::Update()
 	{
 		obstacle->Update();
 	}
-
-	auto enemies = std::remove_if(m_pObstacle.begin(), m_pObstacle.end(), [](const std::shared_ptr<ObstacleBase>& enemies)
-		{
-			return enemies->GetErase();
-		});
-	m_pObstacle.erase(enemies, m_pObstacle.end());
 }
 
 void ObstacleManager::Draw()
