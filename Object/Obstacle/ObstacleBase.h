@@ -18,14 +18,9 @@ public:
 	// ターゲットの位置
 	virtual void GetTarGetPos(VECTOR pos) { m_targetPos = pos; }
 
-	virtual bool GetErase();
-
 protected:
 	// 位置
 	VECTOR m_pos = VGet(0.0f, 0.0f, 0.0f);
 	// ターゲット位置
 	VECTOR m_targetPos = VGet(0.0f, 0.0f, 0.0f);
-
-
-	bool test = false;
 };

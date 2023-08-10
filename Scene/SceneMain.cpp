@@ -98,7 +98,7 @@ SceneBase* SceneMain::Update()
 	m_pMap->Update();
 	
 	// 敵を生成(デバッグ用)
-	if (Pad::isTrigger(PAD_INPUT_1))
+	if (Pad::isTrigger(PAD_INPUT_2))
 	{
 		m_pEnemy->Create(1);
 	}

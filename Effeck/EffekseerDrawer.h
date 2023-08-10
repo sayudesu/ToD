@@ -14,6 +14,8 @@ public:
 	void Draw();
 	// 位置を受け取ります
 	void GetPos(VECTOR pos);
+	// 現在エフェクトが再生されているかどうか
+	int SetPlayingNow();
 private:
 	VECTOR  m_pos;
 	int m_hEff;

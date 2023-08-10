@@ -22,6 +22,7 @@ ObstacleNormalShot::ObstacleNormalShot(VECTOR pos):
 	m_pos = pos;
 	// 設置用関数に移動
 	m_updateFunc = &ObstacleNormalShot::UpdateSetting;
+
 	m_pEffect = new EffekseerDrawer;
 }
 
@@ -36,7 +37,9 @@ void ObstacleNormalShot::Init()
 
 void ObstacleNormalShot::End()
 {
-
+	m_pEffect->End();
+	delete m_pEffect;
+	m_pEffect = nullptr;
 }
 
 void ObstacleNormalShot::Update()
@@ -52,6 +55,7 @@ void ObstacleNormalShot::UpdateSetting()
 	// ショットの打ち出しまでのフレームをカウントする
 	m_shotFirstDelayFrameCount++;
 	if (m_shotFirstDelayFrameCount > kShotFirstFrameMax)
+//	if (m_pEffect->SetPlayingNow() == -1)
 	{
 		// ショット用関数に移動
 		m_updateFunc = &ObstacleNormalShot::UpdateShot;
@@ -80,16 +84,7 @@ void ObstacleNormalShot::UpdateShot()
 	for (auto& shot : m_pShot)
 	{
 		shot->Update();
-	}
-
-	static int a = 0;
-	a++;
-	if (a > 60 * 5)
-	{
-		test = true;
-	//	a = 0;
-	}
-	
+	}	
 }
 
 void ObstacleNormalShot::Draw()

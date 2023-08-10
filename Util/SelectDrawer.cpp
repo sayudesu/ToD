@@ -41,10 +41,6 @@ SelectDrawer::SelectDrawer():
 
 SelectDrawer::~SelectDrawer()
 {
-	// メモリ解放
-	DeleteGraph(m_hSelectFrame);
-	DeleteGraph(m_hCatHand);
-
 	for (auto& text : m_pText)
 	{
 		text.reset();
@@ -56,6 +52,13 @@ void SelectDrawer::Add(int frameX, int frameY, int stringX, int stringY, const c
 	// インスタンスを作成
 	m_pText.push_back(std::make_shared<StringDrawer>(frameX, frameY, stringX, stringY, text, color, size, m_hSelectFrame, m_hCatHand));
 	selectNum++;
+}
+
+void SelectDrawer::End()
+{
+	// メモリ解放
+	DeleteGraph(m_hSelectFrame);
+	DeleteGraph(m_hCatHand);
 }
 
 void SelectDrawer::Update()

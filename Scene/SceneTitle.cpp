@@ -41,6 +41,7 @@ void SceneTitle::Init()
 	// 画像サイズを取得
 	GetGraphSize(m_hTitleLogo, &m_logoImageSizeX, &m_logoImageSizeY);
 
+	// 選択肢を追加
 	m_pSelect->Add(
 		Game::kScreenWidth / 2,
 		Game::kScreenHeight / 2 + 250,
@@ -63,12 +64,14 @@ void SceneTitle::Init()
 void SceneTitle::End()
 {
 	// メモリ解放
+	m_pSelect->End();
 	DeleteGraph(m_hTitleLogo);
 }
 
 SceneBase* SceneTitle::Update()
 {
-	if (Pad::isTrigger(PAD_INPUT_8))
+	// ゲームスタートを押した場合
+	if(m_pSelect->GetSelectNo() == 0)
 	{
 		m_isChangeScene = true;
 		m_isSliderOpen = true;

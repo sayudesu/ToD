@@ -24,10 +24,14 @@ void EffekseerDrawer::Init()
 
 void EffekseerDrawer::End()
 {
+	// Effekseerにより再生中の3Dエフェクトの描画を終了する。
+	DrawEffekseer3D_End();
 	// エフェクトリソースを削除する。(Effekseer終了時に破棄されるので削除しなくてもいい)
 	DeleteEffekseerEffect(m_hEff);
 	// 3D表示のエフェクトを停止する。
 	StopEffekseer3DEffect(m_hPlayEff);
+
+	m_pos = VGet(0, 0, 0);	
 }
 
 void EffekseerDrawer::Update()
@@ -58,4 +62,9 @@ void EffekseerDrawer::Draw()
 void EffekseerDrawer::GetPos(VECTOR pos)
 {
 	m_pos = pos;
+}
+
+int EffekseerDrawer::SetPlayingNow()
+{
+	return IsEffekseer3DEffectPlaying(m_hPlayEff);
 }

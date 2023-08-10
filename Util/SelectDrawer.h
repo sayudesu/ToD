@@ -32,6 +32,9 @@ public:
 	/// <param name="size">		 サイズ</param>
 	void Add(int frameX, int frameY, int stringX, int stringY, const char* text, int color, int size);
 
+	// メモリ解放
+	void End();
+
 	/// パッド入力の更新処理
 	void Update();
 
