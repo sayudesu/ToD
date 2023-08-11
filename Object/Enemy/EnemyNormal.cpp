@@ -29,8 +29,6 @@ void EnemyNormal::End()
 
 void EnemyNormal::Update()
 {
-//	m_pos.x -= 3.0f;
-
 	//**** ’Ç]‚ÌAI ****//
 	// Œü‚«‚ðŽZo
 	m_dir = VSub(m_targetPos, m_pos);
@@ -39,6 +37,7 @@ void EnemyNormal::Update()
 	// Œ»Ý“G‚ªŒü‚¢‚Ä‚¢‚é•ûŒü‚ÌƒxƒNƒgƒ‹‚ð¶¬‚·‚é
 	const MATRIX enemyRotMtx = MGetRotY(angle);
 	const VECTOR dir = VTransform(VGet(0, 0, 0), enemyRotMtx);
+	//printfDx("%2d\n",dir.z);
 	// ŽÎ‚ß‚É‚È‚Á‚½‚Æ‚«((1, 1, 0)‚È‚Ç)‚É‚¢‚Á‚½‚ñ’·‚³‚P‚É–ß‚·(³‹K‰»)
 	if (VSquareSize(m_dir) > 0)
 	{

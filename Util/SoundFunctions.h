@@ -7,9 +7,8 @@ namespace SoundFunctions
 		SoundIdTitle,		// タイトル画面のBGM
 		SoundIdMain,		// メイン(ゲームプレイ)画面のBGM
 
-		SoundIdCoin,
-		SoundIdJump,
-		SoundIdRun,
+		SoundIdSelct,
+		SoundIdSelctChange,
 
 		SoundIdMaxNum
 	}SoundId;

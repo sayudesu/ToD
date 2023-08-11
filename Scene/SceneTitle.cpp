@@ -18,6 +18,32 @@ namespace
 	constexpr float kTitleScale = 0.8f;
 	// 角度
 	constexpr int kAngle = DX_PI / 180;
+
+	// 選択用表示文字
+	// 1
+	constexpr int kFrame1PosX = Game::kScreenWidth / 2;
+	constexpr int kFrame1PosY = Game::kScreenHeight / 2 + 250;
+	constexpr int kString1PosX = -200;
+	constexpr int kString1PosY = -25;
+	const char* kStringGameStert = "ゲームスタート";
+	constexpr int kString1Color = 0xffffff;
+	constexpr int kString1Size = 52;
+	// 2
+	constexpr int kFrame2PosX = Game::kScreenWidth / 2;
+	constexpr int kFrame2PosY = Game::kScreenHeight / 2 + 350;
+	constexpr int kString2PosX = -65;
+	constexpr int kString2PosY = -25;
+	const char* kStringSetting = "設定";
+	constexpr int kString2Color = 0xffffff;
+	constexpr int kString2Size = 52;
+	// 3
+	constexpr int kFrame3PosX = Game::kScreenWidth / 2;
+	constexpr int kFrame3PosY = Game::kScreenHeight / 2 + 450;
+	constexpr int kString3PosX = -150;
+	constexpr int kString3PosY = -25;
+	const char* kStringCredit = "クレジット";
+	constexpr int kString3Color = 0xffffff;
+	constexpr int kString3Size = 52;
 }
 
 SceneTitle::SceneTitle():
@@ -42,23 +68,33 @@ void SceneTitle::Init()
 	GetGraphSize(m_hTitleLogo, &m_logoImageSizeX, &m_logoImageSizeY);
 
 	// 選択肢を追加
+	// 1
 	m_pSelect->Add(
-		Game::kScreenWidth / 2,
-		Game::kScreenHeight / 2 + 250,
-		-200,
-		-25,
-		"ゲームスタート",
-		0xffffff,
-		52);
-
+		kFrame1PosX,
+		kFrame1PosY,
+		kString1PosX,
+		kString1PosY,
+		kStringGameStert,
+		kString1Color,
+		kString1Size);
+	// 2
 	m_pSelect->Add(
-		Game::kScreenWidth / 2,
-		Game::kScreenHeight / 2 + 350,
-		-150,
-		-25,
-		"クレジット",
-		0xffffff,
-		52);
+		kFrame2PosX,
+		kFrame2PosY,
+		kString2PosX,
+		kString2PosY,
+		kStringSetting,
+		kString2Color,
+		kString2Size);
+	// 3
+	m_pSelect->Add(
+		kFrame3PosX,
+		kFrame3PosY,
+		kString3PosX,
+		kString3PosY,
+		kStringCredit,
+		kString3Color,
+		kString3Size);
 }
 
 void SceneTitle::End()

@@ -14,9 +14,8 @@ namespace
 		"Data/Sound/Bgm/0.mp3",
 		"Data/Sound/Bgm/1.mp3",
 		// SE
-		"Data/Sound/SE/0.mp3",
-		"Data/Sound/SE/1.mp3",
-		"Data/Sound/SE/2.mp3",
+		"Data/Sound/SE/Select.mp3",
+		"Data/Sound/SE/SelectChange.mp3",
 	};
 }
 

@@ -1,7 +1,8 @@
 #include "SelectDrawer.h"
 #include <DxLib.h>
-#include "Pad.h"
 #include <cassert>
+#include "Pad.h"
+#include "SoundFunctions.h"
 
 namespace 
 {
@@ -68,6 +69,8 @@ void SelectDrawer::Update()
 		// 選択
 		if (Pad::isTrigger(PAD_INPUT_UP))
 		{
+			// サウンド追加
+			SoundFunctions::Play(SoundFunctions::SoundIdSelctChange);
 			if (selectNow > 0)
 			{
 				selectNow--;
@@ -81,6 +84,8 @@ void SelectDrawer::Update()
 		}
 		if (Pad::isTrigger(PAD_INPUT_DOWN))
 		{
+			// サウンド追加
+			SoundFunctions::Play(SoundFunctions::SoundIdSelctChange);
 			if (selectNow < selectNum)
 			{
 				selectNow++;
@@ -97,6 +102,8 @@ void SelectDrawer::Update()
 	// 選択をする
 	if (Pad::isTrigger(PAD_INPUT_1))
 	{
+		// サウンド追加
+		SoundFunctions::Play(SoundFunctions::SoundIdSelct);
 		m_isSelect = true;
 	}
 
@@ -132,7 +139,6 @@ void SelectDrawer::Update()
 			m_pText[i]->SetSelectRadius(0);
 		}
 	}
-
 #endif
 }
 
