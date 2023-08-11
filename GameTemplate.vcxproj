@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Effeck\EffekseerDrawer.cpp" />
+    <ClCompile Include="GameSetting.cpp" />
     <ClCompile Include="Object\Map\Map.cpp" />
     <ClCompile Include="Object\Camera\Camera.cpp" />
     <ClCompile Include="Object\Enemy\EnemyBase.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="Object\Obstacle\ObstacleNormalShot.cpp" />
     <ClCompile Include="Object\Obstacle\ObstacleManager.cpp" />
     <ClCompile Include="Object\Player\Player.cpp" />
+    <ClCompile Include="PauseBase.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneMain.cpp" />
@@ -163,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Effeck\EffekseerDrawer.h" />
+    <ClInclude Include="GameSetting.h" />
     <ClInclude Include="Object\Map\Map.h" />
     <ClInclude Include="Object\Camera\Camera.h" />
     <ClInclude Include="Object\Enemy\EnemyBase.h" />
@@ -172,6 +175,7 @@
     <ClInclude Include="Object\Obstacle\ObstacleNormalShot.h" />
     <ClInclude Include="Object\Obstacle\ObstacleManager.h" />
     <ClInclude Include="Object\Player\Player.h" />
+    <ClInclude Include="PauseBase.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
     <ClInclude Include="scene\SceneBase.h" />
     <ClInclude Include="scene\SceneMain.h" />

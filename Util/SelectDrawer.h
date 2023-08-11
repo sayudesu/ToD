@@ -54,7 +54,14 @@ public:
 	/// 選択した番号
 	/// </summary>
 	/// <returns>何番目を選択しかたを返す</returns>
-	int GetSelectNo() { return m_selectNo; }
+	int GetSelectNo();
+
+	/// <summary>
+	/// 現在選択中の番号
+	/// </summary>
+	/// <returns>現在選択中の番号を返す</returns>
+	int GetSelectNowNo();
+
 private:
 	// テキスト描画用クラス
 	std::vector<std::shared_ptr<StringDrawer>> m_pText;
@@ -70,6 +77,8 @@ private:
 	int m_hSelectFrame;
 	int m_hCatHand;
 	int m_catHandPosX[kCatHandNum];
+	// 猫の手の位置
+	int m_catHandPosY;
 };
 
 class StringDrawer

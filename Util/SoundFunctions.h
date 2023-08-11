@@ -9,6 +9,7 @@ namespace SoundFunctions
 
 		SoundIdSelct,
 		SoundIdSelctChange,
+		SoundIdOver,
 
 		SoundIdMaxNum
 	}SoundId;

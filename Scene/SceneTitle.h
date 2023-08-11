@@ -3,6 +3,8 @@
 
 // 選択用クラス
 class SelectDrawer;
+// 設定用クラス
+class GameSetting;
 
 class SceneTitle : public SceneBase
 {
@@ -21,7 +23,12 @@ private:
 	int m_logoImageSizeX;
 	int m_logoImageSizeY;
 
+	// 設定を選択したかどうか
+	bool m_isSlectSetting;
+
 	// 選択用クラス
 	SelectDrawer* m_pSelect;
+	// 設定用クラス
+	GameSetting* m_pGameSetting;
 };
 

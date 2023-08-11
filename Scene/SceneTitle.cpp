@@ -4,7 +4,7 @@
 #include "../Util/Pad.h"
 #include "../Util/game.h"
 #include "../Util/SelectDrawer.h"
-#include <string>
+#include "../GameSetting.h"
 
 namespace
 {
@@ -47,10 +47,13 @@ namespace
 }
 
 SceneTitle::SceneTitle():
-	m_hTitleLogo(-1)
+	m_hTitleLogo(-1),
+	m_isSlectSetting(false)
 {
 	// 選択用クラスのインスタンス
 	m_pSelect = new SelectDrawer;
+	// 設定用クラス
+	m_pGameSetting = new GameSetting;
 }
 
 SceneTitle::~SceneTitle()
@@ -58,6 +61,8 @@ SceneTitle::~SceneTitle()
 	// メモリ解放
 	delete m_pSelect;
 	m_pSelect = nullptr;
+	delete m_pGameSetting;
+	m_pGameSetting = nullptr;
 }
 
 void SceneTitle::Init()
@@ -95,22 +100,52 @@ void SceneTitle::Init()
 		kStringCredit,
 		kString3Color,
 		kString3Size);
+
+	m_pGameSetting->Init();
 }
 
 void SceneTitle::End()
 {
 	// メモリ解放
 	m_pSelect->End();
+	m_pGameSetting->End();
 	DeleteGraph(m_hTitleLogo);
 }
 
 SceneBase* SceneTitle::Update()
 {
+	// 何も選択していない場合
+	if (m_pSelect->GetSelectNo() == -1)
+	{
+		// セレクト関連更新処理
+		m_pSelect->Update();
+	}
+
 	// ゲームスタートを押した場合
 	if(m_pSelect->GetSelectNo() == 0)
 	{
 		m_isChangeScene = true;
 		m_isSliderOpen = true;
+	}
+
+	if (m_pSelect->GetSelectNo() == 1)
+	{
+		m_isSlectSetting = true;
+		// 設定処理
+		m_pGameSetting->Update();
+		if (m_pGameSetting->GetSettingEnd())
+		{
+			m_isSlectSetting = false;
+			// セレクトナンバーをリセットする
+			m_pSelect->ResetSelectNo();
+		}
+	}
+
+	// まだ何もありません
+	if (m_pSelect->GetSelectNo() == 2)
+	{
+		// セレクトナンバーをリセットする
+		m_pSelect->ResetSelectNo();
 	}
 
 	if (m_isChangeScene)
@@ -120,10 +155,7 @@ SceneBase* SceneTitle::Update()
 			return new SceneMain;
 		}
 	}
-
-	// セレクト関連更新処理
-	m_pSelect->Update();
-
+	
 	// スライドを開ける
 	SceneBase::UpdateSlider(m_isSliderOpen);
 
@@ -140,6 +172,12 @@ void SceneTitle::Draw()
 
 	// セレクト関連描画
 	m_pSelect->Draw();
+
+	if (m_isSlectSetting)
+	{
+		// 設定画面
+		m_pGameSetting->Draw();
+	}
 
 	SceneBase::DrawSliderDoor();
 }

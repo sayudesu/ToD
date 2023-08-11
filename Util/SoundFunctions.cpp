@@ -16,6 +16,7 @@ namespace
 		// SE
 		"Data/Sound/SE/Select.mp3",
 		"Data/Sound/SE/SelectChange.mp3",
+		"Data/Sound/SE/Over.mp3",
 	};
 }
 

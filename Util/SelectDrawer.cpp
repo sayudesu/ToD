@@ -13,7 +13,7 @@ namespace
 	// 選択用枠
 	// パス
 	const char* kSelectFramePath = "Data/Image/SelectFrame.png";
-	const char* kSelectCatHandPath = "Data/Image/nikukyu.png";
+	const char* kSelectCatHandPath = "Data/Image/nikukyu1.png";
 
 	// 角度
 	constexpr int kAngle = DX_PI / 180;
@@ -29,7 +29,8 @@ SelectDrawer::SelectDrawer():
 	m_selectNo(-1),
 	selectRad(0),
 	m_hSelectFrame(-1),
-	m_hCatHand(-1)
+	m_hCatHand(-1),
+	m_catHandPosY(0)
 {
 	// 画像ファイルをメモリにロードします。
 	m_hSelectFrame = LoadGraph(kSelectFramePath);
@@ -152,21 +153,19 @@ void SelectDrawer::UpdatePos(int x, int y)
 
 void SelectDrawer::UpdateCatHandPos()
 {
-	static int y = 0;
-	if (y < m_pText[selectNow]->GetFramePosY() + 10)
+	if (m_catHandPosY < m_pText[selectNow]->GetFramePosY() + 10)
 	{
-		y += 26;
+		m_catHandPosY += 26;
 	}
-	if (y > m_pText[selectNow]->GetFramePosY() + 10)
+	if (m_catHandPosY > m_pText[selectNow]->GetFramePosY() + 10)
 	{
-		y -= 26;
+		m_catHandPosY -= 26;
 	}
-
 	// 選択用肉球を描画
 	for (int i = 0; i < kCatHandNum; i++)
 	{
 		DrawRotaGraph(m_pText[selectNow]->GetFramePosX() + m_catHandPosX[i],
-					y,
+					m_catHandPosY,
 					0.2,
 					kAngle,
 					m_hCatHand,
@@ -187,6 +186,18 @@ void SelectDrawer::Draw()
 void SelectDrawer::ResetSelectNo()
 {
 	m_selectNo = -1;
+}
+
+/// <returns>何番目を選択しかたを返す</returns>
+int SelectDrawer::GetSelectNo()
+{
+	return m_selectNo;
+}
+
+/// <returns>現在選択中の番号を返す</returns>
+int SelectDrawer::GetSelectNowNo()
+{
+	return selectNow;
 }
 
 ////////////////
@@ -218,8 +229,12 @@ StringDrawer::~StringDrawer()
 
 void StringDrawer::UpdatePos(int x,int y)
 {
-	m_changePosX = x;
-	m_changePosY = y;
+	m_changePosX + x;
+	m_changePosY + y;
+	m_stringX + x;
+	m_stringY + y;
+	m_frameX + x;
+	m_frameY + y;
 }
 
 void StringDrawer::Draw()
