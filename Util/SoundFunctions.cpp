@@ -11,8 +11,9 @@ namespace
 	const char* const kFileName[SoundFunctions::SoundIdMaxNum] =
 	{
 		// BGM
-		"Data/Sound/Bgm/0.mp3",
-		"Data/Sound/Bgm/1.mp3",
+		"Data/Sound/Bgm/Title.mp3",
+		"Data/Sound/Bgm/Battle.mp3",
+		"Data/Sound/Bgm/End.mp3",
 		// SE
 		"Data/Sound/SE/Select.mp3",
 		"Data/Sound/SE/SelectChange.mp3",
@@ -43,10 +44,9 @@ namespace SoundFunctions
 	}
 
 	// ‰‚ß‚ÉBGM‚ğ—¬‚·
-	void StartBgm(SoundId id, int volume)
+	void StartBgm(SoundId id)
 	{
 		PlaySoundMem(m_soundHandle[id], DX_PLAYTYPE_BACK, true);
-		SetVolume(id, volume);
 	}
 
 	// BGM‚ª—¬‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©
@@ -75,5 +75,13 @@ namespace SoundFunctions
 	void SetVolume(SoundId id, int volume)
 	{
 		ChangeVolumeSoundMem(volume, m_soundHandle[id]);
+	}
+
+	// Œ»İ‚Ì‰¹—Ê‚ğ“¾‚é
+	int GetVolume(SoundId id)
+	{
+		int volume = 0;
+		// 0‚©‚ç1000‚Ì”ÍˆÍ‚ğ0‚©‚ç255‚É
+		return volume = ((GetVolumeSoundMem(m_soundHandle[id]) - 0) * (255 - 0)) / (10000 - 0);
 	}
 }

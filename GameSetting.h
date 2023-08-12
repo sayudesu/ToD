@@ -1,5 +1,7 @@
 #pragma once
 #include "PauseBase.h"
+#include "SaveData.h"
+
 // 選択用クラス
 class SelectDrawer;
 class GameSetting : public PauseBase
@@ -18,6 +20,9 @@ public:
 	/// </summary>
 	/// <returns>設定画面を終了するどうか</returns>
 	bool GetSettingEnd();
+
+	// 現在の音量
+	SaveData::Sound GetSoundVol();
 
 private:
 	void UpdateStart();
@@ -38,6 +43,12 @@ private:
 	/// <summary>
 	/// <param name="changeNo">変更する配列番号</param>
 	void UpdateSoundVolume(int changeNo);
+
+	// 音量を調整します
+	void UpdateSoundVol();
+private:
+	// 値をリセットします
+	void Reset();
 private:
 	// ボリューム猫関係
 	int m_hVolCat;
@@ -62,9 +73,12 @@ private:
 		int bottomLeft = 0;
 		int bottomRight = 0;
 	};
+
 	Box m_frame[2];
 	Box m_volVer[2];
 	Box m_cat[2];
+
+	SaveData::Sound m_saveSound;
 
 	// スライド
 	int m_slideY;

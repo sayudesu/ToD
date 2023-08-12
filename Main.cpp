@@ -70,12 +70,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		MessageBox(NULL, "フォント読込失敗", "", MB_OK);
 	}
 
+	// サウンド読み込み
+	SoundFunctions::Load();
+
 	SceneManager* pScene = new SceneManager;
 
 	pScene->Init();
 
-	// サウンド読み込み
-	SoundFunctions::Load();
 
 	while (ProcessMessage() == 0)
 	{

@@ -13,7 +13,7 @@ namespace
 	// 選択用枠
 	// パス
 	const char* kSelectFramePath = "Data/Image/SelectFrame.png";
-	const char* kSelectCatHandPath = "Data/Image/nikukyu1.png";
+	const char* kSelectCatHandPath = "Data/Image/nikukyu_S.png";
 
 	// 角度
 	constexpr int kAngle = DX_PI / 180;
@@ -210,6 +210,7 @@ StringDrawer::StringDrawer(int frameX, int frameY, int stringX, int stringY, con
 	m_stringY(frameY + stringY),
 	m_changePosX(0),
 	m_changePosY(0),
+	m_slideY(0),
 	m_text(text),
 	m_color(color),
 	m_rad(0),
@@ -229,28 +230,35 @@ StringDrawer::~StringDrawer()
 
 void StringDrawer::UpdatePos(int x,int y)
 {
-	m_changePosX + x;
-	m_changePosY + y;
-	m_stringX + x;
-	m_stringY + y;
-	m_frameX + x;
-	m_frameY + y;
+//	m_slideY = x;
+	m_slideY = y;
 }
 
 void StringDrawer::Draw()
 {
 	// 文字枠を描画
-	DrawRotaGraph(m_frameX, m_frameY, 1, kAngle, m_hSelectFrame, true);
+	DrawRotaGraph(
+		m_frameX,
+		m_frameY + m_slideY,
+		1,
+		kAngle,
+		m_hSelectFrame,
+		true);
 
 	// 描画ブレンドモードをαブレンドにする
 	SetDrawBlendMode(DX_BLENDMODE_PMA_ALPHA, m_blend);
 	// フォントデータを使い文字を描画
-	DrawStringToHandle(m_stringX + m_changePosX, m_stringY + m_changePosY, m_text, m_color, m_fontHandle);
+	DrawStringToHandle(
+		m_stringX + m_changePosX,
+		m_stringY + m_changePosY + m_slideY,
+		m_text,
+		m_color,
+		m_fontHandle);
 	// 描画ブレンドモードをノーブレンドにする
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	// 円の大きさを変更
-	if(m_rad != 0)DrawCircle(m_frameX, m_frameY, m_rad, 0xff0000,false);
+	if(m_rad != 0)DrawCircle(m_frameX, m_frameY + m_slideY, m_rad, 0xff0000,false);
 }
 
 // 円の大きさ

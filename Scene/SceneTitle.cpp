@@ -5,6 +5,7 @@
 #include "../Util/game.h"
 #include "../Util/SelectDrawer.h"
 #include "../GameSetting.h"
+#include "../Util/SoundFunctions.h"
 
 namespace
 {
@@ -63,6 +64,9 @@ SceneTitle::~SceneTitle()
 	m_pSelect = nullptr;
 	delete m_pGameSetting;
 	m_pGameSetting = nullptr;
+
+	// BGM停止
+	SoundFunctions::StopBgm(SoundFunctions::SoundIdTitle);
 }
 
 void SceneTitle::Init()
@@ -71,6 +75,10 @@ void SceneTitle::Init()
 	m_hTitleLogo = LoadGraph(kTitlePath);
 	// 画像サイズを取得
 	GetGraphSize(m_hTitleLogo, &m_logoImageSizeX, &m_logoImageSizeY);
+
+	// BGM再生
+	SoundFunctions::StartBgm(SoundFunctions::SoundIdTitle);
+//	SoundFunctions::SetVolume(SoundFunctions::SoundIdTitle, SoundFunctions::GetVolume(SoundFunctions::SoundIdTitle));
 
 	// 選択肢を追加
 	// 1
@@ -158,6 +166,10 @@ SceneBase* SceneTitle::Update()
 	
 	// スライドを開ける
 	SceneBase::UpdateSlider(m_isSliderOpen);
+
+#if _DEBUG
+	printfDx("BGM = %d\n", SoundFunctions::GetVolume(SoundFunctions::SoundIdTitle));
+#endif
 
 	return this;
 }

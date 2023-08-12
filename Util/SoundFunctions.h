@@ -4,8 +4,9 @@ namespace SoundFunctions
 	typedef enum SoundId
 	{
 		// BGM
-		SoundIdTitle,		// タイトル画面のBGM
-		SoundIdMain,		// メイン(ゲームプレイ)画面のBGM
+		SoundIdTitle,		// はじまるぞ
+		SoundIdBattle,		// 激しい
+		SoundIdEnd,		    // すこしかなしい
 
 		SoundIdSelct,
 		SoundIdSelctChange,
@@ -19,7 +20,7 @@ namespace SoundFunctions
 	void UnLoad();
 
 	// BGMの再生
-	void StartBgm(SoundId id, int volume = 255);
+	void StartBgm(SoundId id);
 	void ReStartBgm(SoundId id);
 	void StopBgm(SoundId id);
 
@@ -28,5 +29,8 @@ namespace SoundFunctions
 
 	// 音量設定	0~255
 	void SetVolume(SoundId id, int volume);
+
+	// 現在の音量を得る
+	int GetVolume(SoundId id);
 };
 

@@ -7,6 +7,7 @@
 #include "../Object/Player/Player.h"
 #include "../Object/Map/Map.h"
 #include "../Util/game.h"
+#include "../Util/SoundFunctions.h"
 // ‚ ‚Æ‚ÅÁ‚·
 #include "../Util/Pad.h"
 
@@ -31,6 +32,10 @@ SceneMain::SceneMain():
 
 SceneMain::~SceneMain()
 {
+
+	// BGM’âŽ~
+	SoundFunctions::StopBgm(SoundFunctions::SoundIdBattle);
+
 	// ƒƒ‚ƒŠ‚Ì‰ð•ú
 	delete m_pCamera;
 	m_pCamera = nullptr;
@@ -53,6 +58,10 @@ void SceneMain::Init()
 	SetWriteZBuffer3D(true);
 	// ƒ|ƒŠƒSƒ“‚Ì— –Ê‚ð•`‰æ‚µ‚È‚¢
 	SetUseBackCulling(true);
+
+	// BGM’âŽ~
+	SoundFunctions::StartBgm(SoundFunctions::SoundIdBattle);
+	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, 100);
 
 	m_pCamera->Init();
 	m_pEnemy->Init();
@@ -124,6 +133,10 @@ SceneBase* SceneMain::Update()
 
 	// ƒXƒ‰ƒCƒh‚ðŠJ‚¯‚é
 	SceneBase::UpdateSlider(m_isSliderOpen);
+
+#if _DEBUG
+	printfDx("BGM = %d\n", SoundFunctions::GetVolume(SoundFunctions::SoundIdBattle));
+#endif
 	return this;
 }
 

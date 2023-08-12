@@ -176,6 +176,7 @@
     <ClInclude Include="Object\Obstacle\ObstacleManager.h" />
     <ClInclude Include="Object\Player\Player.h" />
     <ClInclude Include="PauseBase.h" />
+    <ClInclude Include="SaveData.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
     <ClInclude Include="scene\SceneBase.h" />
     <ClInclude Include="scene\SceneMain.h" />

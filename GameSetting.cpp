@@ -11,8 +11,10 @@ namespace
 	const char* kVolCat = "Data/Image/SelectVol.png";
 	const char* kVolCatS = "Data/Image/SelectVol_S.png";
 
-	// 猫の画像のスピード
+	// 猫の画像の速さ
 	constexpr int kVolCatSpeed = 20;
+	// スライドの速さ
+	constexpr int kSlideSpeed = 50;
 
 	// 選択用表示文字
 	// 1
@@ -155,11 +157,11 @@ void GameSetting::Update()
 void GameSetting::Draw()
 {
 	DrawBox(
-		0,
-		0 + m_slideY,
-		Game::kScreenWidth,
-		Game::kScreenHeight + m_slideY,
-		0xaaaaaa,
+		200,
+		100 + m_slideY,
+		Game::kScreenWidth - 200,
+		Game::kScreenHeight - 100 + m_slideY,
+		0xffaaaa,
 		true);
 	// 調整用外枠を描画
 	// 調整用背景を描画
@@ -203,11 +205,27 @@ bool GameSetting::GetSettingEnd()
 	return m_isSetingEnd;
 }
 
+SaveData::Sound GameSetting::GetSoundVol()
+{
+	return m_saveSound;
+}
+
 void GameSetting::UpdateStart()
 {
-	// Main用関数に移動
-	m_updateFunc = &PauseBase::UpdateMain;
+	// スライドします
+	m_slideY += kSlideSpeed;
 
+	m_pSelect->UpdatePos(0,m_slideY);
+
+	// スライドが終わると関数を移動
+	if (m_slideY > 0)
+	{
+		// スライドの値を0に調整
+		m_slideY = 0;
+		// Main用関数に移動
+		m_updateFunc = &PauseBase::UpdateMain;
+	}
+	m_isSetingEnd = false;	
 #if _DEBUG
 	printfDx("Start\n");
 #endif
@@ -236,6 +254,14 @@ void GameSetting::UpdateMain()
 		UpdateSoundVolume(i);
 	}
 
+	if (Pad::isTrigger(PAD_INPUT_2))
+	{
+		// サウンド再生
+		SoundFunctions::Play(SoundFunctions::SoundIdSelct);
+		// End用関数に移動
+		m_updateFunc = &PauseBase::UpdateEnd;
+	}
+
 	// 閉じるを選択すると設定画面を終了処理に移行します
 	if (m_pSelect->GetSelectNo() == 2)
 	{
@@ -246,6 +272,10 @@ void GameSetting::UpdateMain()
 	{
 		m_isSetingEnd = false;
 	}
+
+	// 音量を調整します
+	UpdateSoundVol();
+
 #if _DEBUG
 	printfDx("Main\n");
 #endif
@@ -253,13 +283,22 @@ void GameSetting::UpdateMain()
 
 void GameSetting::UpdateEnd()
 {
+	m_slideY -= kSlideSpeed;
+
+	m_pSelect->UpdatePos(0, m_slideY);
+
+	if (m_slideY < -Game::kScreenHeight)
+	{
+		// 変数の初期化
+		Reset();
+		// エンド処理が終わっているかどうか
+		m_isSetingEnd = true;
+		// 選択をリセットします
+		m_pSelect->ResetSelectNo();
+	}
 #if _DEBUG
 	printfDx("End\n");
 #endif
-	// Main用関数に移動
-	m_updateFunc = &PauseBase::UpdateMain;
-	m_pSelect->ResetSelectNo();
-	m_isSetingEnd = true;
 }
 
 void GameSetting::SoundVolume(int changeNo,int BigVol, int MaxVol,int changeVol)
@@ -297,6 +336,34 @@ void GameSetting::UpdateSoundVolume(int changeNo)
 	{
 		m_hVolCat = m_hVolCatS;
 	}
+}
+
+// 音量を調整します
+void GameSetting::UpdateSoundVol()
+{
+	// 音量を変更
+	m_saveSound.Bgm = m_SoundVolPosX[0];
+	m_saveSound.SE = m_SoundVolPosX[1];
+
+	// 0から1000の範囲を0から255に
+	m_saveSound.Bgm = ((m_SoundVolPosX[0] - 0) * (255 - 0)) / (1000 - 0);
+	m_saveSound.SE  = ((m_SoundVolPosX[1] - 0) * (255 - 0)) / (1000 - 0);
+	// BGM
+	SoundFunctions::SetVolume(SoundFunctions::SoundIdTitle, m_saveSound.Bgm);
+	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, m_saveSound.Bgm);
+	SoundFunctions::SetVolume(SoundFunctions::SoundIdEnd, m_saveSound.Bgm);
+	// SE
+	SoundFunctions::SetVolume(SoundFunctions::SoundIdSelctChange, m_saveSound.SE);
+	SoundFunctions::SetVolume(SoundFunctions::SoundIdSelct, m_saveSound.SE);
+	SoundFunctions::SetVolume(SoundFunctions::SoundIdOver, m_saveSound.SE);
+}
+
+void GameSetting::Reset()
+{
+	// Main用関数に移動
+	m_updateFunc = &PauseBase::UpdateStart;
+	// スライドの値を初期化
+	m_slideY = -Game::kScreenHeight;
 }
 
 

@@ -115,6 +115,8 @@ private:
 	// 元の位置からずらす用
 	int m_changePosX;
 	int m_changePosY;
+	// スライド用変数
+	int m_slideY;
 	// 文字
 	const char* m_text;
 	// 色
