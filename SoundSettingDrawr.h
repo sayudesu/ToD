@@ -4,11 +4,11 @@
 
 // 選択用クラス
 class SelectDrawer;
-class GameSetting : public PauseBase
+class SoundSettingDrawr : public PauseBase
 {
 public:
-	GameSetting();
-	~GameSetting();
+	SoundSettingDrawr();
+	~SoundSettingDrawr();
 
 	void Init();
 	void End();
@@ -22,7 +22,7 @@ public:
 	bool GetSettingEnd();
 
 	// 現在の音量
-	SaveData::Sound GetSoundVol();
+	SaveData GetSoundVol();
 
 private:
 	void UpdateStart();
@@ -78,7 +78,7 @@ private:
 	Box m_volVer[2];
 	Box m_cat[2];
 
-	SaveData::Sound m_saveSound;
+	SaveData m_saveSound;
 
 	// スライド
 	int m_slideY;

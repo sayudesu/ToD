@@ -1,4 +1,6 @@
 #pragma once
+#include "../SaveData.h"
+
 namespace SoundFunctions
 {
 	typedef enum SoundId
@@ -7,16 +9,16 @@ namespace SoundFunctions
 		SoundIdTitle,		// はじまるぞ
 		SoundIdBattle,		// 激しい
 		SoundIdEnd,		    // すこしかなしい
-
-		SoundIdSelct,
-		SoundIdSelctChange,
-		SoundIdOver,
-
+		// SE
+		SoundIdSelct,	    // 選択中
+		SoundIdSelctChange, // 選択決定
+		SoundIdOver,        // 選択できません
+		// 最大数
 		SoundIdMaxNum
 	}SoundId;
 
 	// ロード、アンロード
-	void Load();
+	void Load(SaveData soundVol);
 	void UnLoad();
 
 	// BGMの再生

@@ -141,7 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Effeck\EffekseerDrawer.cpp" />
-    <ClCompile Include="GameSetting.cpp" />
+    <ClCompile Include="SoundSettingDrawr.cpp" />
     <ClCompile Include="Object\Map\Map.cpp" />
     <ClCompile Include="Object\Camera\Camera.cpp" />
     <ClCompile Include="Object\Enemy\EnemyBase.cpp" />
@@ -158,6 +158,7 @@
     <ClCompile Include="Scene\SceneMain.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Object\Shot\ShotBase.cpp" />
+    <ClCompile Include="UserSaveData.cpp" />
     <ClCompile Include="Util\SelectDrawer.cpp" />
     <ClCompile Include="Util\SoundFunctions.cpp" />
     <ClCompile Include="util\Pad.cpp" />
@@ -165,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Effeck\EffekseerDrawer.h" />
-    <ClInclude Include="GameSetting.h" />
+    <ClInclude Include="SoundSettingDrawr.h" />
     <ClInclude Include="Object\Map\Map.h" />
     <ClInclude Include="Object\Camera\Camera.h" />
     <ClInclude Include="Object\Enemy\EnemyBase.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="scene\SceneMain.h" />
     <ClInclude Include="scene\SceneManager.h" />
     <ClInclude Include="Object\Shot\ShotBase.h" />
+    <ClInclude Include="UserSaveData.h" />
     <ClInclude Include="Util\SelectDrawer.h" />
     <ClInclude Include="Util\SoundFunctions.h" />
     <ClInclude Include="Util\game.h" />

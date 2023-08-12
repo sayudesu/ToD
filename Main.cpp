@@ -5,6 +5,8 @@
 #include "Util/game.h"
 #include "Util/SoundFunctions.h"
 
+#include "UserSaveData.h"
+
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -70,13 +72,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		MessageBox(NULL, "フォント読込失敗", "", MB_OK);
 	}
 
+	// ファイルの読み込み
+	SaveDataFunctions::Load();
 	// サウンド読み込み
-	SoundFunctions::Load();
+	SoundFunctions::Load(SaveDataFunctions::GetSoundData());
 
 	SceneManager* pScene = new SceneManager;
 
 	pScene->Init();
-
 
 	while (ProcessMessage() == 0)
 	{

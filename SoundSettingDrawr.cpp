@@ -1,9 +1,10 @@
-#include "GameSetting.h"
+#include "SoundSettingDrawr.h"
 #include <DxLib.h>
 #include "Util/game.h"
 #include "Util/Pad.h"
 #include "Util/SelectDrawer.h"
 #include "Util/SoundFunctions.h"
+#include "UserSaveData.h"
 
 namespace
 {
@@ -43,7 +44,7 @@ namespace
 	constexpr int kString3Size = 52;
 }
 
-GameSetting::GameSetting() :
+SoundSettingDrawr::SoundSettingDrawr() :
 	m_hVolCat(-1),
 	m_hVolCatD(-1),
 	m_hVolCatS(-1),
@@ -57,12 +58,12 @@ GameSetting::GameSetting() :
 	m_updateFunc = &PauseBase::UpdateStart;
 }
 
-GameSetting::~GameSetting()
+SoundSettingDrawr::~SoundSettingDrawr()
 {
 	delete m_pSelect;
 }
 
-void GameSetting::Init()
+void SoundSettingDrawr::Init()
 {
 	// 画像データの読み込み
 	m_hVolCatD = LoadGraph(kVolCat);
@@ -101,10 +102,10 @@ void GameSetting::Init()
 	);
 
 	// ボリューム
-	m_SoundVolPosX[0] = 1000;
-	m_SoundVolPosX[1] = 1000;
-	m_TempSoundVolPosX[0] = 1000;
-	m_TempSoundVolPosX[1] = 1000;
+	m_SoundVolPosX[0] = SaveDataFunctions::GetSoundBarData().Bgm;
+	m_SoundVolPosX[1] = SaveDataFunctions::GetSoundBarData().SE;
+	m_TempSoundVolPosX[0] = m_SoundVolPosX[0];
+	m_TempSoundVolPosX[1] = m_SoundVolPosX[1];
 
 	// ボリューム枠
 	m_frame[0].upLeft = Game::kScreenWidth / 2 - 500;
@@ -141,7 +142,7 @@ void GameSetting::Init()
 	m_volCatDirection[1] = false;
 }
 
-void GameSetting::End()
+void SoundSettingDrawr::End()
 {
 	// 画像データのメモリ解放
 	DeleteGraph(m_hVolCatD);
@@ -149,12 +150,12 @@ void GameSetting::End()
 	DeleteGraph(m_hVolCat);
 }
 
-void GameSetting::Update()
+void SoundSettingDrawr::Update()
 {
 	(this->*m_updateFunc)();
 }
 
-void GameSetting::Draw()
+void SoundSettingDrawr::Draw()
 {
 	DrawBox(
 		200,
@@ -163,6 +164,7 @@ void GameSetting::Draw()
 		Game::kScreenHeight - 100 + m_slideY,
 		0xffaaaa,
 		true);
+
 	// 調整用外枠を描画
 	// 調整用背景を描画
 	// 調整用猫を描画
@@ -200,17 +202,18 @@ void GameSetting::Draw()
 }
 
 /// <returns>設定画面を終了するどうか</returns>
-bool GameSetting::GetSettingEnd()
+bool SoundSettingDrawr::GetSettingEnd()
 {
 	return m_isSetingEnd;
 }
 
-SaveData::Sound GameSetting::GetSoundVol()
+// 現在の音量
+SaveData SoundSettingDrawr::GetSoundVol()
 {
 	return m_saveSound;
 }
 
-void GameSetting::UpdateStart()
+void SoundSettingDrawr::UpdateStart()
 {
 	// スライドします
 	m_slideY += kSlideSpeed;
@@ -226,12 +229,9 @@ void GameSetting::UpdateStart()
 		m_updateFunc = &PauseBase::UpdateMain;
 	}
 	m_isSetingEnd = false;	
-#if _DEBUG
-	printfDx("Start\n");
-#endif
 }
 
-void GameSetting::UpdateMain()
+void SoundSettingDrawr::UpdateMain()
 {
 	m_pSelect->Update();
 	for (int i = 0; i < 2; i++)
@@ -275,13 +275,9 @@ void GameSetting::UpdateMain()
 
 	// 音量を調整します
 	UpdateSoundVol();
-
-#if _DEBUG
-	printfDx("Main\n");
-#endif
 }
 
-void GameSetting::UpdateEnd()
+void SoundSettingDrawr::UpdateEnd()
 {
 	m_slideY -= kSlideSpeed;
 
@@ -296,12 +292,12 @@ void GameSetting::UpdateEnd()
 		// 選択をリセットします
 		m_pSelect->ResetSelectNo();
 	}
-#if _DEBUG
-	printfDx("End\n");
-#endif
+
+	// データを保存します
+    SaveDataFunctions::Save(m_saveSound);
 }
 
-void GameSetting::SoundVolume(int changeNo,int BigVol, int MaxVol,int changeVol)
+void SoundSettingDrawr::SoundVolume(int changeNo,int BigVol, int MaxVol,int changeVol)
 {
 	// サウンド調整
 	if (BigVol > MaxVol)
@@ -318,16 +314,22 @@ void GameSetting::SoundVolume(int changeNo,int BigVol, int MaxVol,int changeVol)
 	}
 }
 
-void GameSetting::UpdateSoundVolume(int changeNo)
+void SoundSettingDrawr::UpdateSoundVolume(int changeNo)
 {
 	// 目的のボリュームの位置まで動く
 	if (m_TempSoundVolPosX[changeNo] > m_SoundVolPosX[changeNo])
 	{
+		// スライド更新
 		m_SoundVolPosX[changeNo] += kVolCatSpeed;
+		// 最大値を調整
+		if (m_SoundVolPosX[changeNo] > 1000)m_SoundVolPosX[changeNo] = 1000;
 	}
 	if (m_TempSoundVolPosX[changeNo] < m_SoundVolPosX[changeNo])
 	{
+		// スライド更新
 		m_SoundVolPosX[changeNo] -= kVolCatSpeed;
+		// 最大値を調整
+		if (m_SoundVolPosX[changeNo] < 0)m_SoundVolPosX[changeNo] = 0;
 	}
 
 	// 特別な画像変更
@@ -339,7 +341,7 @@ void GameSetting::UpdateSoundVolume(int changeNo)
 }
 
 // 音量を調整します
-void GameSetting::UpdateSoundVol()
+void SoundSettingDrawr::UpdateSoundVol()
 {
 	// 音量を変更
 	m_saveSound.Bgm = m_SoundVolPosX[0];
@@ -358,7 +360,7 @@ void GameSetting::UpdateSoundVol()
 	SoundFunctions::SetVolume(SoundFunctions::SoundIdOver, m_saveSound.SE);
 }
 
-void GameSetting::Reset()
+void SoundSettingDrawr::Reset()
 {
 	// Main用関数に移動
 	m_updateFunc = &PauseBase::UpdateStart;

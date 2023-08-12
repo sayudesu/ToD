@@ -8,6 +8,7 @@
 #include "../Object/Map/Map.h"
 #include "../Util/game.h"
 #include "../Util/SoundFunctions.h"
+#include "../UserSaveData.h"
 // ‚ ‚Æ‚ÅÁ‚·
 #include "../Util/Pad.h"
 
@@ -61,7 +62,7 @@ void SceneMain::Init()
 
 	// BGM’âŽ~
 	SoundFunctions::StartBgm(SoundFunctions::SoundIdBattle);
-	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, 100);
+	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, SaveDataFunctions::GetSoundData().Bgm);
 
 	m_pCamera->Init();
 	m_pEnemy->Init();
