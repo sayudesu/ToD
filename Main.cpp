@@ -5,6 +5,8 @@
 #include "Util/game.h"
 #include "Util/SoundFunctions.h"
 
+#include "SaveDataFunctions.h"
+
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -40,20 +42,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
 	// Effekseerを使用する場合は必ず設定する。
-	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+	SetChangeScreenModeGraphicsSystemResetFlag(false);
 
 	// DXライブラリのデバイスロストした時のコールバックを設定する。
 	// ウインドウとフルスクリーンの切り替えが発生する場合は必ず実行する。
 	// ただし、DirectX11を使用する場合は実行する必要はない。
 //	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
 
+	// 3D関連の設定
 	// Zバッファを有効にする。
 	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
-	SetUseZBuffer3D(TRUE);
+	SetUseZBuffer3D(true);
 
 	// Zバッファへの書き込みを有効にする。
 	// Effekseerを使用する場合、2DゲームでもZバッファを使用する。
-	SetWriteZBuffer3D(TRUE);
+	SetWriteZBuffer3D(true);
+
+	// ポリゴンの裏面を描画しない
+	SetUseBackCulling(true);
 
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -70,13 +76,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		MessageBox(NULL, "フォント読込失敗", "", MB_OK);
 	}
 
+	// ファイルの読み込み
+	SaveDataFunctions::Load();
 	// サウンド読み込み
-	SoundFunctions::Load();
+	SoundFunctions::Load(SaveDataFunctions::GetSoundData());
 
 	SceneManager* pScene = new SceneManager;
 
 	pScene->Init();
-
 
 	while (ProcessMessage() == 0)
 	{

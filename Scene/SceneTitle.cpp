@@ -4,8 +4,9 @@
 #include "../Util/Pad.h"
 #include "../Util/game.h"
 #include "../Util/SelectDrawer.h"
-#include "../GameSetting.h"
+#include "../SoundSettingDrawr.h"
 #include "../Util/SoundFunctions.h"
+#include "../SaveDataFunctions.h"
 
 namespace
 {
@@ -54,7 +55,7 @@ SceneTitle::SceneTitle():
 	// 選択用クラスのインスタンス
 	m_pSelect = new SelectDrawer;
 	// 設定用クラス
-	m_pGameSetting = new GameSetting;
+	m_pGameSetting = new SoundSettingDrawr;
 }
 
 SceneTitle::~SceneTitle()
@@ -76,9 +77,10 @@ void SceneTitle::Init()
 	// 画像サイズを取得
 	GetGraphSize(m_hTitleLogo, &m_logoImageSizeX, &m_logoImageSizeY);
 
+
 	// BGM再生
 	SoundFunctions::StartBgm(SoundFunctions::SoundIdTitle);
-//	SoundFunctions::SetVolume(SoundFunctions::SoundIdTitle, SoundFunctions::GetVolume(SoundFunctions::SoundIdTitle));
+	SoundFunctions::SetVolume(SoundFunctions::SoundIdTitle, SaveDataFunctions::GetSoundData().Bgm);
 
 	// 選択肢を追加
 	// 1

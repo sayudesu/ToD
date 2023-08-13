@@ -11,20 +11,19 @@ namespace
 	const char* const kFileName[SoundFunctions::SoundIdMaxNum] =
 	{
 		// BGM
-		"Data/Sound/Bgm/Title.mp3",
-		"Data/Sound/Bgm/Battle.mp3",
-		"Data/Sound/Bgm/End.mp3",
+		"Data/Sound/Bgm/Title.mp3",  // はじまるぞ
+		"Data/Sound/Bgm/Battle.mp3", // 激しい
+		"Data/Sound/Bgm/End.mp3",    // すこしかなしい
 		// SE
-		"Data/Sound/SE/Select.mp3",
-		"Data/Sound/SE/SelectChange.mp3",
-		"Data/Sound/SE/Over.mp3",
+		"Data/Sound/SE/Select.mp3",		  // 選択中
+		"Data/Sound/SE/SelectChange.mp3", // 選択決定
+		"Data/Sound/SE/Over.mp3",         // 選択できません
 	};
 }
 
 namespace SoundFunctions
 {
-
-	void Load()
+	void Load(GameData::Sound soundVol)
 	{
 		// サウンドデータの読み込み
 		for (auto& fileName : kFileName)
@@ -32,6 +31,16 @@ namespace SoundFunctions
 			int handle = LoadSoundMem(fileName);
 			m_soundHandle.push_back(handle);
 		}
+
+		// サウンドの初期調整
+		// BGM
+		SetVolume(SoundIdTitle, soundVol.Bgm);
+		SetVolume(SoundIdBattle, soundVol.Bgm);
+		SetVolume(SoundIdEnd, soundVol.Bgm);
+		// SE
+		SetVolume(SoundIdSelct, soundVol.SE);
+		SetVolume(SoundIdSelctChange, soundVol.SE);
+		SetVolume(SoundIdOver, soundVol.SE);
 	}
 
 	void UnLoad()
