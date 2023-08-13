@@ -4,13 +4,17 @@
 #include "Util/Pad.h"
 #include "Util/SelectDrawer.h"
 #include "Util/SoundFunctions.h"
-#include "UserSaveData.h"
+#include "SaveDataFunctions.h"
 
 namespace
 {
 	// 猫の画像パス
-	const char* kVolCat = "Data/Image/SelectVol.png";
+	const char* kVolCat = "Data/Image/SelectVol_B.png";
 	const char* kVolCatS = "Data/Image/SelectVol_S.png";
+	// 背景画像パス
+	const char* kWood = "Data/Image/Wood.png";
+	// メーター画像パス
+	const char* kBar = "Data/Image/GBar.png";
 
 	// 猫の画像の速さ
 	constexpr int kVolCatSpeed = 20;
@@ -48,6 +52,8 @@ SoundSettingDrawr::SoundSettingDrawr() :
 	m_hVolCat(-1),
 	m_hVolCatD(-1),
 	m_hVolCatS(-1),
+	m_hWood(-1),
+	m_hBar(-1),
 	m_isSetingEnd(false),
 	m_slideY(-Game::kScreenHeight)
 {
@@ -68,6 +74,8 @@ void SoundSettingDrawr::Init()
 	// 画像データの読み込み
 	m_hVolCatD = LoadGraph(kVolCat);
 	m_hVolCatS = LoadGraph(kVolCatS);
+	m_hWood = LoadGraph(kWood);
+	m_hBar = LoadGraph(kBar);
 
 	m_hVolCat = m_hVolCatD;
 
@@ -148,6 +156,8 @@ void SoundSettingDrawr::End()
 	DeleteGraph(m_hVolCatD);
 	DeleteGraph(m_hVolCatS);
 	DeleteGraph(m_hVolCat);
+	DeleteGraph(m_hWood);
+	DeleteGraph(m_hBar);
 }
 
 void SoundSettingDrawr::Update()
@@ -157,13 +167,15 @@ void SoundSettingDrawr::Update()
 
 void SoundSettingDrawr::Draw()
 {
-	DrawBox(
-		200,
-		100 + m_slideY,
-		Game::kScreenWidth - 200,
-		Game::kScreenHeight - 100 + m_slideY,
-		0xffaaaa,
+	// 背景画像
+	DrawExtendGraph(
+		0,
+		0 + m_slideY,
+		Game::kScreenWidth - 0,
+		Game::kScreenHeight + 100 + m_slideY,
+		m_hWood,
 		true);
+
 
 	// 調整用外枠を描画
 	// 調整用背景を描画
@@ -178,12 +190,20 @@ void SoundSettingDrawr::Draw()
 			0xffffff,
 			true);
 
-		DrawBox(
+		//DrawBox(
+		//	m_volVer[i].upLeft,
+		//	m_volVer[i].bottomLeft + m_slideY,
+		//	m_volVer[i].upRight + m_SoundVolPosX[i],
+		//	m_volVer[i].bottomRight + m_slideY,
+		//	0x00ff00,
+		//	true);
+
+		DrawExtendGraph(
 			m_volVer[i].upLeft,
 			m_volVer[i].bottomLeft + m_slideY,
 			m_volVer[i].upRight + m_SoundVolPosX[i],
 			m_volVer[i].bottomRight + m_slideY,
-			0x00ff00,
+			m_hBar,
 			true);
 
 		DrawRotaGraph(
@@ -208,7 +228,8 @@ bool SoundSettingDrawr::GetSettingEnd()
 }
 
 // 現在の音量
-SaveData SoundSettingDrawr::GetSoundVol()
+// 0から255
+GameData::Sound SoundSettingDrawr::GetSoundVol()
 {
 	return m_saveSound;
 }
@@ -294,7 +315,10 @@ void SoundSettingDrawr::UpdateEnd()
 	}
 
 	// データを保存します
-    SaveDataFunctions::Save(m_saveSound);
+	GameData::Input save{};
+	save.Bgm_ = m_saveSound.Bgm;
+	save.SE_ = m_saveSound.SE;
+    SaveDataFunctions::Save(save);
 }
 
 void SoundSettingDrawr::SoundVolume(int changeNo,int BigVol, int MaxVol,int changeVol)

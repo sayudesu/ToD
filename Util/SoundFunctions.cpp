@@ -23,7 +23,7 @@ namespace
 
 namespace SoundFunctions
 {
-	void Load(SaveData soundVol)
+	void Load(GameData::Sound soundVol)
 	{
 		// サウンドデータの読み込み
 		for (auto& fileName : kFileName)

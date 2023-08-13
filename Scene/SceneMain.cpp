@@ -8,7 +8,7 @@
 #include "../Object/Map/Map.h"
 #include "../Util/game.h"
 #include "../Util/SoundFunctions.h"
-#include "../UserSaveData.h"
+#include "../SaveDataFunctions.h"
 // あとで消す
 #include "../Util/Pad.h"
 
@@ -52,17 +52,11 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
-	// 3D関連の設定
-	// Zバッファを使用する
-	SetUseZBuffer3D(true);
-	// Zバッファへの書き込みを行う
-	SetWriteZBuffer3D(true);
-	// ポリゴンの裏面を描画しない
-	SetUseBackCulling(true);
-
-	// BGM停止
+	//SaveDataFunctions::Load();
+	// BGM再生
 	SoundFunctions::StartBgm(SoundFunctions::SoundIdBattle);
 	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, SaveDataFunctions::GetSoundData().Bgm);
+	printfDx("%d\n", SaveDataFunctions::GetSoundData().Bgm);
 
 	m_pCamera->Init();
 	m_pEnemy->Init();

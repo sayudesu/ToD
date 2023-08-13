@@ -1,6 +1,8 @@
-#include "UserSaveData.h"
+#include "SaveDataFunctions.h"
 #include <DxLib.h>
 #include <cassert>
+
+#include <vector>
 
 #include <string>
 #include <fstream>
@@ -12,8 +14,10 @@ namespace
     // 外部ファイル読み込み用
     std::vector<int> m_loadData;
     // 
-    SaveData m_saveData;
-    SaveData m_soundBarData;
+    GameData::Sound m_saveData;
+    GameData::Sound m_soundBarData;
+    // データ数カウント
+    int dataNum = -1;
 }
 
 namespace SaveDataFunctions
@@ -28,11 +32,12 @@ namespace SaveDataFunctions
             // ファイルが存在しなかったら
             // 新しいcsvファイルを作成
             // デフォルトの値を記録
-            SaveData data;
-            data.Bgm = 255;
-            data.SE = 255;
+            GameData::Input data{};
+            data.Bgm_ = 255;
+            data.SE_ = 255;
             Save(data);
             // 新しく作ったファイルを開く
+            // 開けない場合はリターン
             fp;
             if (fopen_s(&fp, "Data/Save/SaveData.csv", "rt"))return;
         }
@@ -46,7 +51,7 @@ namespace SaveDataFunctions
         int tempNum = 0;
 
         while (true)
-        {
+        {        
             chr = fgetc(fp);    // 1文字読み込み
             // 区切り文字が見つかった
             if (chr == ',' ||
@@ -55,6 +60,7 @@ namespace SaveDataFunctions
             {
                 // dataTblにデータを入れる
                 m_loadData.push_back(tempNum);
+                dataNum++;
                 tempNum = 0;
 
                 // ファイルの終端に来たら終了
@@ -99,29 +105,30 @@ namespace SaveDataFunctions
         }
         // ファイルを閉じる
         fclose(fp);
-
-        printfDx("閉じた後%d\n", m_loadData[0]);
     }
 
-    void Save(SaveData data)
+    void Save(GameData::Input data)
     {
-        printfDx("bgm == %d\n", data.Bgm);
         //FILEポインタの宣言
         FILE* fp1;
-        //Step1. CSVファイルを開く
+        // CSVファイルを開く
         fopen_s(&fp1, "Data/Save/SaveData.csv", "w");
-        //CSVファイルに上書き保存
+        // CSVファイルに上書き保存
         fprintf(
             fp1,
             "%ld,%ld\n",
-            data.Bgm,
-            data.SE);
-        //Step3. CSVファイルを閉じる
+            data.Bgm_,
+            data.SE_);
+        // CSVファイルを閉じる
         fclose(fp1);
+
+        // データを保管
+        m_loadData[0] = data.Bgm_;
+        m_loadData[1] = data.SE_;
     }
 
     // 0から255
-    SaveData GetSoundData()
+    GameData::Sound GetSoundData()
     {
         m_saveData.Bgm = m_loadData[0];
         m_saveData.SE  = m_loadData[1];
@@ -130,7 +137,7 @@ namespace SaveDataFunctions
     }
 
     // 0から1000
-    SaveData GetSoundBarData()
+    GameData::Sound GetSoundBarData()
     {   
         // 0から255を0から1000の割合に変換
         m_soundBarData.Bgm = (m_loadData[0] - 0) * (1000 - 0) / (255 - 0);

@@ -1,6 +1,6 @@
 #pragma once
 #include "PauseBase.h"
-#include "SaveData.h"
+#include "GameData.h"
 
 // 選択用クラス
 class SelectDrawer;
@@ -22,7 +22,7 @@ public:
 	bool GetSettingEnd();
 
 	// 現在の音量
-	SaveData GetSoundVol();
+	GameData::Sound GetSoundVol();
 
 private:
 	void UpdateStart();
@@ -57,6 +57,10 @@ private:
 	int m_volCatDirection[2];
 	int m_catPosX[2];
 	int m_catPosY[2];
+	// 背景用画像
+	int m_hWood;
+	// メーター用画像
+	int m_hBar;
 
 	// サウンド設定用位置
 	int m_SoundVolPosX[2];
@@ -78,7 +82,7 @@ private:
 	Box m_volVer[2];
 	Box m_cat[2];
 
-	SaveData m_saveSound;
+	GameData::Sound m_saveSound;
 
 	// スライド
 	int m_slideY;

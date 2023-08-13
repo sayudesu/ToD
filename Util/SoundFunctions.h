@@ -1,5 +1,5 @@
 #pragma once
-#include "../SaveData.h"
+#include "../GameData.h"
 
 namespace SoundFunctions
 {
@@ -18,7 +18,7 @@ namespace SoundFunctions
 	}SoundId;
 
 	// ロード、アンロード
-	void Load(SaveData soundVol);
+	void Load(GameData::Sound soundVol);
 	void UnLoad();
 
 	// BGMの再生
