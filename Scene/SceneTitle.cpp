@@ -58,7 +58,7 @@ SceneTitle::SceneTitle():
 	m_pGameSetting = new SettingDrawer;
 
 
-	m_hCatAnim = LoadGraph("Data/Image/CatAnim2.png");
+	m_hCatAnim = LoadGraph("Data/Image/CatAnim.png");
 }
 
 SceneTitle::~SceneTitle()
@@ -175,16 +175,49 @@ SceneBase* SceneTitle::Update()
 	// スライドを開ける
 	SceneBase::UpdateSlider(m_isSliderOpen);
 
-	m_count++;
+	static bool isRev = false;
+	static bool isMove = false;
 
-	if (m_count == 10)
+	isMove = false;	
+
+	
+	if (Pad::isPress(PAD_INPUT_LEFT))
 	{
-		m_imagePosX += 322;
-		if (m_imagePosX == 322 * 3)
+		x -= 3;
+		isMove = true;
+
+	}
+	if (Pad::isPress(PAD_INPUT_RIGHT))
+	{
+		x += 3;
+		isMove = true;
+	}
+
+	if (isMove)
+	{
+		m_count++;
+		if (m_count == 3)
 		{
-			m_imagePosX = 0;
+			if (!isRev)
+			{
+				m_imagePosX += 321;
+				if (m_imagePosX == 321 * 5)
+				{
+					isRev = true;
+				}
+			}
+			if (isRev)
+			{
+				m_imagePosX -= 321;
+				if (m_imagePosX <= 0)
+				{
+					isRev = false;
+				}
+			}
+
+			m_count = 0;
+
 		}
-		m_count = 0;
 	}
 
 
@@ -205,9 +238,9 @@ void SceneTitle::Draw()
 	DrawRectRotaGraph(
 		Game::kScreenWidth/2,
 		Game::kScreenHeight/2,//プレイヤーの位置
-		m_imagePosX, 0,// 画像の左上
-		322, 169,    // 画像の右下
-		3,	   // サイズ
+		m_imagePosX + 4, 0,// 画像の左上
+		322, 192,    // 画像の右下
+		0.8,	   // サイズ
 		DX_PI_F * 180.0f,			   // 回転角度
 		m_hCatAnim,		   // ハンドル
 		true,		       // 画像透過

@@ -39,8 +39,10 @@ private:
 	int m_slideY;
 
 	// アイコン選択
-	int m_hIcon[3];
+	int m_hIcon[6];
 	int m_iconSelect;
+	int m_iconSelectLeft;
+	int m_iconSelectRight;
 	// アイコンのデータを保管
 	GameData::Icon m_iconData;
 

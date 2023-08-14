@@ -1,6 +1,7 @@
 #include "SoundFunctions.h"
 #include <DxLib.h>
 #include <vector>
+#include <cassert>
 
 namespace
 {
@@ -19,6 +20,7 @@ namespace
 		"Data/Sound/SE/SelectChange.mp3", // 選択決定
 		"Data/Sound/SE/Over.mp3",         // 選択できません
 		"Data/Sound/SE/Dwon.mp3",         // でぅーん
+		"Data/Sound/SE/Change.mp3",         // かちーん
 	};
 }
 
@@ -30,6 +32,7 @@ namespace SoundFunctions
 		for (auto& fileName : kFileName)
 		{
 			int handle = LoadSoundMem(fileName);
+			assert(handle != -1);
 			m_soundHandle.push_back(handle);
 		}
 
@@ -43,6 +46,7 @@ namespace SoundFunctions
 		SetVolume(SoundIdSelctChange, soundVol.SE);
 		SetVolume(SoundIdOver, soundVol.SE);
 		SetVolume(SoundIdDwon, soundVol.SE);
+		SetVolume(SoundIdChange, soundVol.SE);
 	}
 
 	void UnLoad()

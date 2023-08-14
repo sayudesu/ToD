@@ -14,6 +14,7 @@ namespace SoundFunctions
 		SoundIdSelctChange, // 選択決定
 		SoundIdOver,        // 選択できません
 		SoundIdDwon,        // でぅーん
+		SoundIdChange,        // かちーん
 		// 最大数
 		SoundIdMaxNum
 	}SoundId;

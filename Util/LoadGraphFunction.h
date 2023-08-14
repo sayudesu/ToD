@@ -16,6 +16,9 @@ namespace LoadGraphFunction
 		Icon0,
 		Icon1,
 		Icon2,
+		Icon3,
+		Icon4,
+		Icon5,
 		GamePad,
 
 		// �ő吔

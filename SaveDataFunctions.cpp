@@ -128,7 +128,7 @@ namespace SaveDataFunctions
             // 新しいcsvファイルを作成
             // デフォルトの値を記録
             GameData::Input data{};
-            data.Icon_ = 255;
+            data.Icon_ = 0;
             data.Bgm_ = 255;
             data.SE_ = 255;
             Save(data, true);

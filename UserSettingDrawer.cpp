@@ -43,7 +43,9 @@ namespace
 UserSettingDrawer::UserSettingDrawer():
 	m_isSetingEnd(false),
 	m_slideY(-Game::kScreenHeight),
-	m_iconSelect(SaveDataFunctions::GetIconData().Icon)
+	m_iconSelect(SaveDataFunctions::GetIconData().Icon),
+	m_iconSelectLeft(0),
+	m_iconSelectRight(0)
 {
 	// 選択用クラスのインスタンス
 	m_pSelect = new SelectDrawer;
@@ -92,6 +94,9 @@ void UserSettingDrawer::Init()
 	m_hIcon[0] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon0);
 	m_hIcon[1] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon1);
 	m_hIcon[2] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon2);
+	m_hIcon[3] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon3);
+	m_hIcon[4] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon4);
+	m_hIcon[5] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon5);
 }
 
 void UserSettingDrawer::End()
@@ -120,6 +125,22 @@ void UserSettingDrawer::Draw()
 		0.6,
 		DX_PI_F * 180.0f,
 		m_hIcon[m_iconSelect],
+		true);
+
+	DrawRotaGraph(
+		kFrame1PosX - 130,
+		kFrame1PosY + 120 + m_slideY,
+		0.4,
+		DX_PI_F * 180.0f,
+		m_hIcon[m_iconSelect + m_iconSelectLeft],
+		true);
+
+	DrawRotaGraph(
+		kFrame1PosX + 130,
+		kFrame1PosY + 120 + m_slideY,
+		0.4,
+		DX_PI_F * 180.0f,
+		m_hIcon[m_iconSelect + m_iconSelectRight],
 		true);
 
 	m_pSelect->Draw();
@@ -167,23 +188,24 @@ void UserSettingDrawer::UpdateMain()
 		m_updateFunc = &PauseBase::UpdateEnd;
 	}
 
-	// アイコン変更
 	if (m_pSelect->GetSelectNowNo() == 0)
 	{
 		if (Pad::isTrigger(PAD_INPUT_LEFT))
 		{
+			SoundFunctions::Play(SoundFunctions::SoundIdChange);
 			if (m_iconSelect > 0)
 			{
 				m_iconSelect--;
 			}
 			else
 			{
-				m_iconSelect = 2;
+				m_iconSelect = 5;
 			}
 		}
 		if (Pad::isTrigger(PAD_INPUT_RIGHT))
 		{
-			if (m_iconSelect < 2)
+			SoundFunctions::Play(SoundFunctions::SoundIdChange);
+			if (m_iconSelect < 5)
 			{
 				m_iconSelect++;
 			}
@@ -194,6 +216,22 @@ void UserSettingDrawer::UpdateMain()
 		}
 	}
 
+	if (m_iconSelect == 0)
+	{
+		m_iconSelectLeft = 5;
+	}
+	else
+	{
+		m_iconSelectLeft = -1;
+	}
+	if (m_iconSelect == 5)
+	{
+		m_iconSelectRight = -5;
+	}
+	else
+	{
+		m_iconSelectRight = 1;
+	}
 	// データーをリセット
 	if (m_pSelect->GetSelectNo() == 1)
 	{
