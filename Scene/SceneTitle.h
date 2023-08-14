@@ -4,7 +4,7 @@
 // 選択用クラス
 class SelectDrawer;
 // 設定用クラス
-class SoundSettingDrawr;
+class SettingDrawer;
 
 class SceneTitle : public SceneBase
 {
@@ -29,6 +29,11 @@ private:
 	// 選択用クラス
 	SelectDrawer* m_pSelect;
 	// 設定用クラス
-	SoundSettingDrawr* m_pGameSetting;
+	SettingDrawer* m_pGameSetting;
+
+	// あとでけす
+	int m_hCatAnim = -1;
+	int m_count = 0;
+	int m_imagePosX = 0;
 };
 

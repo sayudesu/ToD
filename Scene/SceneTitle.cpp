@@ -4,7 +4,7 @@
 #include "../Util/Pad.h"
 #include "../Util/game.h"
 #include "../Util/SelectDrawer.h"
-#include "../SoundSettingDrawr.h"
+#include "../SettingDrawer.h"
 #include "../Util/SoundFunctions.h"
 #include "../SaveDataFunctions.h"
 
@@ -55,7 +55,10 @@ SceneTitle::SceneTitle():
 	// 選択用クラスのインスタンス
 	m_pSelect = new SelectDrawer;
 	// 設定用クラス
-	m_pGameSetting = new SoundSettingDrawr;
+	m_pGameSetting = new SettingDrawer;
+
+
+	m_hCatAnim = LoadGraph("Data/Image/CatAnim2.png");
 }
 
 SceneTitle::~SceneTitle()
@@ -166,8 +169,24 @@ SceneBase* SceneTitle::Update()
 		}
 	}
 	
+	// BGMが止まったらもう一度再生
+	SoundFunctions::ReStartBgm(SoundFunctions::SoundIdTitle);
+
 	// スライドを開ける
 	SceneBase::UpdateSlider(m_isSliderOpen);
+
+	m_count++;
+
+	if (m_count == 10)
+	{
+		m_imagePosX += 322;
+		if (m_imagePosX == 322 * 3)
+		{
+			m_imagePosX = 0;
+		}
+		m_count = 0;
+	}
+
 
 	return this;
 }
@@ -182,6 +201,18 @@ void SceneTitle::Draw()
 
 	// セレクト関連描画
 	m_pSelect->Draw();
+
+	DrawRectRotaGraph(
+		Game::kScreenWidth/2,
+		Game::kScreenHeight/2,//プレイヤーの位置
+		m_imagePosX, 0,// 画像の左上
+		322, 169,    // 画像の右下
+		3,	   // サイズ
+		DX_PI_F * 180.0f,			   // 回転角度
+		m_hCatAnim,		   // ハンドル
+		true,		       // 画像透過
+		false      // 画像反転
+	);
 
 	if (m_isSlectSetting)
 	{

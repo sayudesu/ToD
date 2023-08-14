@@ -19,6 +19,10 @@ namespace
         "Data/Image/OutSideBarBg.png",// 外側のメーター画像パス   
         "Data/Image/SelectFrame.png",// 選択用枠
         "Data/Image/nikukyu_S.png",// 選択用肉球
+        "Data/Image/Icon0.png",// アイコン
+        "Data/Image/Icon1.png",
+        "Data/Image/Icon2.png",
+        "Data/Image/GamePad.png",// ゲームパッド
     };
 }
 

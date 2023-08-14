@@ -4,11 +4,11 @@
 
 // 選択用クラス
 class SelectDrawer;
-class SoundSettingDrawr : public PauseBase
+class SoundSettingDrawer : public PauseBase
 {
 public:
-	SoundSettingDrawr();
-	~SoundSettingDrawr();
+	SoundSettingDrawer();
+	~SoundSettingDrawer();
 
 	void Init();
 	void End();
@@ -23,6 +23,8 @@ public:
 
 	// 現在の音量
 	GameData::Sound GetSoundVol();
+
+
 
 private:
 	void UpdateStart();

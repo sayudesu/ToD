@@ -13,4 +13,6 @@ namespace SaveDataFunctions
 	GameData::Sound GetSoundData();
 	// 0から1000
 	GameData::Sound GetSoundBarData();
+	// アイコンのデーターを渡す
+	GameData::Icon GetIconData();
 }

@@ -3,6 +3,11 @@
 // 保存するリスト
 typedef struct 
 {	
+	// アイコン
+	struct Icon
+	{
+		int Icon;
+	};
 	// サウンド
 	struct Sound
 	{
@@ -10,9 +15,12 @@ typedef struct
 		int SE;
 	};
 
+
+
 	// 保存する場所
 	struct Input
 	{
+		int Icon_;
 		int Bgm_;
 		int SE_;
 	};

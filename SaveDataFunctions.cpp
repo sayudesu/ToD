@@ -20,12 +20,14 @@ namespace
     // 
     GameData::Sound m_saveData;
     GameData::Sound m_soundBarData;
+    GameData::Icon m_iconData;
     // データ数カウント
     int dataNum = -1;
 
     constexpr int kDataMaxNum = 2;
-    constexpr int kDataBGM = 0;
-    constexpr int kDataSE  = 1;
+    constexpr int kDataIcon = 0;
+    constexpr int kDataBGM  = 1;
+    constexpr int kDataSE   = 2;
 }
 
 namespace SaveDataFunctions
@@ -44,6 +46,7 @@ namespace SaveDataFunctions
             // 新しいcsvファイルを作成
             // デフォルトの値を記録
             GameData::Input data{};
+            data.Icon_ = 0;
             data.Bgm_ = 255;
             data.SE_ = 255;
             Save(data,false);
@@ -105,8 +108,6 @@ namespace SaveDataFunctions
             // データは数字のみのはず
            assert(chr >= '0' && chr <= '9');
         
-
-
             // 数字なのは確定
             // 文字列を数値に変換したい
             // 268を読み込む
@@ -127,6 +128,7 @@ namespace SaveDataFunctions
             // 新しいcsvファイルを作成
             // デフォルトの値を記録
             GameData::Input data{};
+            data.Icon_ = 255;
             data.Bgm_ = 255;
             data.SE_ = 255;
             Save(data, true);
@@ -142,7 +144,8 @@ namespace SaveDataFunctions
         // CSVファイルに上書き保存
         fprintf(
             fp1,
-            "%ld,%ld\n",
+            "%ld,%ld,%ld\n",
+            data.Icon_,
             data.Bgm_,
             data.SE_);
         // CSVファイルを閉じる
@@ -151,6 +154,7 @@ namespace SaveDataFunctions
         if (now)
         {
             // データを保管
+            m_loadData[kDataIcon] = data.Icon_;
             m_loadData[kDataBGM] = data.Bgm_;
             m_loadData[kDataSE] = data.SE_;
         }
@@ -173,5 +177,12 @@ namespace SaveDataFunctions
         m_soundBarData.SE = (m_loadData[kDataSE] - 0) * (1000 - 0) / (255 - 0);
 
         return m_soundBarData;
+    }
+    // アイコンのデータを渡す
+    GameData::Icon GetIconData()
+    {
+        m_iconData.Icon = m_loadData[kDataIcon];
+
+        return m_iconData;
     }
 }

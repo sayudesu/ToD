@@ -18,6 +18,7 @@ namespace
 		"Data/Sound/SE/Select.mp3",		  // 選択中
 		"Data/Sound/SE/SelectChange.mp3", // 選択決定
 		"Data/Sound/SE/Over.mp3",         // 選択できません
+		"Data/Sound/SE/Dwon.mp3",         // でぅーん
 	};
 }
 
@@ -41,6 +42,7 @@ namespace SoundFunctions
 		SetVolume(SoundIdSelct, soundVol.SE);
 		SetVolume(SoundIdSelctChange, soundVol.SE);
 		SetVolume(SoundIdOver, soundVol.SE);
+		SetVolume(SoundIdDwon, soundVol.SE);
 	}
 
 	void UnLoad()
@@ -62,7 +64,7 @@ namespace SoundFunctions
 	// 流れていない場合はもう一度流す
 	void ReStartBgm(SoundId id)
 	{
-		if (CheckSoundMem(id) == 0)
+		if (CheckSoundMem(m_soundHandle[id]) == 0)
 		{
 			PlaySoundMem(m_soundHandle[id], DX_PLAYTYPE_BACK, true);
 		}

@@ -1,4 +1,4 @@
-#include "SoundSettingDrawr.h"
+#include "SoundSettingDrawer.h"
 #include <DxLib.h>
 #include "Util/game.h"
 #include "Util/Pad.h"
@@ -41,7 +41,7 @@ namespace
 	constexpr int kString3Size = 52;
 }
 
-SoundSettingDrawr::SoundSettingDrawr() :
+SoundSettingDrawer::SoundSettingDrawer() :
 	m_hVolCat(-1),
 	m_isSetingEnd(false),
 	m_slideY(-Game::kScreenHeight)
@@ -53,14 +53,14 @@ SoundSettingDrawr::SoundSettingDrawr() :
 	m_updateFunc = &PauseBase::UpdateStart;
 }
 
-SoundSettingDrawr::~SoundSettingDrawr()
+SoundSettingDrawer::~SoundSettingDrawer()
 {
 	delete m_pSelect;
 }
 
-void SoundSettingDrawr::Init()
+void SoundSettingDrawer::Init()
 {
-	m_hVolCat = LoadGraphFunction::GraphData(LoadGraphFunction::VolCat);;
+	m_hVolCat = LoadGraphFunction::GraphData(LoadGraphFunction::VolCat);
 
 	m_pSelect->Add(
 		kFrame1PosX,
@@ -133,16 +133,16 @@ void SoundSettingDrawr::Init()
 	m_volCatDirection[1] = false;
 }
 
-void SoundSettingDrawr::End()
+void SoundSettingDrawer::End()
 {
 }
 
-void SoundSettingDrawr::Update()
+void SoundSettingDrawer::Update()
 {
 	(this->*m_updateFunc)();
 }
 
-void SoundSettingDrawr::Draw()
+void SoundSettingDrawer::Draw()
 {
 	// 背景画像
 	DrawExtendGraph(
@@ -199,19 +199,19 @@ void SoundSettingDrawr::Draw()
 }
 
 /// <returns>設定画面を終了するどうか</returns>
-bool SoundSettingDrawr::GetSettingEnd()
+bool SoundSettingDrawer::GetSettingEnd()
 {
 	return m_isSetingEnd;
 }
 
 // 現在の音量
 // 0から255
-GameData::Sound SoundSettingDrawr::GetSoundVol()
+GameData::Sound SoundSettingDrawer::GetSoundVol()
 {
 	return m_saveSound;
 }
 
-void SoundSettingDrawr::UpdateStart()
+void SoundSettingDrawer::UpdateStart()
 {
 	// スライドします
 	m_slideY += kSlideSpeed;
@@ -229,7 +229,7 @@ void SoundSettingDrawr::UpdateStart()
 	m_isSetingEnd = false;	
 }
 
-void SoundSettingDrawr::UpdateMain()
+void SoundSettingDrawer::UpdateMain()
 {
 	m_pSelect->Update();
 	for (int i = 0; i < 2; i++)
@@ -275,7 +275,7 @@ void SoundSettingDrawr::UpdateMain()
 	UpdateSoundVol();
 }
 
-void SoundSettingDrawr::UpdateEnd()
+void SoundSettingDrawer::UpdateEnd()
 {
 	m_slideY -= kSlideSpeed;
 
@@ -289,16 +289,18 @@ void SoundSettingDrawr::UpdateEnd()
 		m_isSetingEnd = true;
 		// 選択をリセットします
 		m_pSelect->ResetSelectNo();
+
+		// データを保存します
+		//GameData::Input save{};
+		//save.Bgm_ = m_saveSound.Bgm;
+		//save.SE_ = m_saveSound.SE;
+		//SaveDataFunctions::Save(save);
 	}
 
-	// データを保存します
-	GameData::Input save{};
-	save.Bgm_ = m_saveSound.Bgm;
-	save.SE_ = m_saveSound.SE;
-    SaveDataFunctions::Save(save);
+
 }
 
-void SoundSettingDrawr::SoundVolume(int changeNo,int BigVol, int MaxVol,int changeVol)
+void SoundSettingDrawer::SoundVolume(int changeNo,int BigVol, int MaxVol,int changeVol)
 {
 	// サウンド調整
 	if (BigVol > MaxVol)
@@ -315,7 +317,7 @@ void SoundSettingDrawr::SoundVolume(int changeNo,int BigVol, int MaxVol,int chan
 	}
 }
 
-void SoundSettingDrawr::UpdateSoundVolume(int changeNo)
+void SoundSettingDrawer::UpdateSoundVolume(int changeNo)
 {
 	// 目的のボリュームの位置まで動く
 	if (m_TempSoundVolPosX[changeNo] > m_SoundVolPosX[changeNo])
@@ -342,7 +344,7 @@ void SoundSettingDrawr::UpdateSoundVolume(int changeNo)
 }
 
 // 音量を調整します
-void SoundSettingDrawr::UpdateSoundVol()
+void SoundSettingDrawer::UpdateSoundVol()
 {
 	// 音量を変更
 	m_saveSound.Bgm = m_SoundVolPosX[0];
@@ -361,7 +363,7 @@ void SoundSettingDrawr::UpdateSoundVol()
 	SoundFunctions::SetVolume(SoundFunctions::SoundIdOver, m_saveSound.SE);
 }
 
-void SoundSettingDrawr::Reset()
+void SoundSettingDrawer::Reset()
 {
 	// Main用関数に移動
 	m_updateFunc = &PauseBase::UpdateStart;

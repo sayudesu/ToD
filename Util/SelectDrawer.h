@@ -77,6 +77,7 @@ private:
 	// ”L‚ÌŽè‚ÌˆÊ’u
 	int m_catHandPosX[kCatHandNum];
 	int m_catHandPosY;
+	int m_catHandSlideY;
 };
 
 class StringDrawer

@@ -13,6 +13,10 @@ namespace LoadGraphFunction
 		OutSideBarBg,
 		SelectFrame,
 		SelectCatHand,
+		Icon0,
+		Icon1,
+		Icon2,
+		GamePad,
 
 		// �ő吔
 		GraphIdMaxNum

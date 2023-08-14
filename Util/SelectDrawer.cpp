@@ -143,10 +143,13 @@ void SelectDrawer::UpdatePos(int x, int y)
 	{
 		text->UpdatePos(x, y);
 	}
+	// スライドの為の値を受けとる
+	 m_catHandSlideY = y;
 }
 
 void SelectDrawer::UpdateCatHandPos()
 {
+
 	if (m_catHandPosY < m_pText[selectNow]->GetFramePosY() + 10)
 	{
 		m_catHandPosY += 26;
@@ -155,16 +158,18 @@ void SelectDrawer::UpdateCatHandPos()
 	{
 		m_catHandPosY -= 26;
 	}
+
 	// 選択用肉球を描画
 	for (int i = 0; i < kCatHandNum; i++)
 	{
 		DrawRotaGraph(m_pText[selectNow]->GetFramePosX() + m_catHandPosX[i],
-					m_catHandPosY,
-					0.2,
-					kAngle,
-					LoadGraphFunction::GraphData(LoadGraphFunction::SelectCatHand),
-					true);
+			m_catHandPosY + m_catHandSlideY,
+			0.2,
+			kAngle,
+			LoadGraphFunction::GraphData(LoadGraphFunction::SelectCatHand),
+			true);
 	}
+
 }
 
 void SelectDrawer::Draw()
