@@ -229,10 +229,13 @@ void UserSettingDrawer::UpdateEnd()
 	{
 		// 変数の初期化
 		Reset();
+
 		// エンド処理が終わっているかどうか
 		m_isSetingEnd = true;
+
 		// 選択をリセットします
 		m_pSelect->ResetSelectNo();
+
 		// アイコンのデータを保管
 		m_iconData.Icon = m_iconSelect;
 	}
