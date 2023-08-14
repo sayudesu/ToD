@@ -9,8 +9,12 @@
 #include <sstream>
 #include <iostream>
 
+#include <cctype>
+
 namespace
 {
+    // データ保存用パス
+    const char* kDataPath = "Data/Save/SaveData.csv";
     // 外部ファイル読み込み用
     std::vector<int> m_loadData;
     // 
@@ -18,6 +22,10 @@ namespace
     GameData::Sound m_soundBarData;
     // データ数カウント
     int dataNum = -1;
+
+    constexpr int kDataMaxNum = 2;
+    constexpr int kDataBGM = 0;
+    constexpr int kDataSE  = 1;
 }
 
 namespace SaveDataFunctions
@@ -26,20 +34,24 @@ namespace SaveDataFunctions
     {
         // csvファイルを読み込んで数字の配列にしたい
         FILE* fp;
+        // ファイルがあるかどうか
+        bool isFileCheck = true;
 
-        if (fopen_s(&fp, "Data/Save/SaveData.csv", "rt") != 0)
+        if (fopen_s(&fp,kDataPath, "rt") != 0)
         {
+            isFileCheck = false;
             // ファイルが存在しなかったら
             // 新しいcsvファイルを作成
             // デフォルトの値を記録
             GameData::Input data{};
             data.Bgm_ = 255;
             data.SE_ = 255;
-            Save(data);
+            Save(data,false);
+
             // 新しく作ったファイルを開く
             // 開けない場合はリターン
             fp;
-            if (fopen_s(&fp, "Data/Save/SaveData.csv", "rt"))return;
+            if (fopen_s(&fp,kDataPath, "rt"))return;
         }
 
         int chr;
@@ -51,15 +63,16 @@ namespace SaveDataFunctions
         int tempNum = 0;
 
         while (true)
-        {        
+        {
             chr = fgetc(fp);    // 1文字読み込み
+
             // 区切り文字が見つかった
-            if (chr == ',' ||
-                chr == '\n' ||
-                chr == EOF)
+            if (chr == ',' || chr == '\n' || chr == EOF)
             {
-                // dataTblにデータを入れる
+
+                // m_loadDataにデータを入れる
                 m_loadData.push_back(tempNum);
+
                 dataNum++;
                 tempNum = 0;
 
@@ -90,7 +103,9 @@ namespace SaveDataFunctions
             }
 
             // データは数字のみのはず
-            assert(chr >= '0' && chr <= '9');
+           assert(chr >= '0' && chr <= '9');
+        
+
 
             // 数字なのは確定
             // 文字列を数値に変換したい
@@ -105,14 +120,25 @@ namespace SaveDataFunctions
         }
         // ファイルを閉じる
         fclose(fp);
+
+        if (!isFileCheck)
+        {
+            // ファイルが存在しなかったら
+            // 新しいcsvファイルを作成
+            // デフォルトの値を記録
+            GameData::Input data{};
+            data.Bgm_ = 255;
+            data.SE_ = 255;
+            Save(data, true);
+        }
     }
 
-    void Save(GameData::Input data)
+    void Save(GameData::Input data,bool now)
     {
         //FILEポインタの宣言
         FILE* fp1;
         // CSVファイルを開く
-        fopen_s(&fp1, "Data/Save/SaveData.csv", "w");
+        fopen_s(&fp1, kDataPath, "w");
         // CSVファイルに上書き保存
         fprintf(
             fp1,
@@ -122,16 +148,19 @@ namespace SaveDataFunctions
         // CSVファイルを閉じる
         fclose(fp1);
 
-        // データを保管
-        m_loadData[0] = data.Bgm_;
-        m_loadData[1] = data.SE_;
+        if (now)
+        {
+            // データを保管
+            m_loadData[kDataBGM] = data.Bgm_;
+            m_loadData[kDataSE] = data.SE_;
+        }
     }
 
     // 0から255
     GameData::Sound GetSoundData()
     {
-        m_saveData.Bgm = m_loadData[0];
-        m_saveData.SE  = m_loadData[1];
+        m_saveData.Bgm = m_loadData[kDataBGM];
+        m_saveData.SE  = m_loadData[kDataSE];
 
         return m_saveData;
     }
@@ -140,8 +169,8 @@ namespace SaveDataFunctions
     GameData::Sound GetSoundBarData()
     {   
         // 0から255を0から1000の割合に変換
-        m_soundBarData.Bgm = (m_loadData[0] - 0) * (1000 - 0) / (255 - 0);
-        m_soundBarData.SE = (m_loadData[1] - 0) * (1000 - 0) / (255 - 0);
+        m_soundBarData.Bgm = (m_loadData[kDataBGM] - 0) * (1000 - 0) / (255 - 0);
+        m_soundBarData.SE = (m_loadData[kDataSE] - 0) * (1000 - 0) / (255 - 0);
 
         return m_soundBarData;
     }

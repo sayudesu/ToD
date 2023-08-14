@@ -169,10 +169,6 @@ SceneBase* SceneTitle::Update()
 	// スライドを開ける
 	SceneBase::UpdateSlider(m_isSliderOpen);
 
-#if _DEBUG
-	printfDx("BGM = %d\n", SoundFunctions::GetVolume(SoundFunctions::SoundIdTitle));
-#endif
-
 	return this;
 }
 

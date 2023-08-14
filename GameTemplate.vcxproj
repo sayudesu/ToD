@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Effeck\EffekseerDrawer.cpp" />
+    <ClCompile Include="Util\LoadGraphFunction.cpp" />
     <ClCompile Include="SoundSettingDrawr.cpp" />
     <ClCompile Include="Object\Map\Map.cpp" />
     <ClCompile Include="Object\Camera\Camera.cpp" />
@@ -166,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Effeck\EffekseerDrawer.h" />
+    <ClInclude Include="Util\LoadGraphFunction.h" />
     <ClInclude Include="SoundSettingDrawr.h" />
     <ClInclude Include="Object\Map\Map.h" />
     <ClInclude Include="Object\Camera\Camera.h" />

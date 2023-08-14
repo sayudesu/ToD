@@ -6,6 +6,7 @@
 #include "Util/SoundFunctions.h"
 
 #include "SaveDataFunctions.h"
+#include "Util/LoadGraphfunction.h"
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -80,6 +81,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SaveDataFunctions::Load();
 	// サウンド読み込み
 	SoundFunctions::Load(SaveDataFunctions::GetSoundData());
+	// 画像データの読み込み
+	LoadGraphFunction::Load();
 
 	SceneManager* pScene = new SceneManager;
 
@@ -123,6 +126,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// サウンドメモリ解放
 	SoundFunctions::UnLoad();
+
+	// 画像データのメモリ解放
+	LoadGraphFunction::UnLoad();
 
 	// Effekseerを終了する。
 	Effkseer_End();

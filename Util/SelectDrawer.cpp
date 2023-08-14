@@ -3,6 +3,7 @@
 #include <cassert>
 #include "Pad.h"
 #include "SoundFunctions.h"
+#include "LoadGraphFunction.h"
 
 namespace 
 {
@@ -28,13 +29,9 @@ SelectDrawer::SelectDrawer():
 	selectNow(0),
 	m_selectNo(-1),
 	selectRad(0),
-	m_hSelectFrame(-1),
-	m_hCatHand(-1),
 	m_catHandPosY(0)
 {
-	// 画像ファイルをメモリにロードします。
-	m_hSelectFrame = LoadGraph(kSelectFramePath);
-	m_hCatHand = LoadGraph(kSelectCatHandPath);
+
 
 	// 肉球画像の位置
 	m_catHandPosX[0] = -300;
@@ -52,15 +49,12 @@ SelectDrawer::~SelectDrawer()
 void SelectDrawer::Add(int frameX, int frameY, int stringX, int stringY, const char* text, int color, int size)
 {
 	// インスタンスを作成
-	m_pText.push_back(std::make_shared<StringDrawer>(frameX, frameY, stringX, stringY, text, color, size, m_hSelectFrame, m_hCatHand));
+	m_pText.push_back(std::make_shared<StringDrawer>(frameX, frameY, stringX, stringY, text, color, size, LoadGraphFunction::GraphData(LoadGraphFunction::SelectFrame), LoadGraphFunction::GraphData(LoadGraphFunction::SelectCatHand)));
 	selectNum++;
 }
 
 void SelectDrawer::End()
 {
-	// メモリ解放
-	DeleteGraph(m_hSelectFrame);
-	DeleteGraph(m_hCatHand);
 }
 
 void SelectDrawer::Update()
@@ -168,7 +162,7 @@ void SelectDrawer::UpdateCatHandPos()
 					m_catHandPosY,
 					0.2,
 					kAngle,
-					m_hCatHand,
+					LoadGraphFunction::GraphData(LoadGraphFunction::SelectCatHand),
 					true);
 	}
 }

@@ -5,17 +5,10 @@
 #include "Util/SelectDrawer.h"
 #include "Util/SoundFunctions.h"
 #include "SaveDataFunctions.h"
+#include "Util/LoadGraphFunction.h"
 
 namespace
 {
-	// 猫の画像パス
-	const char* kVolCat = "Data/Image/SelectVol_B.png";
-	const char* kVolCatS = "Data/Image/SelectVol_S.png";
-	// 背景画像パス
-	const char* kWood = "Data/Image/Wood.png";
-	// メーター画像パス
-	const char* kBar = "Data/Image/GBar.png";
-
 	// 猫の画像の速さ
 	constexpr int kVolCatSpeed = 20;
 	// スライドの速さ
@@ -50,10 +43,6 @@ namespace
 
 SoundSettingDrawr::SoundSettingDrawr() :
 	m_hVolCat(-1),
-	m_hVolCatD(-1),
-	m_hVolCatS(-1),
-	m_hWood(-1),
-	m_hBar(-1),
 	m_isSetingEnd(false),
 	m_slideY(-Game::kScreenHeight)
 {
@@ -71,13 +60,7 @@ SoundSettingDrawr::~SoundSettingDrawr()
 
 void SoundSettingDrawr::Init()
 {
-	// 画像データの読み込み
-	m_hVolCatD = LoadGraph(kVolCat);
-	m_hVolCatS = LoadGraph(kVolCatS);
-	m_hWood = LoadGraph(kWood);
-	m_hBar = LoadGraph(kBar);
-
-	m_hVolCat = m_hVolCatD;
+	m_hVolCat = LoadGraphFunction::GraphData(LoadGraphFunction::VolCat);;
 
 	m_pSelect->Add(
 		kFrame1PosX,
@@ -152,12 +135,6 @@ void SoundSettingDrawr::Init()
 
 void SoundSettingDrawr::End()
 {
-	// 画像データのメモリ解放
-	DeleteGraph(m_hVolCatD);
-	DeleteGraph(m_hVolCatS);
-	DeleteGraph(m_hVolCat);
-	DeleteGraph(m_hWood);
-	DeleteGraph(m_hBar);
 }
 
 void SoundSettingDrawr::Update()
@@ -173,7 +150,7 @@ void SoundSettingDrawr::Draw()
 		0 + m_slideY,
 		Game::kScreenWidth - 0,
 		Game::kScreenHeight + 100 + m_slideY,
-		m_hWood,
+		LoadGraphFunction::GraphData(LoadGraphFunction::Wood),
 		true);
 
 
@@ -182,28 +159,28 @@ void SoundSettingDrawr::Draw()
 	// 調整用猫を描画
 	for (int i = 0; i < 2; i++)
 	{
-		DrawBox(
+		DrawExtendGraph(
 			m_frame[i].upLeft,
 			m_frame[i].bottomLeft + m_slideY,
 			m_frame[i].upRight,
 			m_frame[i].bottomRight + m_slideY,
-			0xffffff,
+			LoadGraphFunction::GraphData(LoadGraphFunction::OutSideBarBg),
 			true);
-
-		//DrawBox(
-		//	m_volVer[i].upLeft,
-		//	m_volVer[i].bottomLeft + m_slideY,
-		//	m_volVer[i].upRight + m_SoundVolPosX[i],
-		//	m_volVer[i].bottomRight + m_slideY,
-		//	0x00ff00,
-		//	true);
 
 		DrawExtendGraph(
 			m_volVer[i].upLeft,
 			m_volVer[i].bottomLeft + m_slideY,
 			m_volVer[i].upRight + m_SoundVolPosX[i],
 			m_volVer[i].bottomRight + m_slideY,
-			m_hBar,
+			LoadGraphFunction::GraphData(LoadGraphFunction::Bar),
+			true);
+
+		DrawExtendGraph(
+			m_frame[i].upLeft,
+			m_frame[i].bottomLeft + m_slideY,
+			m_frame[i].upRight,
+			m_frame[i].bottomRight + m_slideY,
+			LoadGraphFunction::GraphData(LoadGraphFunction::OutSideBar),
 			true);
 
 		DrawRotaGraph(
@@ -360,7 +337,7 @@ void SoundSettingDrawr::UpdateSoundVolume(int changeNo)
 	if (m_SoundVolPosX[0] == 0 &&
 		m_SoundVolPosX[1] == 0)
 	{
-		m_hVolCat = m_hVolCatS;
+		m_hVolCat = LoadGraphFunction::GraphData(LoadGraphFunction::VolCatS);
 	}
 }
 

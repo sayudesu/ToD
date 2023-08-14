@@ -56,7 +56,6 @@ void SceneMain::Init()
 	// BGM再生
 	SoundFunctions::StartBgm(SoundFunctions::SoundIdBattle);
 	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, SaveDataFunctions::GetSoundData().Bgm);
-	printfDx("%d\n", SaveDataFunctions::GetSoundData().Bgm);
 
 	m_pCamera->Init();
 	m_pEnemy->Init();
@@ -129,9 +128,6 @@ SceneBase* SceneMain::Update()
 	// スライドを開ける
 	SceneBase::UpdateSlider(m_isSliderOpen);
 
-#if _DEBUG
-	printfDx("BGM = %d\n", SoundFunctions::GetVolume(SoundFunctions::SoundIdBattle));
-#endif
 	return this;
 }
 

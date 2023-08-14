@@ -5,10 +5,8 @@ namespace SaveDataFunctions
 {
 	// セーブデータをロードします
 	void Load();
-	// セーブデータの更新
-	void RenewalData();
 	// データを保存します
-	void Save(GameData::Input data);
+	void Save(GameData::Input data, bool now = true);
 
 	// サウンドのセーブデータを渡す
 	// 0から255

@@ -52,13 +52,9 @@ private:
 private:
 	// ボリューム猫関係
 	int m_hVolCat;
-	int m_hVolCatD;
-	int m_hVolCatS;
 	int m_volCatDirection[2];
 	int m_catPosX[2];
 	int m_catPosY[2];
-	// 背景用画像
-	int m_hWood;
 	// メーター用画像
 	int m_hBar;
 

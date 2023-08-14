@@ -73,11 +73,9 @@ private:
 	int m_selectNo;
 	// ‰~‚Ì”¼Œa
 	int selectRad;
-	// ‘I‘ð‰æ‘œ—pƒnƒ“ƒhƒ‹
-	int m_hSelectFrame;
-	int m_hCatHand;
-	int m_catHandPosX[kCatHandNum];
+
 	// ”L‚ÌŽè‚ÌˆÊ’u
+	int m_catHandPosX[kCatHandNum];
 	int m_catHandPosY;
 };
 
