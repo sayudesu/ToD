@@ -14,6 +14,7 @@ public:
 private:
 	// モデルハンドル
 	int m_hBlock;
+	int m_hBlock2;
 	// データ保管
 	std::vector<int>m_loadData;
 	// データ数カウント

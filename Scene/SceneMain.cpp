@@ -87,13 +87,16 @@ SceneBase* SceneMain::Update()
 	m_pObstacle->Update();
 	// カメラ
 	m_pCamera->Update();
-	m_pCamera->GetMouseScreenPos(m_pPlayer->SetMouseScreenPos());
+	m_pCamera->GetMouseScreenPos(m_pPlayer->SetPos());
 	m_pCamera->GetMouseWorldPos(m_pPlayer->SetMouseWorldPos());
 	// 敵
 	m_pEnemy->Update();
 	// マップ
 	m_pMap->Update();
 	
+	// 
+	m_pCamera->GetTargetPos(m_pPlayer->SetPos());
+
 	// 敵を生成(デバッグ用)
 	if (Pad::isTrigger(PAD_INPUT_2))
 	{
@@ -102,7 +105,7 @@ SceneBase* SceneMain::Update()
 	// オブジェクトを生成
 	if (m_pPlayer->SetMouseLeft())
 	{
-		m_pObstacle->Create(m_pPlayer->SetMouseScreenPos());
+		m_pObstacle->Create(m_pPlayer->SetPos());
 	}
 
 	// シーンを切り替えます
@@ -120,6 +123,9 @@ SceneBase* SceneMain::Update()
 		}
 	}
 
+	// BGMが止まったらもう一度再生
+	SoundFunctions::ReStartBgm(SoundFunctions::SoundIdBattle);
+
 	// スライドを開ける
 	SceneBase::UpdateSlider(m_isSliderOpen);
 
@@ -128,28 +134,15 @@ SceneBase* SceneMain::Update()
 
 void SceneMain::Draw()
 {
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xaaaaaa, true);
 
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xdddd888, true);
 	m_pMap->Draw();
 	m_pEnemy->Draw();
 	m_pObstacle->Draw();
+	m_pPlayer->DrawUI();
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA,180);
 	m_pPlayer->Draw();
-
-	constexpr int lineScale = 300;
-	for (int X = -150; X < 1000; X += 30)
-	{
-		const VECTOR a = VGet(-lineScale, 0, X);
-		const VECTOR b = VGet(lineScale, 0, X);
-
-		DrawLine3D(a, b, 0xffffff);
-	}
-	for (int X = -150; X < 1000; X += 30)
-	{
-		const VECTOR a = VGet(X, 0, -lineScale);
-		const VECTOR b = VGet(X, 0, lineScale);
-
-		DrawLine3D(a, b, 0xffffff);
-	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,255);
 
 	SceneBase::DrawSliderDoor();
 }

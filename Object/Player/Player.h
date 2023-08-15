@@ -14,10 +14,11 @@ public:
 	void End();
 	void Update();
 	void Draw();
+	void DrawUI();
 
 	// マウスの位置を返す
 	VECTOR SetMouseWorldPos() { return m_screenToWorldPos; }
-	VECTOR SetMouseScreenPos() { return m_pos; }
+	VECTOR SetPos() { return m_pos; }
 	// マウスが押されているかどうか
 	bool SetMouseLeft() { return m_isResultObject; }
 private:
@@ -44,6 +45,9 @@ private:
 	bool m_isSetObject;
 
 	// オブジェクトコスト関連
+	// 背景ハンドル
+	int m_hCostBg;
+	// コスト数
 	int m_objectCostNum;
 };
 

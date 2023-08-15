@@ -279,11 +279,7 @@ void SettingDrawer::UpdateEnd()
 		save.Icon_ = m_pUserSettig->GetIcon().Icon;
 		save.Bgm_ = m_pSoundSetting->GetSoundVol().Bgm;
 		save.SE_ = m_pSoundSetting->GetSoundVol().SE;
-#if _DEBUG
-		printfDx("Icon = %d\n", save.Icon_);
-		printfDx("BGM  = %d\n", save.Bgm_);
-		printfDx("SE   = %d\n", save.SE_);
-#endif
+
 		SaveDataFunctions::Save(save);
 	}
 

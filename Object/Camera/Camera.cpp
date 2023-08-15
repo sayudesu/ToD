@@ -5,7 +5,7 @@ namespace
 {
 	// カメラ初期位置
 //	const VECTOR kCameraPos = VGet(0.0f, 300.0f, -100.0f);
-	const VECTOR kCameraPos = VGet(0.0f, 500.0f, -0.00001f);
+	const VECTOR kCameraPos = VGet(0.0f, 700.0f, -400.0f);
 //	const VECTOR kCameraPos = VGet(0.0f, 500.0f, 0.0f);
 	// カメラ初期ターゲット位置
 	const VECTOR kCameraTargetPos = VGet(0.0f, 0.0f, 0.0f);
@@ -16,7 +16,8 @@ namespace
 }
 
 Camera::Camera():
-	m_pos(kCameraPos)
+	m_pos(kCameraPos),
+	m_targetPos(kCameraTargetPos)
 {
 }
 
@@ -29,7 +30,7 @@ void Camera::Init()
 	// どこから、どこまで見えるか
 	SetCameraNearFar(100.0f, 2000.0f);
 	// どこを居てどこをみるか
-	SetCameraPositionAndTarget_UpVecY(m_pos, kCameraTargetPos);
+	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetPos);
 	// 遠近法のセットアップ( ラジアン値に変換しています )
 	SetupCamera_Perspective(kFovCalculation);
 }
@@ -40,20 +41,30 @@ void Camera::End()
 
 void Camera::Update()
 {
+	DINPUT_JOYSTATE input;
+
+	// 入力状態を取得
+	GetJoypadDirectInputState(DX_INPUT_PAD1, &input);
+
+	// スティックの位置からカメラ位置に変換
+	int x = (input.Rx - 0) * (500 - 0) / (1000 - 0);
+	int z = (input.Ry - 0) * (390 - 0) / (1000 - 0);
+	m_pos.x = x;
+	m_pos.z = z + kCameraPos.z;
+
 	// どこを居てどこをみるか
-	SetCameraPositionAndTarget_UpVecY(m_pos, kCameraTargetPos);
+	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetPos);
+}
 
-	//m_mouseScreenPos.y = 300.0f;
-	////m_mouseWorldPos.y = 0.0f;
-	//SetCameraPositionAndTarget_UpVecY(m_mouseScreenPos, m_mouseWorldPos);
+VECTOR Camera::SetPos() const
+{
+	return m_pos;
+}
 
-	//const float cameraSpeed = 10.0f;
-	//if (Pad::isPress(PAD_INPUT_UP))
-	//{
-	//	m_pos.y += cameraSpeed;
-	//}
-	//else if (Pad::isPress(PAD_INPUT_DOWN))
-	//{
-	//	m_pos.y -= cameraSpeed;
-	//}
+void Camera::GetTargetPos(VECTOR targetPos)
+{
+	VECTOR tempPos = targetPos;
+
+	if (targetPos.z > m_targetPos.z)m_targetPos.z += 10;
+	if (targetPos.z < m_targetPos.z)m_targetPos.z -= 10;
 }

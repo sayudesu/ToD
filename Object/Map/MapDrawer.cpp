@@ -110,6 +110,7 @@ void MapDrawer::Init()
 
     // モデルロード
     m_hBlock = MV1LoadModel("Data/Model/NormalBlock2.mv1");
+    m_hBlock2 = MV1LoadModel("Data/Model/NormalBlock3.mv1");
 }
 
 void MapDrawer::End()
@@ -130,7 +131,7 @@ void MapDrawer::Draw()
         // カウント
         puls++;
         // 右に押し詰める
-        int x = -450;
+        int x = -600;
         x += (puls * 50);
 
         // Z軸変更
@@ -146,6 +147,15 @@ void MapDrawer::Draw()
             MV1SetPosition(m_hBlock, pos);
             // オブジェクト描画
             MV1DrawModel(m_hBlock);
+            continue;
+        }
+        if (m_loadData[i] == 2)
+        {
+            VECTOR pos = VGet(x, -25.0f, z);
+            MV1SetPosition(m_hBlock2, pos);
+            // オブジェクト描画
+            MV1DrawModel(m_hBlock2);
+            continue;
         }
 
     }
