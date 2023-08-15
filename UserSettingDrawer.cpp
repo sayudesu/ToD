@@ -97,6 +97,8 @@ void UserSettingDrawer::Init()
 	m_hIcon[3] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon3);
 	m_hIcon[4] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon4);
 	m_hIcon[5] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon5);
+	m_hIcon[6] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon6);
+	m_hIcon[7] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon7);
 }
 
 void UserSettingDrawer::End()
@@ -199,13 +201,13 @@ void UserSettingDrawer::UpdateMain()
 			}
 			else
 			{
-				m_iconSelect = 5;
+				m_iconSelect = 7;
 			}
 		}
 		if (Pad::isTrigger(PAD_INPUT_RIGHT))
 		{
 			SoundFunctions::Play(SoundFunctions::SoundIdChange);
-			if (m_iconSelect < 5)
+			if (m_iconSelect < 7)
 			{
 				m_iconSelect++;
 			}
@@ -218,15 +220,15 @@ void UserSettingDrawer::UpdateMain()
 
 	if (m_iconSelect == 0)
 	{
-		m_iconSelectLeft = 5;
+		m_iconSelectLeft = 7;
 	}
 	else
 	{
 		m_iconSelectLeft = -1;
 	}
-	if (m_iconSelect == 5)
+	if (m_iconSelect == 7)
 	{
-		m_iconSelectRight = -5;
+		m_iconSelectRight = -7;
 	}
 	else
 	{
@@ -273,7 +275,7 @@ void UserSettingDrawer::UpdateEnd()
 
 		// 選択をリセットします
 		m_pSelect->ResetSelectNo();
-
+		printfDx("_Icon = %d\n", m_iconSelect);
 		// アイコンのデータを保管
 		m_iconData.Icon = m_iconSelect;
 	}

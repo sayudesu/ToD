@@ -146,7 +146,7 @@
     <ClCompile Include="UserSettingDrawer.cpp" />
     <ClCompile Include="Util\LoadGraphFunction.cpp" />
     <ClCompile Include="SoundSettingDrawer.cpp" />
-    <ClCompile Include="Object\Map\Map.cpp" />
+    <ClCompile Include="Object\Map\MapDrawer.cpp" />
     <ClCompile Include="Object\Camera\Camera.cpp" />
     <ClCompile Include="Object\Enemy\EnemyBase.cpp" />
     <ClCompile Include="Object\Enemy\EnemyManager.cpp" />
@@ -175,7 +175,7 @@
     <ClInclude Include="UserSettingDrawer.h" />
     <ClInclude Include="Util\LoadGraphFunction.h" />
     <ClInclude Include="SoundSettingDrawer.h" />
-    <ClInclude Include="Object\Map\Map.h" />
+    <ClInclude Include="Object\Map\MapDrawer.h" />
     <ClInclude Include="Object\Camera\Camera.h" />
     <ClInclude Include="Object\Enemy\EnemyBase.h" />
     <ClInclude Include="Object\Enemy\EnemyManager.h" />

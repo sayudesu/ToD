@@ -5,7 +5,7 @@ class Camera;
 class EnemyManager;
 class ObstacleManager;
 class Player;
-class Map;
+class MapDrawer;
 
 class SceneMain : public SceneBase
 {
@@ -23,5 +23,5 @@ private:
 	EnemyManager*    m_pEnemy;
 	ObstacleManager* m_pObstacle;
 	Player*          m_pPlayer;
-	Map*			 m_pMap;
+	MapDrawer*		 m_pMap;
 };

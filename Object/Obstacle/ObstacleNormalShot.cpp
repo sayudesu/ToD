@@ -1,6 +1,7 @@
 #include "ObstacleNormalShot.h"
 #include "../../Object/Shot/ShotBase.h"
 #include "../../Effeck/EffekseerDrawer.h"
+#include "../../Util/SoundFunctions.h"
 
 namespace
 {
@@ -33,6 +34,8 @@ ObstacleNormalShot::~ObstacleNormalShot()
 void ObstacleNormalShot::Init()
 {
 	m_pEffect->Init();
+	// ê›íuâπ
+	SoundFunctions::Play(SoundFunctions::SoundIdSet);
 }
 
 void ObstacleNormalShot::End()

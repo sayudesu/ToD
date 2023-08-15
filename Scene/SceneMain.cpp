@@ -5,7 +5,7 @@
 #include "../Object/Enemy/EnemyManager.h"
 #include "../Object/Obstacle/ObstacleManager.h"
 #include "../Object/Player/Player.h"
-#include "../Object/Map/Map.h"
+#include "../Object/Map/MapDrawer.h"
 #include "../Util/game.h"
 #include "../Util/SoundFunctions.h"
 #include "../SaveDataFunctions.h"
@@ -28,7 +28,7 @@ SceneMain::SceneMain():
 	// プレイヤークラスのインスタンス作成
 	m_pPlayer = new Player;
 	// マップクラスのインスタンス作成
-	m_pMap = new Map;
+	m_pMap = new MapDrawer;
 }
 
 SceneMain::~SceneMain()
@@ -78,15 +78,9 @@ void SceneMain::End()
 
 SceneBase* SceneMain::Update()
 {
-#if true
-	static VECTOR pos = VGet(0,0,0);
-	static float speed = 10.0f;
-	if (Pad::isPress(PAD_INPUT_LEFT))	pos.x -= speed;
-	if (Pad::isPress(PAD_INPUT_RIGHT))pos.x += speed;
-	if (Pad::isPress(PAD_INPUT_UP))	pos.z += speed;
-	if (Pad::isPress(PAD_INPUT_DOWN))	pos.z -= speed;
+
 	m_pObstacle->GetTarGetPos(m_pEnemy->SetNormalPos(m_pEnemy->SetNormalNum()));
-#endif
+
 	// プレイヤー操作
 	m_pPlayer->Update();
 	// プレイヤーの設置するオブジェクト
@@ -111,6 +105,7 @@ SceneBase* SceneMain::Update()
 		m_pObstacle->Create(m_pPlayer->SetMouseScreenPos());
 	}
 
+	// シーンを切り替えます
 	if (Pad::isTrigger(PAD_INPUT_8))
 	{
 		m_isChangeScene = true;
@@ -134,6 +129,7 @@ SceneBase* SceneMain::Update()
 void SceneMain::Draw()
 {
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xaaaaaa, true);
+
 	m_pMap->Draw();
 	m_pEnemy->Draw();
 	m_pObstacle->Draw();
@@ -157,4 +153,3 @@ void SceneMain::Draw()
 
 	SceneBase::DrawSliderDoor();
 }
-

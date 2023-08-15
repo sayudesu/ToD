@@ -21,6 +21,8 @@ namespace
 		"Data/Sound/SE/Over.mp3",         // 選択できません
 		"Data/Sound/SE/Dwon.mp3",         // でぅーん
 		"Data/Sound/SE/Change.mp3",         // かちーん
+		"Data/Sound/SE/Set.mp3",         // 設置
+		"Data/Sound/SE/Shot.mp3",         // 撃つ
 	};
 }
 
@@ -36,6 +38,22 @@ namespace SoundFunctions
 			m_soundHandle.push_back(handle);
 		}
 
+		// 音量だけロードします
+		ReLoad(soundVol);
+	}
+
+	void UnLoad()
+	{
+		// サウンドデータの解放
+		for (auto& handle : m_soundHandle)
+		{
+			DeleteSoundMem(handle);
+		}
+	}
+
+	// 音量だけロードします
+	void ReLoad(GameData::Sound soundVol)
+	{
 		// サウンドの初期調整
 		// BGM
 		SetVolume(SoundIdTitle, soundVol.Bgm);
@@ -47,15 +65,8 @@ namespace SoundFunctions
 		SetVolume(SoundIdOver, soundVol.SE);
 		SetVolume(SoundIdDwon, soundVol.SE);
 		SetVolume(SoundIdChange, soundVol.SE);
-	}
-
-	void UnLoad()
-	{
-		// サウンドデータの解放
-		for (auto& handle : m_soundHandle)
-		{
-			DeleteSoundMem(handle);
-		}
+		SetVolume(SoundIdSet, soundVol.SE);
+		SetVolume(SoundIdShot, soundVol.SE);
 	}
 
 	// 初めにBGMを流す

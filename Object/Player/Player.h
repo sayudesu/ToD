@@ -23,7 +23,8 @@ public:
 private:
 	// 操作を制御
 	void UpdateControl();
-
+	// オブジェクトのコスト関連
+	void ObjectCost();
 private:
 	// マウスの位置
 	VECTOR m_pos;
@@ -41,5 +42,8 @@ private:
 	bool m_isResultObject;
 	// 設置出来るかの最終確認
 	bool m_isSetObject;
+
+	// オブジェクトコスト関連
+	int m_objectCostNum;
 };
 

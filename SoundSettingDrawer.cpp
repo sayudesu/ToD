@@ -361,6 +361,7 @@ void SoundSettingDrawer::UpdateSoundVol()
 	SoundFunctions::SetVolume(SoundFunctions::SoundIdSelctChange, m_saveSound.SE);
 	SoundFunctions::SetVolume(SoundFunctions::SoundIdSelct, m_saveSound.SE);
 	SoundFunctions::SetVolume(SoundFunctions::SoundIdOver, m_saveSound.SE);
+
 }
 
 void SoundSettingDrawer::Reset()

@@ -15,6 +15,8 @@ namespace SoundFunctions
 		SoundIdOver,        // 選択できません
 		SoundIdDwon,        // でぅーん
 		SoundIdChange,        // かちーん
+		SoundIdSet,        // 設置
+		SoundIdShot,        // 設置
 		// 最大数
 		SoundIdMaxNum
 	}SoundId;
@@ -22,6 +24,9 @@ namespace SoundFunctions
 	// ロード、アンロード
 	void Load(GameData::Sound soundVol);
 	void UnLoad();
+
+	// 音量だけロードします
+	void ReLoad(GameData::Sound soundVol);
 
 	// BGMの再生
 	void StartBgm(SoundId id);

@@ -15,8 +15,6 @@ typedef struct
 		int SE;
 	};
 
-
-
 	// •Û‘¶‚·‚éêŠ
 	struct Input
 	{

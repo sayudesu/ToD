@@ -1,5 +1,6 @@
 #include "ShotBase.h"
 #include <cmath>
+#include "../../Util/SoundFunctions.h"
 
 namespace
 {
@@ -11,6 +12,7 @@ ShotBase::ShotBase(VECTOR pos):
 	m_targetPos(VGet(0,0,0)),
 	m_isScreenOut(false)
 {
+	SoundFunctions::Play(SoundFunctions::SoundIdShot);
 }
 
 ShotBase::~ShotBase()

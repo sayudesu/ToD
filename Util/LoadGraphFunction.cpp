@@ -25,6 +25,8 @@ namespace
         "Data/Image/Icon3.png",
         "Data/Image/Icon4.png",
         "Data/Image/Icon5.png",
+        "Data/Image/Icon6.png",
+        "Data/Image/Icon7.png",
         "Data/Image/GamePad.png",// ゲームパッド
     };
 }

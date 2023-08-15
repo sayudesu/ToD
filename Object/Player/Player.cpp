@@ -1,13 +1,17 @@
 #include "Player.h"
 #include <DxLib.h>
 #include "../../Util/Pad.h"
+#include "../../SaveDataFunctions.h"
+#include "../../Util/SoundFunctions.h"
+#include "../../Util/LoadGraphFunction.h"
 
 
 Player::Player() :
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
 	m_screenToWorldPos(VGet(0.0f, 0.0f, 0.0f)),
 	m_isResultObject(false),
-	m_isSetObject(false)
+	m_isSetObject(false),
+	m_objectCostNum(0)
 {
 	m_posHistory.push_back(VGet(-1.0f, -1.0f, -1.0f));
 }
@@ -26,27 +30,7 @@ void Player::End()
 
 void Player::Update()
 {
-#if false
-	// マウスの位置を取得
-	int mouseX, mouseY;
-	GetMousePoint(&mouseX, &mouseY);
-	float speed = 1.0f;
-	m_pos.x = static_cast<float>(mouseX) * -speed;
-	m_pos.y = static_cast<float>(mouseY) * speed;
-
-	// マウス押しているかどうか
-	// マウスを押した場合画面座標から3D空間に変換する
-	if ((GetMouseInput() & MOUSE_INPUT_LEFT) && !m_isMouseLeft)
-	{
-		const VECTOR pos = VGet(m_pos.x, m_pos.y, 0.0f);
-		m_screenToWorldPos = ConvScreenPosToWorldPos(pos);
-		m_isMouseLeft = true;
-	}
-	else
-	{
-		m_isMouseLeft = false;
-	}
-#endif
+	
 	// 操作の制御
 	UpdateControl();
 }
@@ -57,10 +41,32 @@ void Player::Draw()
 
 	VECTOR pos = VGet(m_pos.x, m_pos.y + 30.0f, m_pos.z);
 	DrawSphere3D(pos, 8, 16, 0xffffff, 0xffffff, true);
+
+	// オブジェクトコスト描画
+	DrawFormatString(300, 300, 0xffffff, "オブジェクトコスト[%d]", m_objectCostNum);
+	int m_hIcon[8];
+	m_hIcon[0] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon0);
+	m_hIcon[1] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon1);
+	m_hIcon[2] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon2);
+	m_hIcon[3] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon3);
+	m_hIcon[4] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon4);
+	m_hIcon[5] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon5);
+	m_hIcon[6] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon6);
+	m_hIcon[7] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon7);
+	DrawRotaGraph(
+		100,
+		100,
+		1,
+		DX_PI_F * 180.0f,
+		m_hIcon[SaveDataFunctions::GetIconData().Icon],
+		true);
 }
 
 void Player::UpdateControl()
 {
+	// オブジェクトの設置コスト
+	ObjectCost();
+
 	// 設置場を指定
 	if (Pad::isTrigger(PAD_INPUT_UP))
 	{
@@ -81,8 +87,9 @@ void Player::UpdateControl()
 
 	m_isResultObject = false;
 	// 設置します
-	if (Pad::isTrigger(PAD_INPUT_1))
+	if (Pad::isTrigger(PAD_INPUT_1) && m_objectCostNum > 100)
 	{		
+		m_objectCostNum -= 100;
 		// すでにその場所にオブジェクトが存在しないか確認
 		for (int i = 0; i < m_posHistory.size(); i++)
 		{
@@ -105,4 +112,9 @@ void Player::UpdateControl()
 			m_isResultObject = true;
 		}
 	}
+}
+
+void Player::ObjectCost()
+{
+	m_objectCostNum++;
 }
