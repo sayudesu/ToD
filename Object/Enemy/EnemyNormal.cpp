@@ -2,6 +2,8 @@
 #include <cmath>
 #include <cassert>
 
+#include "../../Util/Pad.h"
+
 namespace
 {
 	// 速度
@@ -68,40 +70,33 @@ void EnemyNormal::NextPosChange()
 	// 配列が無かったら...
 	assert(m_mapChip.size() != 0);
 
-	// マップチップサイズ
-	const int mapChipMaxZ = 26;
-	const int mapChipMaxX = 13;
-	// マップチップナンバー(敵の道)
-	const int enemyRoad = 2;
-	// ブロック1つの大きさ
-	const float block = 50.0f;
+		// マップチップサイズ
+		const int mapChipMaxZ = 12;// 行
+		const int mapChipMaxX = 25;// 列
+		// マップチップナンバー(敵の道)
+		const int enemyRoad = 2;
+		// ブロック1つの大きさ
+		const float block = 50.0f;
 
-	m_count = -1;
+		m_count = -1;
 
-	for (int z = 0; z < mapChipMaxZ; ++z)
-	{
-		m_count++;
-		
-		for (int x = 0; x < mapChipMaxX; ++x)
-		{
-			m_count++;
-
-			if (m_count > mapChipMaxZ &&
-				(m_count + mapChipMaxZ) < m_mapChip.size())
+		// 行
+		for (int z = 0; z < mapChipMaxZ; ++z)
+		{	
+			// 列
+			for (int x = 0; x < mapChipMaxX; ++x)
 			{
-				printfDx("現在通っています\n");
+					// [現在の列 + 現在の列 * チップ最大列]
+					if (m_mapChip[x + z * mapChipMaxX] == enemyRoad)
+					{
+						//// 敵の位置に代入
+						m_pos.x = (x * block);
+						m_pos.z = (z * block);
 
-				//if (m_mapChip[x + z * mapChipMaxZ] == enemyRoad)
-				//{
-				//	// 敵の位置に代入
-				//	m_pos.x = x * block;
-				//	m_pos.z = z * block;
-				//}
+						printfDx("x = %2f,z = %2f\n", x * block, z * block);
+					}
 			}
-
-		}
-	}
-	printfDx("%d\n", m_count);
+		}	
 }
 
 void EnemyNormal::Draw()
