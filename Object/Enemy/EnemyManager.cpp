@@ -1,7 +1,8 @@
 #include "EnemyManager.h"
 #include "EnemyNormal.h"
 
-EnemyManager::EnemyManager()
+EnemyManager::EnemyManager() :
+	m_count(-1)
 {
 }
 
@@ -11,10 +12,36 @@ EnemyManager::~EnemyManager()
 
 void EnemyManager::Init()
 {
-	for (auto& enemyNormal : m_pEnemyNormal)
-	{
-		enemyNormal->Init();
-	}
+	//VECTOR pos = VGet(0, 0, 0);
+	//int z = 250;
+	//int puls = -1;
+
+	//for (int i = 0; i < m_mapChip.size(); i++)
+	//{
+	//	// カウント
+	//	puls++;
+	//	// 右に押し詰める
+	//	int x = -600;
+	//	x += (puls * 50);
+
+	//	// Z軸変更
+	//	if (m_mapChip[i] == 0)
+	//	{
+	//		puls = -1;
+	//		z -= 50;
+	//	}
+
+	//	// 初期位置
+	//	if (m_mapChip[i] == 3)
+	//	{
+	//		pos = VGet(x, 0.0f, z);
+	//	}
+	//}
+
+	//for (auto& enemyNormal : m_pEnemyNormal)
+	//{
+	//	enemyNormal->Init(pos);
+	//}
 }
 
 void EnemyManager::End()
@@ -25,13 +52,37 @@ void EnemyManager::End()
 	}
 }
 
-void EnemyManager::Create(int num)
+void EnemyManager::Create()
 {
-	for (int i = 0; i < num; i++)
+	VECTOR pos = VGet(0, 0, 0);
+	int z = 250;
+	int puls = -1;
+
+	for (int i = 0; i < m_mapChip.size(); i++)
 	{
-		m_pEnemyNormal.push_back(std::make_shared<EnemyNormal>());
-		m_pEnemyNormal[i]->Init();
+		// カウント
+		puls++;
+		// 右に押し詰める
+		int x = -600;
+		x += (puls * 50);
+
+		// Z軸変更
+		if (m_mapChip[i] == 0)
+		{
+			puls = -1;
+			z -= 50;
+		}
+
+		// 初期位置
+		if (m_mapChip[i] == 3)
+		{
+			pos = VGet(x, 0.0f, z);
+		}
 	}
+
+	m_count++;
+	m_pEnemyNormal.push_back(std::make_shared<EnemyNormal>());
+	m_pEnemyNormal[m_count]->Init(pos);
 }
 
 void EnemyManager::Update()
@@ -39,33 +90,6 @@ void EnemyManager::Update()
 	for (auto& enemyNormal : m_pEnemyNormal)
 	{
 		enemyNormal->Update();
-	}
-
-	// マップチップサイズ
-	const int mapChipMaxZ = 26;
-	const int mapChipMaxX = 13;
-	// マップチップナンバー(敵の道)
-	const int enemyRoad = 2;
-	// ブロック1つの大きさ
-	const float block = 50.0f;
-
-	for (int z = 0; z < mapChipMaxZ; ++z)
-	{
-		for (int x = 0; x < mapChipMaxX; ++x)
-		{
-			if (m_mapChip[x + z * mapChipMaxZ] == enemyRoad)
-			{
-				// 敵の位置に代入
-				m_pos.x = x * block;
-				m_pos.z = z * block;
-			}
-
-		}
-	}
-
-	for (auto& enemyNormal : m_pEnemyNormal)
-	{
-		enemyNormal->GetPos()
 	}
 }
 

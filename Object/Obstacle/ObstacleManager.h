@@ -19,6 +19,7 @@ public:
 	void GetTarGetPos(VECTOR pos);
 private:
 	std::vector<std::shared_ptr<ObstacleBase>>m_pObstacle;
+	// 出現数をカウントします
 	int m_count;
 };
 

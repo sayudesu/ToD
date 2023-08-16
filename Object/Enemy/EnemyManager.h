@@ -12,7 +12,7 @@ public:
 
 	void Init();
 	void End();
-	void Create(int num);
+	void Create();
 	void Update();
 	void Draw();
 	// ノーマルエネミーの位置
@@ -25,5 +25,7 @@ private:
 	// ノーマルエネミー
 	std::vector<std::shared_ptr<EnemyBase>>m_pEnemyNormal;
 	std::vector<int>m_mapChip;
+	// 出現数をカウントします
+	int m_count;
 };
 

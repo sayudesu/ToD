@@ -8,7 +8,7 @@ public:
 	EnemyBase() {};
 	virtual ~EnemyBase() {};
 
-	virtual void Init() = 0;
+	virtual void Init(VECTOR firstPos) = 0;
 	virtual void End() = 0;
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
@@ -18,7 +18,7 @@ public:
 	VECTOR GetPos(VECTOR pos) { m_pos = pos; }
 
 	// �ʂ铹
-	void SetRoadPos(std::vector<int> mapChip) { m_mapChip = mapChip; }
+	virtual void SetRoadPos(std::vector<int> mapChip) { m_mapChip = mapChip; }
 
 protected:
 	VECTOR m_pos = VGet(0.0f, 0.0f, 0.0f);

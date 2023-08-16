@@ -57,7 +57,6 @@ void SceneMain::Init()
 	SoundFunctions::StartBgm(SoundFunctions::SoundIdBattle);
 	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, SaveDataFunctions::GetSoundData().Bgm);
 
-	m_pEnemy->Create(1);
 
 	m_pCamera->Init();
 	m_pObstacle->Init();
@@ -65,9 +64,10 @@ void SceneMain::Init()
 	m_pMap->Init();
 
 	// マップチップをエネミーに渡す
+	// コードの処理の流れのせいでこうなっています治します
 	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
-
-	m_pEnemy->Init();
+	m_pEnemy->Create();
+	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
 
 }
 
@@ -104,7 +104,8 @@ SceneBase* SceneMain::Update()
 	// 敵を生成(デバッグ用)
 	if (Pad::isTrigger(PAD_INPUT_2))
 	{
-		m_pEnemy->Create(1);
+		m_pEnemy->Create();
+		m_pEnemy->SetMapChip(m_pMap->GetMapChip());
 	}
 	// オブジェクトを生成
 	if (m_pPlayer->SetMouseLeft())

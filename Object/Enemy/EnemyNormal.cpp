@@ -1,5 +1,6 @@
 #include "EnemyNormal.h"
 #include <cmath>
+#include <cassert>
 
 namespace
 {
@@ -12,40 +13,24 @@ namespace
 
 EnemyNormal::EnemyNormal():
 	m_dir(VGet(0,0,0)),
-	m_targetPos(VGet(0,0,0))
+	m_targetPos(VGet(0,0,0)),
+	m_count(-1)
 {
 }
 EnemyNormal::~EnemyNormal()
 {
 }
 
-void EnemyNormal::Init()
+void EnemyNormal::Init(VECTOR firstPos)
 {
-	int z = 250;
-	int puls = -1;
-
-	for (int i = 0; i < m_mapChip.size(); i++)
-	{
-		// カウント
-		puls++;
-		// 右に押し詰める
-		int x = -600;
-		x += (puls * 50);
-
-		// Z軸変更
-		if (m_mapChip[i] == 0)
-		{
-			puls = -1;
-			z -= 50;
-		}
-
-		// 初期位置
-		if (m_mapChip[i] == 3)
-		{
-			m_pos = VGet(x, 0.0f, z);
-		}
-
-	}
+	// 初期位置
+	m_pos = firstPos;
+	
+#if _DEBUG
+	printfDx(
+		"x = %2f,y = %2f,z = %2f\n",
+		m_pos.x, m_pos.y, m_pos.z);
+#endif
 }
 
 void EnemyNormal::End()
@@ -80,54 +65,49 @@ void EnemyNormal::Update()
 
 void EnemyNormal::NextPosChange()
 {
+	// 配列が無かったら...
+	assert(m_mapChip.size() != 0);
 
-	//}
-	//for (int y = 0; y < 13; ++y)
-	//{
+	// マップチップサイズ
+	const int mapChipMaxZ = 26;
+	const int mapChipMaxX = 13;
+	// マップチップナンバー(敵の道)
+	const int enemyRoad = 2;
+	// ブロック1つの大きさ
+	const float block = 50.0f;
 
-	//	for (int x = 0; x < 26; ++x) 
-	//	{
+	m_count = -1;
 
-	//		if (m_mapChip[x + y * 26] == 2) 
-	//		{
+	for (int z = 0; z < mapChipMaxZ; ++z)
+	{
+		m_count++;
+		
+		for (int x = 0; x < mapChipMaxX; ++x)
+		{
+			m_count++;
 
-	//			m_targetPos.x = x * m_mapChip[x], y* m_mapChip[y];
-	//			m_targetPos.y = x * m_mapChip[x], y* m_mapChip[y];
-	//			m_targetPos.z = x * m_mapChip[x], y* m_mapChip[y];
+			if (m_count > mapChipMaxZ &&
+				(m_count + mapChipMaxZ) < m_mapChip.size())
+			{
+				printfDx("現在通っています\n");
 
-	//		}
+				//if (m_mapChip[x + z * mapChipMaxZ] == enemyRoad)
+				//{
+				//	// 敵の位置に代入
+				//	m_pos.x = x * block;
+				//	m_pos.z = z * block;
+				//}
+			}
 
-	//	}
-
-	//}
+		}
+	}
+	printfDx("%d\n", m_count);
 }
 
 void EnemyNormal::Draw()
 {
-	//int z = 250;
-	//int puls = -1;
-
-	//for (int i = 0; i < m_mapChip.size(); i++)
-	//{
-	//	// カウント
-	//	puls++;
-	//	// 右に押し詰める
-	//	int x = -600;
-	//	x += (puls * 50);
-
-	//	// Z軸変更
-	//	if (m_mapChip[i] == 0)
-	//	{
-	//		puls = -1;
-	//		z -= 50;
-	//	}
-
-	//	if (m_mapChip[i] == 2)
-	//	{
-	//		VECTOR pos = VGet(x, 0.0f, z);
-	//		DrawSphere3D(pos, 16, 16, 0xffff00, 0xffff00, true);
-	//	}
-	//}
-
 	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
+
+	DrawFormatString(1000, 100, 0xffffff, "敵の位置　x = %2f,y = %2f,z = %2f",
+		m_pos.x, m_pos.y, m_pos.z);
 }
