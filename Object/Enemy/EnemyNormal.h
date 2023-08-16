@@ -15,7 +15,7 @@ public:
 	void Draw();
 
 	// ’Ê‚é“¹
-	void SetRoadPos(std::vector<int> mapChip);
+//	void SetRoadPos(std::vector<int> mapChip);
 
 private:
 	// Œü‚«

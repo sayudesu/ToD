@@ -10,6 +10,8 @@ namespace
 
 MapDrawer::MapDrawer():
     m_hBlock(-1),
+    m_hEnemyRoad(-1),
+    m_hEnemySpawner(-1),
     m_dataNum(-1)
 {
 
@@ -96,21 +98,36 @@ void MapDrawer::Init()
     // ファイルを閉じる
     fclose(fp);
 
+
+    int puls = -1;
+    int z = 250;
+    int x = 0;
+
     for (int i = 0; i < m_loadData.size(); i++)
     {
-        int x = -300;
-        int y = 0;
-        x += i * 50;
-        if (m_loadData[i] == 1)
-        {
-            m_objPosX.push_back(x);
+        // カウント
+        puls++;
+        // 右に押し詰める
+        //int x = -600;
+        x = 0;
+        x += (puls * 50) - 600;
 
+        // Z軸変更
+        if (m_loadData[i] == 0)
+        {
+            puls = -1;
+            z -= 50;
         }
+
+        // 保存
+        m_objPosX.push_back(x);
+        m_objPosZ.push_back(z);
     }
 
     // モデルロード
-    m_hBlock = MV1LoadModel("Data/Model/NormalBlock2.mv1");
-    m_hBlock2 = MV1LoadModel("Data/Model/NormalBlock3.mv1");
+    m_hBlock        = MV1LoadModel("Data/Model/NormalBlock2.mv1");
+    m_hEnemyRoad    = MV1LoadModel("Data/Model/EnemyRoad.mv1");
+    m_hEnemySpawner = MV1LoadModel("Data/Model/EnemySpawner.mv1");
 }
 
 void MapDrawer::End()
@@ -123,45 +140,49 @@ void MapDrawer::Update()
 
 void MapDrawer::Draw()
 {
-    int z = 250;
-    int puls = -1;
-
     for (int i = 0; i < m_loadData.size(); i++)
     {
-        // カウント
-        puls++;
-        // 右に押し詰める
-        int x = -600;
-        x += (puls * 50);
-
-        // Z軸変更
-        if (m_loadData[i] == 0)
-        {
-            puls = -1;
-            z -= 50;
-        }
         // 地面ブロック
         if (m_loadData[i] == 1)
         {
-            VECTOR pos = VGet(x, -25.0f, z);
+            VECTOR pos = VGet(m_objPosX[i], -25.0f, m_objPosZ[i]);
             MV1SetPosition(m_hBlock, pos);
             // オブジェクト描画
             MV1DrawModel(m_hBlock);
             continue;
         }
+        // 敵の道
         if (m_loadData[i] == 2)
         {
-            VECTOR pos = VGet(x, -25.0f, z);
-            MV1SetPosition(m_hBlock2, pos);
+            VECTOR pos = VGet(m_objPosX[i], -25.0f, m_objPosZ[i]);
+            MV1SetPosition(m_hEnemyRoad, pos);
             // オブジェクト描画
-            MV1DrawModel(m_hBlock2);
+            MV1DrawModel(m_hEnemyRoad);
             continue;
         }
-
+        // 敵のスポーン位置
+        if (m_loadData[i] == 3)
+        {
+            VECTOR pos = VGet(m_objPosX[i], -25.0f, m_objPosZ[i]);
+            MV1SetPosition(m_hEnemySpawner, pos);
+            // オブジェクト描画
+            MV1DrawModel(m_hEnemySpawner);
+            continue;
+        }
     }
 }
 
 std::vector<int> MapDrawer::GetMapChip()
 {
     return m_loadData;
+}
+
+std::vector<int> MapDrawer::GetMapChipX()
+{
+    return m_objPosX;
+}
+
+std::vector<int> MapDrawer::GetMapChipZ()
+{
+    return m_objPosZ;
 }

@@ -55,6 +55,9 @@ void Player::Draw()
 
 void Player::DrawUI()
 {
+	VECTOR a = VGet(m_pos.x + 50.0f, m_pos.y, m_pos.z);
+	DrawLine3D(m_pos, a, 0xffffff);
+
 	DrawBox(m_pos.x, m_pos.y, m_pos.x + 10, m_pos.y + 10, 0x00ffff, true);
 
 	DrawRotaGraph(500, 100, 0.5f, DX_PI_F * 180.0f, m_hCostBg, true);

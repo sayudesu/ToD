@@ -15,12 +15,13 @@ public:
 
 	// エネミーの位置
 	VECTOR SetPos() const { return m_pos; }
+	VECTOR GetPos(VECTOR pos) { m_pos = pos; }
 
 	// 通る道
 	void SetRoadPos(std::vector<int> mapChip) { m_mapChip = mapChip; }
 
 protected:
-	VECTOR m_pos = VGet(300.0f, 0.0f, 0.0f);
+	VECTOR m_pos = VGet(0.0f, 0.0f, 0.0f);
 	std::vector<int> m_mapChip;
 };
 

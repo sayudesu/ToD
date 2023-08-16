@@ -57,16 +57,18 @@ void SceneMain::Init()
 	SoundFunctions::StartBgm(SoundFunctions::SoundIdBattle);
 	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, SaveDataFunctions::GetSoundData().Bgm);
 
+	m_pEnemy->Create(1);
+
 	m_pCamera->Init();
-	m_pEnemy->Init();
 	m_pObstacle->Init();
 	m_pPlayer->Init();
 	m_pMap->Init();
 
-	m_pEnemy->Create(1);
-
 	// マップチップをエネミーに渡す
 	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
+
+	m_pEnemy->Init();
+
 }
 
 void SceneMain::End()

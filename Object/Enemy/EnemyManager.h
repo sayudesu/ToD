@@ -24,5 +24,6 @@ public:
 private:
 	// ノーマルエネミー
 	std::vector<std::shared_ptr<EnemyBase>>m_pEnemyNormal;
+	std::vector<int>m_mapChip;
 };
 

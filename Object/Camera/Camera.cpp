@@ -48,7 +48,7 @@ void Camera::Update()
 
 	// スティックの位置からカメラ位置に変換
 	int x = (input.Rx - 0) * (500 - 0) / (1000 - 0);
-	int z = (input.Ry - 0) * (390 - 0) / (1000 - 0);
+	int z = (input.Ry - 0) * (1000 - 0) / (1000 - 0);
 	m_pos.x = x;
 	m_pos.z = z + kCameraPos.z;
 

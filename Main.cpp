@@ -85,7 +85,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	LoadGraphFunction::Load();
 
 	SceneManager* pScene = new SceneManager;
-
+		
 	pScene->Init();
 
 	while (ProcessMessage() == 0)
