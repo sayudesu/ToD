@@ -11,6 +11,9 @@ public:
 	void End();
 	void Update();
 	void Draw();
+
+	// マップチップ
+	std::vector<int> GetMapChip();
 private:
 	// モデルハンドル
 	int m_hBlock;

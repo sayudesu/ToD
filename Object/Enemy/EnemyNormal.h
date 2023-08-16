@@ -1,5 +1,7 @@
 #pragma once
 #include "EnemyBase.h"
+
+
 class EnemyNormal : public EnemyBase
 {
 public:
@@ -11,6 +13,10 @@ public:
 	void Update();
 	void NextPosChange();
 	void Draw();
+
+	// ’Ê‚é“¹
+	void SetRoadPos(std::vector<int> mapChip);
+
 private:
 	// Œü‚«
 	VECTOR m_dir;

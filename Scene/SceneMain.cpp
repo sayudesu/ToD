@@ -65,6 +65,8 @@ void SceneMain::Init()
 
 	m_pEnemy->Create(1);
 
+	// マップチップをエネミーに渡す
+	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
 }
 
 void SceneMain::End()

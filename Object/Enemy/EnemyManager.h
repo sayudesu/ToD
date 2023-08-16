@@ -19,6 +19,8 @@ public:
 	VECTOR SetNormalPos(int num);
 	int SetNormalNum();
 
+	void SetMapChip(std::vector<int>mapChip);
+
 private:
 	// ノーマルエネミー
 	std::vector<std::shared_ptr<EnemyBase>>m_pEnemyNormal;

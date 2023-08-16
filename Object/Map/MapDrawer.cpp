@@ -160,3 +160,8 @@ void MapDrawer::Draw()
 
     }
 }
+
+std::vector<int> MapDrawer::GetMapChip()
+{
+    return m_loadData;
+}

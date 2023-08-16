@@ -138,7 +138,7 @@ namespace SaveDataFunctions
     void Save(GameData::Input data,bool now)
     {
         //FILEポインタの宣言
-        FILE* fp1;
+        FILE* fp1 = nullptr;
         // CSVファイルを開く
         fopen_s(&fp1, kDataPath, "w");
         // CSVファイルに上書き保存

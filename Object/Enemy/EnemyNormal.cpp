@@ -55,30 +55,40 @@ void EnemyNormal::Update()
 
 void EnemyNormal::NextPosChange()
 {
-	static int nextNo = 0;
-	if (nextNo == 0)
-	{
-		m_targetPos = kNextPos1;
-		if (m_dir.x == 0.0f&&
-			m_dir.y == 0.0f&&
-			m_dir.z == 0.0f)
-		{
-			nextNo = 1;
-		}
-	}
-	if (nextNo == 1)
-	{
-		m_targetPos = kNextPos2;
-		if (m_pos.x == m_targetPos.x &&
-			m_pos.y == m_targetPos.y &&
-			m_pos.z == m_targetPos.z)
-		{
-			nextNo = 2;
-		}
-	}
+
 }
 
 void EnemyNormal::Draw()
 {
+	int z = 250;
+	int puls = -1;
+
+	for (int i = 0; i < m_mapChip.size(); i++)
+	{
+		// カウント
+		puls++;
+		// 右に押し詰める
+		int x = -600;
+		x += (puls * 50);
+
+		// Z軸変更
+		if (m_mapChip[i] == 0)
+		{
+			puls = -1;
+			z -= 50;
+		}
+
+		if (m_mapChip[i] == 2)
+		{
+			VECTOR pos = VGet(x, 0.0f, z);
+			DrawSphere3D(pos, 16, 16, 0xffff00, 0xffff00, true);
+		}
+	}
+
 	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
+}
+
+void EnemyNormal::SetRoadPos(std::vector<int> mapChip)
+{
+
 }

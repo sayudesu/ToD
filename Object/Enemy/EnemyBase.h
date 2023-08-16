@@ -1,5 +1,7 @@
 #pragma once
 #include <DxLib.h>
+#include <vector>
+
 class EnemyBase
 {
 public:
@@ -14,7 +16,11 @@ public:
 	// エネミーの位置
 	VECTOR SetPos() const { return m_pos; }
 
+	// 通る道
+	void SetRoadPos(std::vector<int> mapChip) { m_mapChip = mapChip; }
+
 protected:
 	VECTOR m_pos = VGet(300.0f, 0.0f, 0.0f);
+	std::vector<int> m_mapChip;
 };
 

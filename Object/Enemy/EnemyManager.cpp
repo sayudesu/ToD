@@ -57,3 +57,11 @@ int EnemyManager::SetNormalNum()
 		return m_pEnemyNormal.size();
 	}
 }
+
+void EnemyManager::SetMapChip(std::vector<int> mapChip)
+{
+	for (auto& normalEnemy : m_pEnemyNormal)
+	{
+		normalEnemy->SetRoadPos(mapChip);
+	}
+}
