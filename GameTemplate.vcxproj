@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation2D.cpp" />
     <ClCompile Include="Effeck\EffekseerDrawer.cpp" />
     <ClCompile Include="ManualDrawer.cpp" />
     <ClCompile Include="SettingDrawer.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation2D.h" />
     <ClInclude Include="Effeck\EffekseerDrawer.h" />
     <ClInclude Include="ManualDrawer.h" />
     <ClInclude Include="SettingDrawer.h" />

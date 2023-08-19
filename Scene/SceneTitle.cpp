@@ -8,6 +8,10 @@
 #include "../Util/SoundFunctions.h"
 #include "../SaveDataFunctions.h"
 
+
+#include "../Animation2D.h"
+
+
 namespace
 {
 	// タイトル関連
@@ -58,7 +62,7 @@ SceneTitle::SceneTitle():
 	m_pGameSetting = new SettingDrawer;
 
 
-	m_hCatAnim = LoadGraph("Data/Image/CatAnim.png");
+	m_hCatAnim = LoadGraph("Image/collon_attack_p.bmp");
 }
 
 SceneTitle::~SceneTitle()
@@ -115,6 +119,8 @@ void SceneTitle::Init()
 		kString3Size);
 
 	m_pGameSetting->Init();
+
+	Animation2D::Anim(0, 0, 128, 128, 5, 128 * 2);
 }
 
 void SceneTitle::End()
@@ -193,33 +199,35 @@ SceneBase* SceneTitle::Update()
 		isMove = true;
 	}
 
-	if (isMove)
-	{
-		m_count++;
-		if (m_count == 3)
-		{
-			if (!isRev)
-			{
-				m_imagePosX += 321;
-				if (m_imagePosX == 321 * 5)
-				{
-					isRev = true;
-				}
-			}
-			if (isRev)
-			{
-				m_imagePosX -= 321;
-				if (m_imagePosX <= 0)
-				{
-					isRev = false;
-				}
-			}
+	//if (isMove)
+	//{
+	//	m_count++;
+	//	if (m_count == 3)
+	//	{
+	//		if (!isRev)
+	//		{
+	//			m_imagePosX += 321;
+	//			if (m_imagePosX == 321 * 5)
+	//			{
+	//				isRev = true;
+	//			}
+	//		}
+	//		if (isRev)
+	//		{
+	//			m_imagePosX -= 321;
+	//			if (m_imagePosX <= 0)
+	//			{
+	//				isRev = false;
+	//			}
+	//		}
 
-			m_count = 0;
+	//		m_count = 0;
 
-		}
-	}
+	//	}
+	//}
 
+
+	Animation2D::Update();
 
 	return this;
 }
@@ -235,16 +243,25 @@ void SceneTitle::Draw()
 	// セレクト関連描画
 	m_pSelect->Draw();
 
-	DrawRectRotaGraph(
-		Game::kScreenWidth/2,
-		Game::kScreenHeight/2,//プレイヤーの位置
-		m_imagePosX + 4, 0,// 画像の左上
-		322, 192,    // 画像の右下
-		0.8,	   // サイズ
-		DX_PI_F * 180.0f,			   // 回転角度
-		m_hCatAnim,		   // ハンドル
-		true,		       // 画像透過
-		false      // 画像反転
+	//DrawRectRotaGraph(
+	//	Game::kScreenWidth/2,
+	//	Game::kScreenHeight/2,//プレイヤーの位置
+	//	m_imagePosX + 4, 0,// 画像の左上
+	//	322, 192,    // 画像の右下
+	//	0.8,	   // サイズ
+	//	DX_PI_F * 180.0f,			   // 回転角度
+	//	m_hCatAnim,		   // ハンドル
+	//	true,		       // 画像透過
+	//	false      // 画像反転
+	//);
+
+	Animation2D::Draw(Game::kScreenWidth / 2,
+		Game::kScreenHeight / 2,
+		10,
+		DX_PI_F * 180.0f,
+		m_hCatAnim,
+		true,
+		false
 	);
 
 	if (m_isSlectSetting)
