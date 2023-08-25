@@ -3,6 +3,7 @@
 #include "SceneBase.h"
 #include "SceneMain.h"
 #include "SceneTitle.h"
+#include "SceneGameClear.h"
 #include "../Util/Pad.h"
 
 SceneManager::SceneManager():

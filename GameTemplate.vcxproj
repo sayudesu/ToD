@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClCompile Include="Effeck\EffekseerDrawer.cpp" />
     <ClCompile Include="ManualDrawer.cpp" />
+    <ClCompile Include="Scene\SceneGameClear.cpp" />
     <ClCompile Include="SettingDrawer.cpp" />
     <ClCompile Include="UserSettingDrawer.cpp" />
     <ClCompile Include="Util\LoadGraphFunction.cpp" />
@@ -171,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="Effeck\EffekseerDrawer.h" />
     <ClInclude Include="ManualDrawer.h" />
+    <ClInclude Include="Scene\SceneGameClear.h" />
     <ClInclude Include="SettingDrawer.h" />
     <ClInclude Include="UserSettingDrawer.h" />
     <ClInclude Include="Util\LoadGraphFunction.h" />

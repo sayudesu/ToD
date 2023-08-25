@@ -91,8 +91,8 @@ SceneBase* SceneMain::Update()
 	m_pObstacle->Update();
 	// カメラ
 	m_pCamera->Update();
-	m_pCamera->GetMouseScreenPos(m_pPlayer->SetPos());
-	m_pCamera->GetMouseWorldPos(m_pPlayer->SetMouseWorldPos());
+	//m_pCamera->GetMouseScreenPos(m_pPlayer->SetPos());
+	//m_pCamera->GetMouseWorldPos(m_pPlayer->SetMouseWorldPos());
 	// 敵
 	m_pEnemy->Update();
 	// マップ
