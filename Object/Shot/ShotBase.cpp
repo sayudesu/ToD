@@ -8,11 +8,14 @@ namespace
 }
 
 ShotBase::ShotBase(VECTOR pos):
+	m_hShot(-1),
 	m_pos(pos),
 	m_targetPos(VGet(0,0,0)),
 	m_isScreenOut(false)
 {
-	SoundFunctions::Play(SoundFunctions::SoundIdShot);
+//	SoundFunctions::Play(SoundFunctions::SoundIdShot);
+	m_hShot = MV1LoadModel("Data/Model/cat_Ver0.0.1.mv1");
+	MV1SetScale(m_hShot, VGet(0.1f, 0.1f, 0.1f));
 }
 
 ShotBase::~ShotBase()
@@ -24,6 +27,7 @@ void ShotBase::Update()
 	if (!m_isScreenOut)
 	{
 		VecCalculation();
+		MV1SetPosition(m_hShot,m_pos);
 	}
 }
 
@@ -31,7 +35,8 @@ void ShotBase::Draw()
 {
 	if (!m_isScreenOut)
 	{
-		DrawSphere3D(m_pos, 8, 8, 0x00ff00, 0x00ff00, true);
+		//DrawSphere3D(m_pos, 8, 8, 0x00ff00, 0x00ff00, true);
+		MV1DrawModel(m_hShot);
 	}
 }
 
@@ -57,4 +62,5 @@ void ShotBase::VecCalculation()
 	m_pos = VAdd(m_pos, velecity);
 	//	m_pModel->SetPos(m_pos);
 	//	m_pModel->SetRot(VGet(0, m_pPlayer->GetDir().y, 0));
+	// MV1SetRotationXYZ(m_hShot,VGet(0, m_dir.y * DX_PI_F / 180.0f, 0));
 }
