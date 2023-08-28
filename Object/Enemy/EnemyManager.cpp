@@ -54,35 +54,40 @@ void EnemyManager::End()
 
 void EnemyManager::Create()
 {
-	VECTOR pos = VGet(0, 0, 0);
-	int z = 250;
-	int puls = -1;
+	// マップチップサイズ
+	const int mapChipMaxZ = 12;// 行
+	const int mapChipMaxX = 25;// 列
+	// マップチップナンバー(敵の道)
+	
+	// ブロック1つの大きさ
+	const float block = 50.0f;
+	VECTOR pos{};
+	pos.y = 50.0f;
 
-	for (int i = 0; i < m_mapChip.size(); i++)
+	int forX = 0;
+	int forZ = 0;
+
+	// 行
+	for (int z = 0; z < mapChipMaxZ; ++z)
 	{
-		// カウント
-		puls++;
-		// 右に押し詰める
-		int x = -600;
-		x += (puls * 50);
-
-		// Z軸変更
-		if (m_mapChip[i] == 0)
+		// 列
+		for (int x = 0; x < mapChipMaxX; ++x)
 		{
-			puls = -1;
-			z -= 50;
-		}
-
-		// 初期位置
-		if (m_mapChip[i] == 3)
-		{
-			pos = VGet(x, 0.0f, z);
+			// [現在の列 + 現在の列 * チップ最大列]
+			if (m_mapChip[x + z * mapChipMaxX] == 3)
+			{
+				//// 敵の位置に代入
+				pos.x = (x * block);
+				pos.z = (z * block);
+				forX = x;
+				forZ = z;
+			}
 		}
 	}
 
 	m_count++;
 	m_pEnemyNormal.push_back(std::make_shared<EnemyNormal>());
-	m_pEnemyNormal[m_count]->Init(pos);
+	m_pEnemyNormal[m_count]->Init(pos, forX, forZ);
 }
 
 void EnemyManager::Update()

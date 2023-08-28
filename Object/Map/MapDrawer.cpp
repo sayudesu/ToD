@@ -140,34 +140,48 @@ void MapDrawer::Update()
 
 void MapDrawer::Draw()
 {
-    for (int i = 0; i < m_loadData.size(); i++)
+    // マップチップサイズ
+    const int mapChipMaxZ = 12;// 行
+    const int mapChipMaxX = 25;// 列
+    // マップチップナンバー(敵の道)
+    const int enemyRoad = 2;
+    // ブロック1つの大きさ
+    const float block = 50.0f;
+
+    static int m_count = -1;
+    static VECTOR m_pos{};
+    m_pos.y = -block + 20.0f;
+    // 行
+    for (int z = 0; z < mapChipMaxZ; ++z)
     {
-        // 地面ブロック
-        if (m_loadData[i] == 1)
+        // 列
+        for (int x = 0; x < mapChipMaxX; ++x)
         {
-            VECTOR pos = VGet(m_objPosX[i], -25.0f, m_objPosZ[i]);
-            MV1SetPosition(m_hBlock, pos);
-            // オブジェクト描画
-            MV1DrawModel(m_hBlock);
-            continue;
-        }
-        // 敵の道
-        if (m_loadData[i] == 2)
-        {
-            VECTOR pos = VGet(m_objPosX[i], -25.0f, m_objPosZ[i]);
-            MV1SetPosition(m_hEnemyRoad, pos);
-            // オブジェクト描画
-            MV1DrawModel(m_hEnemyRoad);
-            continue;
-        }
-        // 敵のスポーン位置
-        if (m_loadData[i] == 3)
-        {
-            VECTOR pos = VGet(m_objPosX[i], -25.0f, m_objPosZ[i]);
-            MV1SetPosition(m_hEnemySpawner, pos);
-            // オブジェクト描画
-            MV1DrawModel(m_hEnemySpawner);
-            continue;
+            // [現在の列 + 現在の列 * チップ最大列]
+            if (m_loadData[x + z * mapChipMaxX] == 1)
+            {
+                m_pos.x = (x * block);
+                m_pos.z = (z * block);
+                MV1SetPosition(m_hBlock, m_pos);
+                MV1DrawModel(m_hBlock);
+            }
+            // [現在の列 + 現在の列 * チップ最大列]
+            if (m_loadData[x + z * mapChipMaxX] == 2)
+            {
+                //// 敵の位置に代入
+                m_pos.x = (x * block);
+                m_pos.z = (z * block);
+                MV1SetPosition(m_hEnemyRoad, m_pos);
+                MV1DrawModel(m_hEnemyRoad);
+            }
+            // [現在の列 + 現在の列 * チップ最大列]
+            if (m_loadData[x + z * mapChipMaxX] == 3)
+            {
+                m_pos.x = (x * block);
+                m_pos.z = (z * block);
+                MV1SetPosition(m_hEnemySpawner, m_pos);
+                MV1DrawModel(m_hEnemySpawner);
+            }
         }
     }
 }

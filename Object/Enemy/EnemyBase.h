@@ -8,7 +8,7 @@ public:
 	EnemyBase() {};
 	virtual ~EnemyBase() {};
 
-	virtual void Init(VECTOR firstPos) = 0;
+	virtual void Init(VECTOR firstPos,int x,int y) = 0;
 	virtual void End() = 0;
 	virtual void Update() = 0;
 	virtual void Draw() = 0;

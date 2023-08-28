@@ -5,10 +5,10 @@ namespace
 {
 	// カメラ初期位置
 //	const VECTOR kCameraPos = VGet(0.0f, 300.0f, -100.0f);
-	const VECTOR kCameraPos = VGet(0.0f, 700.0f, -400.0f);
+	const VECTOR kCameraPos = VGet(600.0f, 700.0f, -300.0f);
 //	const VECTOR kCameraPos = VGet(0.0f, 500.0f, 0.0f);
 	// カメラ初期ターゲット位置
-	const VECTOR kCameraTargetPos = VGet(0.0f, 0.0f, 0.0f);
+	const VECTOR kCameraTargetPos = VGet(kCameraPos.x, 0.0f, 300.0f);
 	// 視野角
 	constexpr float kFov = 60.0f;
 	// 視野角計算
@@ -47,9 +47,9 @@ void Camera::Update()
 	GetJoypadDirectInputState(DX_INPUT_PAD1, &input);
 
 	// スティックの位置からカメラ位置に変換
-	int x = (input.Rx - 0) * (500 - 0) / (1000 - 0);
+	int x = (input.Rx - 0) * (500  - 0) / (1000 - 0);
 	int z = (input.Ry - 0) * (1000 - 0) / (1000 - 0);
-	m_pos.x = x;
+	m_pos.x = x + kCameraPos.x;
 	m_pos.z = z + kCameraPos.z;
 
 	// どこを居てどこをみるか
@@ -65,6 +65,6 @@ void Camera::GetTargetPos(VECTOR targetPos)
 {
 	VECTOR tempPos = targetPos;
 
-	if (targetPos.z > m_targetPos.z)m_targetPos.z += 10;
-	if (targetPos.z < m_targetPos.z)m_targetPos.z -= 10;
+	//if (targetPos.z > m_targetPos.z)m_targetPos.z += 10;
+	//if (targetPos.z < m_targetPos.z)m_targetPos.z -= 10;
 }

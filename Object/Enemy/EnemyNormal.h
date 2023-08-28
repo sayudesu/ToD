@@ -8,7 +8,7 @@ public:
 	EnemyNormal();
 	virtual ~EnemyNormal();
 
-	void Init(VECTOR firstPos);
+	void Init(VECTOR firstPos, int x, int z);
 	void End();
 	void Update();
 	void NextPosChange();
@@ -20,5 +20,7 @@ private:
 	// ターゲット位置
 	VECTOR m_targetPos;
 	int m_count;
+	int forX;
+	int forZ;
 };
 

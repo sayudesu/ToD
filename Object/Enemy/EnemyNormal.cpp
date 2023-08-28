@@ -16,17 +16,21 @@ namespace
 EnemyNormal::EnemyNormal():
 	m_dir(VGet(0,0,0)),
 	m_targetPos(VGet(0,0,0)),
-	m_count(-1)
+	m_count(-1),
+	forX(0),
+	forZ(0)
 {
 }
 EnemyNormal::~EnemyNormal()
 {
 }
 
-void EnemyNormal::Init(VECTOR firstPos)
+void EnemyNormal::Init(VECTOR firstPos,int x,int z)
 {
 	// 初期位置
 	m_pos = firstPos;
+	forX = x;
+	forZ = z;
 }
 
 void EnemyNormal::End()
@@ -64,31 +68,37 @@ void EnemyNormal::NextPosChange()
 	// 配列が無かったら...
 	assert(m_mapChip.size() != 0);
 
-		// マップチップサイズ
-		const int mapChipMaxZ = 12;// 行
-		const int mapChipMaxX = 25;// 列
-		// マップチップナンバー(敵の道)
-		const int enemyRoad = 2;
-		// ブロック1つの大きさ
-		const float block = 50.0f;
+	// マップチップサイズ
+	const int mapChipMaxZ = 12;// 行
+	const int mapChipMaxX = 25;// 列
+	// マップチップナンバー(敵の道)
+	const int enemyRoad = 2;
+	// ブロック1つの大きさ
+	const float block = 50.0f;
+	m_pos.y = -block + 50.0f;
 
-		m_count = -1;
-
+	if (Pad::isTrigger(PAD_INPUT_3))
+	{
 		// 行
-		for (int z = 0; z < mapChipMaxZ; ++z)
+		for (int z = forZ - 1; z < forZ + 2; ++z)
 		{	
 			// 列
-			for (int x = 0; x < mapChipMaxX; ++x)
+			for (int x = forX - 1; x < forX + 2; ++x)
 			{
-					// [現在の列 + 現在の列 * チップ最大列]
-					if (m_mapChip[x + z * mapChipMaxX] == enemyRoad)
-					{
-						//// 敵の位置に代入
-						m_pos.x = (x * block);
-						m_pos.z = (z * block);
-					}
+				// [現在の列 + 現在の列 * チップ最大列]
+				if (m_mapChip[x + z * mapChipMaxX] == enemyRoad)
+				{
+					forX = x;
+					if(forZ >= mapChipMaxZ)forZ = z;
+					// 敵の位置に代入
+					m_pos.x = (x * block);
+					m_pos.z = (z * block);
+					printfDx("%2f\n", m_pos.z);
+				}
 			}
 		}	
+
+	}
 }
 
 void EnemyNormal::Draw()
