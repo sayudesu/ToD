@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Util\Collision3D.cpp" />
     <ClCompile Include="Effeck\EffekseerDrawer.cpp" />
     <ClCompile Include="ManualDrawer.cpp" />
     <ClCompile Include="Scene\SceneGameClear.cpp" />
@@ -170,6 +171,8 @@
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collision2DData.h" />
+    <ClInclude Include="Util\Collision3D.h" />
     <ClInclude Include="Effeck\EffekseerDrawer.h" />
     <ClInclude Include="ManualDrawer.h" />
     <ClInclude Include="Scene\SceneGameClear.h" />

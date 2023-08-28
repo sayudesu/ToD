@@ -27,12 +27,6 @@ void EnemyNormal::Init(VECTOR firstPos)
 {
 	// 初期位置
 	m_pos = firstPos;
-	
-#if _DEBUG
-	printfDx(
-		"x = %2f,y = %2f,z = %2f\n",
-		m_pos.x, m_pos.y, m_pos.z);
-#endif
 }
 
 void EnemyNormal::End()
@@ -92,8 +86,6 @@ void EnemyNormal::NextPosChange()
 						//// 敵の位置に代入
 						m_pos.x = (x * block);
 						m_pos.z = (z * block);
-
-						printfDx("x = %2f,z = %2f\n", x * block, z * block);
 					}
 			}
 		}	
@@ -102,7 +94,4 @@ void EnemyNormal::NextPosChange()
 void EnemyNormal::Draw()
 {
 	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
-
-	DrawFormatString(1000, 100, 0xffffff, "敵の位置　x = %2f,y = %2f,z = %2f",
-		m_pos.x, m_pos.y, m_pos.z);
 }

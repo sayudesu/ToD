@@ -42,10 +42,20 @@ void ObstacleManager::Draw()
 	}
 }
 
-void ObstacleManager::GetTarGetPos(VECTOR pos)
+void ObstacleManager::SetTarGetPos(VECTOR pos)
 {
 	for (auto& obstacle : m_pObstacle)
 	{
-		obstacle->GetTarGetPos(pos);
+		obstacle->SetTarGetPos(pos);
 	}
+}
+
+VECTOR ObstacleManager::GetPos(int num)
+{
+	return m_pObstacle[num]->GetPos();
+}
+
+int ObstacleManager::GetNormalNum()
+{
+	return m_pObstacle.size();
 }

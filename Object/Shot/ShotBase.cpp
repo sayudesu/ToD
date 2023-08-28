@@ -8,15 +8,21 @@ namespace
 }
 
 ShotBase::ShotBase(VECTOR pos):
+	m_hShot(-1),
 	m_pos(pos),
 	m_targetPos(VGet(0,0,0)),
 	m_isScreenOut(false)
 {
-	SoundFunctions::Play(SoundFunctions::SoundIdShot);
+//	SoundFunctions::Play(SoundFunctions::SoundIdShot);
+	// 3DÉÇÉfÉãÇÃÉçÅ[Éh
+	m_hShot = MV1LoadModel("Data/Model/cat_Ver0.0.1.mv1");
+	MV1SetScale(m_hShot, VGet(0.1f, 0.1f, 0.1f));
 }
 
 ShotBase::~ShotBase()
 {
+	// ÉÅÉÇÉäâï˙
+	MV1DeleteModel(m_hShot);
 }
 
 void ShotBase::Update()
@@ -24,6 +30,7 @@ void ShotBase::Update()
 	if (!m_isScreenOut)
 	{
 		VecCalculation();
+		MV1SetPosition(m_hShot,m_pos);
 	}
 }
 
@@ -31,7 +38,8 @@ void ShotBase::Draw()
 {
 	if (!m_isScreenOut)
 	{
-		DrawSphere3D(m_pos, 8, 8, 0x00ff00, 0x00ff00, true);
+	//	DrawSphere3D(m_pos, 8, 8, 0x00ff00, 0x00ff00, true);
+		MV1DrawModel(m_hShot);
 	}
 }
 

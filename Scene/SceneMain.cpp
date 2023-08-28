@@ -9,6 +9,8 @@
 #include "../Util/game.h"
 #include "../Util/SoundFunctions.h"
 #include "../SaveDataFunctions.h"
+#include "../Util/Collision3D.h"
+
 // あとで消す
 #include "../Util/Pad.h"
 
@@ -17,7 +19,8 @@ SceneMain::SceneMain():
 	m_pEnemy(nullptr),
 	m_pObstacle(nullptr),
 	m_pPlayer(nullptr),
-	m_pMap(nullptr)
+	m_pMap(nullptr),
+	m_pColl(nullptr)
 {
 	// カメラクラスのインスタンス作成
 	m_pCamera = new Camera;
@@ -29,6 +32,8 @@ SceneMain::SceneMain():
 	m_pPlayer = new Player;
 	// マップクラスのインスタンス作成
 	m_pMap = new MapDrawer;
+	// 3D当たり判定用のインスタンス
+	m_pColl = new Collision3D;
 }
 
 SceneMain::~SceneMain()
@@ -48,6 +53,8 @@ SceneMain::~SceneMain()
 	m_pPlayer = nullptr;
 	delete m_pMap;
 	m_pMap = nullptr;
+	delete m_pColl;
+	m_pColl = nullptr;
 }
 
 void SceneMain::Init()
@@ -83,7 +90,7 @@ void SceneMain::End()
 SceneBase* SceneMain::Update()
 {
 
-	m_pObstacle->GetTarGetPos(m_pEnemy->SetNormalPos(m_pEnemy->SetNormalNum()));
+	m_pObstacle->SetTarGetPos(m_pEnemy->SetNormalPos(m_pEnemy->SetNormalNum()));
 
 	// プレイヤー操作
 	m_pPlayer->Update();
@@ -112,6 +119,20 @@ SceneBase* SceneMain::Update()
 	{
 		m_pObstacle->Create(m_pPlayer->SetPos());
 	}
+
+	// 判定処理
+	std::vector<VECTOR> pos1;
+	std::vector<VECTOR> pos2;
+	for (int i = 0; i < m_pObstacle->GetNormalNum(); i++)
+	{
+		pos1.push_back(m_pObstacle->GetPos(i));
+	}
+	for (int i = 0; i < m_pEnemy->GetNormalNum(); i++)
+	{
+		pos2.push_back(m_pEnemy->SetNormalPos2(i));
+	}
+	m_pColl->UpdateCheck(pos1, pos2);
+
 
 	// シーンを切り替えます
 	if (Pad::isTrigger(PAD_INPUT_8))

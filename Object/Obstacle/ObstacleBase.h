@@ -14,9 +14,9 @@ public:
 	virtual void Draw() = 0;
 
 	// 障害物の位置
-	virtual VECTOR SetPos() const { return m_pos; }
+	virtual VECTOR GetPos() const { return m_pos; }
 	// ターゲットの位置
-	virtual void GetTarGetPos(VECTOR pos) { m_targetPos = pos; }
+	virtual void SetTarGetPos(VECTOR pos) { m_targetPos = pos; }
 
 protected:
 	// 位置

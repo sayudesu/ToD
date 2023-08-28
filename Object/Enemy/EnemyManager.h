@@ -17,9 +17,13 @@ public:
 	void Draw();
 	// ノーマルエネミーの位置
 	VECTOR SetNormalPos(int num);
+	VECTOR SetNormalPos2(int num);
 	int SetNormalNum();
 
 	void SetMapChip(std::vector<int>mapChip);
+
+	// 配列の数
+	int GetNormalNum();
 
 private:
 	// ノーマルエネミー

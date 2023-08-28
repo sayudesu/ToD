@@ -22,9 +22,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// Log.txtでログを残すかどうか
 	SetOutApplicationLogValidFlag(Game::kLogText);
 
-
 	// 使用する Direct3D のバージョンを 9EX に設定
-	SetUseDirect3DVersion(DX_DIRECT3D_9EX);
+	   SetUseDirect3DVersion(DX_DIRECT3D_9EX);
 
 	// ＤＸライブラリ初期化処理
 	// エラーが起きたら直ちに終了
@@ -32,7 +31,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	{
 		return -1;			
 	}
-
 	// Effekseerを初期化する。
 	// 引数には画面に表示する最大パーティクル数を設定する。
 	if (Effkseer_Init(8000) == -1)
@@ -205,10 +203,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	SetUsePixelShader(m_shader);
 
+	float level = 30.0f;
 	SetPSConstSF(GetConstIndexToShader("alpha", m_shader), 1.0f);
-	SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), 3.0f);
-
-
+	SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), level);
 	while (ProcessMessage() == 0)
 	{
 		LONGLONG  time = GetNowHiPerformanceCount();
@@ -219,12 +216,22 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		
 		//SetDrawScreen(m_hScreen);
 		pScene->Draw();
+		if (DxLib::CheckHitKey(KEY_INPUT_1))
+		{
+			level -= 0.3f;
+		}
+		if (DxLib::CheckHitKey(KEY_INPUT_2))
+		{
+			level += 0.3f;
+		}
+		SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), level);
 
+#if true
 		SetDrawScreen(DX_SCREEN_BACK);
 		DrawPrimitive2DToShader(Vert, 6, DX_PRIMTYPE_TRIANGLELIST);
 
 		SetDrawScreen(m_hScreen);
-
+#endif
 
 		//ClearDrawScreen();
 

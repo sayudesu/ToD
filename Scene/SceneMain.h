@@ -6,6 +6,7 @@ class EnemyManager;
 class ObstacleManager;
 class Player;
 class MapDrawer;
+class Collision3D;
 
 class SceneMain : public SceneBase
 {
@@ -24,4 +25,5 @@ private:
 	ObstacleManager* m_pObstacle;
 	Player*          m_pPlayer;
 	MapDrawer*		 m_pMap;
+	Collision3D*	 m_pColl;
 };

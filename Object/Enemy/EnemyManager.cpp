@@ -109,6 +109,11 @@ VECTOR EnemyManager::SetNormalPos(int num)
 	}
 }
 
+VECTOR EnemyManager::SetNormalPos2(int num)
+{
+	return m_pEnemyNormal[num]->SetPos();
+}
+
 int EnemyManager::SetNormalNum()
 {
 	for (auto& size : m_pEnemyNormal)
@@ -125,4 +130,9 @@ void EnemyManager::SetMapChip(std::vector<int> mapChip)
 	}
 
 	m_mapChip = mapChip;
+}
+
+int EnemyManager::GetNormalNum()
+{
+	return m_pEnemyNormal.size();
 }

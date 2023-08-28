@@ -106,7 +106,7 @@ void ObstacleNormalShot::Draw()
 	}
 }
 
-void ObstacleNormalShot::GetTarGetPos(VECTOR pos)
+void ObstacleNormalShot::SetTarGetPos(VECTOR pos)
 {
 	for (int i = 0; i < m_pShot.size(); i++)
 	{

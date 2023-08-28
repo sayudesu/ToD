@@ -20,7 +20,7 @@ public:
 	void UpdateShot();
 	void Draw();
 
-	void GetTarGetPos(VECTOR pos);
+	void SetTarGetPos(VECTOR pos);
 private:
 	// ショットクラス
 	std::vector<std::shared_ptr<ShotBase>>m_pShot;

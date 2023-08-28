@@ -19,6 +19,8 @@ private:
 	// 移動の計算をしています
 	void VecCalculation();
 private:
+	// 3Dモデルハンドル
+	int m_hShot;
 	// 位置
 	VECTOR m_pos;
 	// 向き

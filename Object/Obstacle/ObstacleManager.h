@@ -16,7 +16,13 @@ public:
 	void Update();
 	void Draw();
 
-	void GetTarGetPos(VECTOR pos);
+	void SetTarGetPos(VECTOR pos);
+
+	VECTOR GetPos(int num);
+
+	// 配列の数を渡す
+	int GetNormalNum();
+
 private:
 	std::vector<std::shared_ptr<ObstacleBase>>m_pObstacle;
 	// 出現数をカウントします
