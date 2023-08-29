@@ -55,7 +55,7 @@ void EnemyManager::End()
 void EnemyManager::Create()
 {
 	// マップチップサイズ
-	const int mapChipMaxZ = 12;// 行
+	const int mapChipMaxZ = 13;// 行
 	const int mapChipMaxX = 25;// 列
 	// マップチップナンバー(敵の道)
 	

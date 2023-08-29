@@ -22,5 +22,8 @@ private:
 	int m_count;
 	int forX;
 	int forZ;
+
+	std::vector<int> m_testPosX;
+	std::vector<int> m_testPosZ;
 };
 

@@ -141,7 +141,7 @@ void MapDrawer::Update()
 void MapDrawer::Draw()
 {
     // マップチップサイズ
-    const int mapChipMaxZ = 12;// 行
+    const int mapChipMaxZ = 13;// 行
     const int mapChipMaxX = 25;// 列
     // マップチップナンバー(敵の道)
     const int enemyRoad = 2;
@@ -151,6 +151,7 @@ void MapDrawer::Draw()
     static int m_count = -1;
     static VECTOR m_pos{};
     m_pos.y = -block + 20.0f;
+
     // 行
     for (int z = 0; z < mapChipMaxZ; ++z)
     {

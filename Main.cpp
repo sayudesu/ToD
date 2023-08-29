@@ -213,7 +213,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		ClearDrawScreen();
 
 		pScene->Update();
-		
 		//SetDrawScreen(m_hScreen);
 		pScene->Draw();
 		if (DxLib::CheckHitKey(KEY_INPUT_1))
@@ -226,10 +225,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		}
 		SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), level);
 
-#if true
+#if FALSE
 		SetDrawScreen(DX_SCREEN_BACK);
 		DrawPrimitive2DToShader(Vert, 6, DX_PRIMTYPE_TRIANGLELIST);
-
 		SetDrawScreen(m_hScreen);
 #endif
 

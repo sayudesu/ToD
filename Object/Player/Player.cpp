@@ -9,6 +9,8 @@ namespace
 {
 	constexpr int kSetCost = 200;
 	constexpr int kSetPosMoveSpeed = 50.0f;
+
+	const char* kCostString = "オブジェクトコスト[%d]";
 }
 
 Player::Player() :
@@ -58,12 +60,10 @@ void Player::DrawUI()
 	VECTOR a = VGet(m_pos.x + 50.0f, m_pos.y, m_pos.z);
 	DrawLine3D(m_pos, a, 0xffffff);
 
-	DrawBox(m_pos.x, m_pos.y, m_pos.x + 10, m_pos.y + 10, 0x00ffff, true);
-
 	DrawRotaGraph(500, 100, 0.5f, DX_PI_F * 180.0f, m_hCostBg, true);
 
 	// オブジェクトコスト描画
-	DrawFormatString(400, 80, 0xffffff, "オブジェクトコスト[%d]", m_objectCostNum);
+	DrawFormatString(400, 80, 0xffffff, kCostString, m_objectCostNum);
 
 	int m_hIcon[8];
 	m_hIcon[0] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon0);
