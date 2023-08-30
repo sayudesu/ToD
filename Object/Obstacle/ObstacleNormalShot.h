@@ -22,6 +22,9 @@ public:
 
 	void SetTarGetPos(VECTOR pos);
 private:
+	// 大砲モデルハンドル
+	int m_hCannon;
+	int m_hCannonBaes;
 	// ショットクラス
 	std::vector<std::shared_ptr<ShotBase>>m_pShot;
 	// エフェクア使用クラス

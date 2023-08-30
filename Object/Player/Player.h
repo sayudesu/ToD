@@ -3,6 +3,9 @@
 #include "../../Util/Vec2.h"
 #include <vector>
 
+
+class ObjectMenuDrawer;
+
 // プレイヤークラス
 class Player
 {
@@ -49,5 +52,7 @@ private:
 	int m_hCostBg;
 	// コスト数
 	int m_objectCostNum;
+
+	ObjectMenuDrawer* m_pObjMenu;
 };
 

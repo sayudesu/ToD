@@ -1,16 +1,19 @@
 #include "Player.h"
 #include <DxLib.h>
 #include "../../Util/Pad.h"
+#include "../../Util/game.h"
 #include "../../SaveDataFunctions.h"
 #include "../../Util/SoundFunctions.h"
 #include "../../Util/LoadGraphFunction.h"
-
+#include "ObjectMenuDrawer.h"
 namespace
 {
-	constexpr int kSetCost = 200;
+//	constexpr int kSetCost = 200;
+	constexpr int kSetCost = 1;
 	constexpr int kSetPosMoveSpeed = 50.0f;
 
 	const char* kCostString = "オブジェクトコスト[%d]";
+	const char* kObjSelectString = "RBを押してオブジェクトを選ぶ！";
 }
 
 Player::Player() :
@@ -30,17 +33,36 @@ Player::~Player()
 
 void Player::Init()
 {
+	// 画像のロード
 	m_hCostBg = LoadGraph("Data/Image/Cost.png");
+
+	// インスタンス生成
+	m_pObjMenu = new ObjectMenuDrawer;
+
+	m_pObjMenu->Init();
 }
 
 void Player::End()
 {
+	m_pObjMenu->End();
+	// メモリ解放
+	delete m_pObjMenu;
+	m_pObjMenu = nullptr;
 }
 
 void Player::Update()
 {	
-	// 操作の制御
-	UpdateControl();
+	// オブジェクトメニューを開いている場合
+	if (!m_pObjMenu->IsSetMenu())
+	{
+		// 操作の制御
+		UpdateControl();
+	}
+
+	// オブジェクトの設置コスト
+	ObjectCost();
+
+	m_pObjMenu->Update();
 }
 
 void Player::Draw()
@@ -65,6 +87,9 @@ void Player::DrawUI()
 	// オブジェクトコスト描画
 	DrawFormatString(400, 80, 0xffffff, kCostString, m_objectCostNum);
 
+	// オブジェクト選択
+	DrawFormatString(400, Game::kScreenHeight - 100, 0xffffff, kObjSelectString, m_objectCostNum);
+
 	int m_hIcon[8];
 	m_hIcon[0] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon0);
 	m_hIcon[1] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon1);
@@ -82,13 +107,12 @@ void Player::DrawUI()
 		DX_PI_F * 180.0f,
 		m_hIcon[SaveDataFunctions::GetIconData().Icon],
 		true);
+
+	m_pObjMenu->Draw();
 }
 
 void Player::UpdateControl()
 {
-	// オブジェクトの設置コスト
-	ObjectCost();
-
 	// 設置場を指定
 	if (Pad::isTrigger(PAD_INPUT_UP))
 	{

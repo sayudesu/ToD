@@ -25,5 +25,10 @@ private:
 
 	std::vector<int> m_testPosX;
 	std::vector<int> m_testPosZ;
+
+	std::vector<int> m_recordX;
+	std::vector<int> m_recordZ;
+
+	VECTOR m_checkPos[9];
 };
 

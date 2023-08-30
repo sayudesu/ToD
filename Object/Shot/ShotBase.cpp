@@ -38,8 +38,8 @@ void ShotBase::Draw()
 {
 	if (!m_isScreenOut)
 	{
-	//	DrawSphere3D(m_pos, 8, 8, 0x00ff00, 0x00ff00, true);
-		MV1DrawModel(m_hShot);
+		DrawSphere3D(m_pos, 8, 8, 0x00ff00, 0x00ff00, true);
+	//	MV1DrawModel(m_hShot);
 	}
 }
 

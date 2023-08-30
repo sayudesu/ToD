@@ -28,6 +28,9 @@ void EnemyNormal::Init(VECTOR firstPos, int x, int z)
 	m_pos = firstPos;
 	forX = x;
 	forZ = z;
+
+	m_recordX.push_back(forX);
+	m_recordZ.push_back(forZ);
 }
 
 void EnemyNormal::End()
@@ -66,7 +69,7 @@ void EnemyNormal::NextPosChange()
 	assert(m_mapChip.size() != 0);
 
 	// マップチップサイズ
-	const int mapChipMaxZ = 12;// 行
+	const int mapChipMaxZ = 13;// 行
 	const int mapChipMaxX = 25;// 列
 	// マップチップナンバー(敵の道)
 	const int enemyRoad = 2;
@@ -77,68 +80,68 @@ void EnemyNormal::NextPosChange()
 
 	int tempZ = 0;
 	int tempX = 0;
-
-	static std::vector<int> xx;
-	xx.push_back(forX);
-	static std::vector<int> zz;
-	zz.push_back(forZ);
-
-	bool a = false;
-
-	if (Pad::isTrigger(PAD_INPUT_3))
-	{
+	
+	int count = -1;
+	if (Pad::isTrigger(PAD_INPUT_3)){
 		// 行
-		for (int z = forZ - 1; z <= forZ + 1; ++z)
-		{
-			// 配列の制御
-			tempZ = z;
-			if (z >= mapChipMaxZ)tempZ = mapChipMaxZ;
-			if (z < 0)tempZ = 0;
+		for (int z = forZ - 1; z <= forZ + 1; ++z){
 			// 列
-			for (int x = forX - 1; x <= forX + 1; ++x)
-			{
+			for (int x = forX - 1; x <= forX + 1; ++x){
+				// 配列の制御
+				tempZ = z;
+				if (z > mapChipMaxZ){tempZ = mapChipMaxZ;}
+				if (z < 0){tempZ = 0;}
 				// 配列の制御
 				tempX = x;
-				if (x >= mapChipMaxX)tempX = mapChipMaxX;
-				if (x < 0)tempX = 0;
+				if (x > mapChipMaxX){tempX = mapChipMaxX;}
+				if (x < 0){tempX = 0;}
+				
+				//count++;
+				//m_checkPos[count].x = ((tempX)*block);
+				//m_checkPos[count].z = ((tempZ)*block);
+				//m_checkPos[count].y = 50.0f;
 
 				// [現在の列 + 現在の列 * チップ最大列]
 				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad)
-				{
-					//if (forX == x && forZ == z)continue;
-
-					for (int i = 0; i < xx.size(); i++)
+				{				
+					// 一度通った道はみない
+					bool back = false;
+					for (int i = 0; i < m_recordX.size(); i++)
 					{
-						if (xx[i] == x && zz[i] == z)a = true;
+						// 見ようとしている場合はcontinu
+						if (m_recordX[i] == x && m_recordZ[i] == z)
+						{
+							back = true;
+						}
 					}
-					if (a)
+					if (back)
 					{
-						a = false;
 						continue;
 					}
-					// 1つまえの場所
-					xx.push_back(x);
-					zz.push_back(z);
-
 					// 座標を記録
 					forX = x;
 					forZ = z;
 
+					// 1つまえの場所
+					m_recordX.push_back(x);
+					m_recordZ.push_back(z);
 					// 敵の位置に代入
 					m_pos.x = ((x) * block);
 					m_pos.z = ((z) * block);
-
-					m_testPosX.push_back(m_pos.x);
-					m_testPosZ.push_back(m_pos.z);
-
 					// 座標制御
-					if (x >= mapChipMaxX)forX = mapChipMaxX;
-					if (z >= mapChipMaxZ)forZ = mapChipMaxZ;
+					if (x > mapChipMaxX)forX = mapChipMaxX;
+					if (z > mapChipMaxZ)forZ = mapChipMaxZ;
 					if (x < 0)forX = 0;
 					if (z < 0)forZ = 0;
-
-					printfDx("通過\n");
-
+#if _DEBUG
+					// デバッグ用
+					//m_testPosX.push_back(m_pos.x);
+					//m_testPosZ.push_back(m_pos.z);
+					//printfDx("通過\n");
+					printfDx(" x = %d  z = %d\n",x,z);
+					printfDx("tx = %d tz = %d\n",tempX, tempZ);
+					printfDx("fx = %d fz = %d\n", forX, forZ);
+#endif
 					break;
 				}
 			}
@@ -146,14 +149,21 @@ void EnemyNormal::NextPosChange()
 	}
 }
 
+
 void EnemyNormal::Draw()
 {
 
-	for (int i = 0; i < m_testPosX.size(); i++)
-	{
-		VECTOR pos = VGet(m_testPosX[i], 0.0f, m_testPosZ[i]);
-		DrawSphere3D(pos, 16, 16, 0xff00ff, 0xff00ff, true);
-	}
+	//for (int i = 0; i < m_testPosX.size(); i++)
+	//{
+	//	VECTOR pos = VGet(m_testPosX[i], 0.0f, m_testPosZ[i]);
+	//	DrawSphere3D(pos, 16, 16, 0xff00ff, 0xff00ff, true);
+	//}
+
+	//for (int i = 0; i < 9; i++)
+	//{
+	//	DrawSphere3D(m_checkPos[i], 16, 16, 0xffffff, 0xffffff, true);
+	//}
+
 
 	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
 }
