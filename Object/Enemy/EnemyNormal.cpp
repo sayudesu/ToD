@@ -87,10 +87,11 @@ void EnemyNormal::NextPosChange()
 	int tempX = 0;
 
 	bool isBreak = false;
+	bool back = false;
 
-	if (Pad::isTrigger(PAD_INPUT_3)){
+	if (Pad::isTrigger(PAD_INPUT_3)) {
 		// 行
-		for (int z = forZ - 1; z <= forZ + 1; z++){
+		for (int z = forZ - 1; z <= forZ + 1; z++) {
 			// 全てのfor分から脱出する
 			if (isBreak)
 			{
@@ -102,24 +103,50 @@ void EnemyNormal::NextPosChange()
 			if (z >= mapChipMaxZ) { tempZ = mapChipMaxZ; }
 			if (z <= 0) { tempZ = 0; }
 			// 列
-			for (int x = forX - 1; x <= forX + 1; x++){
+			for (int x = forX - 1; x <= forX + 1; x++) {
 				// 配列の制御
 				tempX = x;
-				if (x >= mapChipMaxX){tempX = mapChipMaxX;}
-				if (x <= 0){tempX = 0;}
+				if (x >= mapChipMaxX) { tempX = mapChipMaxX; }
+				if (x <= 0) { tempX = 0; }
+
 				bool isStop = false;
 				bool isMove = false;
+				// [現在の列 + 現在の列 * チップ最大列]
 				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyStop)
 				{
 					printfDx("道を選びます。\n");
+					isStop = true;
+
+					//// ここで移動処理を
+					//// 一度通った道はみない
+
+					//for (int i = 0; i < m_recordX.size(); i++)
+					//{
+					//	// 見ようとしている場合はcontinu
+					//	if (m_recordX[i] == tempX && m_recordZ[i] == tempZ)
+					//	{
+					//		back = true;
+					//	}
+					//}
+					//if (back)
+					//{
+					//	back = false;
+					//	printfDx("continue\n");
+					//	continue;
+					//}
+					//// 座標を記録
+					//forX = tempX;
+					//forZ = tempZ;
 				}
 				// [現在の列 + 現在の列 * チップ最大列]
 				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad)
-				{			
+				{
 					printfDx("移動します。\n");
+					isMove = true;
 
+					// ここで移動処理を
 					// 一度通った道はみない
-					bool back = false;
+
 					for (int i = 0; i < m_recordX.size(); i++)
 					{
 						// 見ようとしている場合はcontinu
@@ -128,31 +155,31 @@ void EnemyNormal::NextPosChange()
 							back = true;
 						}
 					}
-
 					if (back)
 					{
+						back = false;
 						printfDx("continue\n");
 						continue;
 					}
-
-					// 通った事のある場所の記録
-					m_recordX.push_back(forX);
-					m_recordZ.push_back(forZ);
 					// 座標を記録
 					forX = tempX;
 					forZ = tempZ;
+					// 通った事のある場所の記録
+					m_recordX.push_back(forX);
+					m_recordZ.push_back(forZ);
 					// 敵の位置を更新
 					m_pos.x = ((forX)*block);
 					m_pos.z = ((forZ)*block);
-					// 全てのfor分から脱出する
 					isBreak = true;
-					break;			
+					break;
 				}
 			}
-		}	
+		}
+		
 
-		// ここで移動処理を
-
+		// 全てのfor分から脱出する
+		
+		//break;
 	}
 }
 
