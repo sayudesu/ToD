@@ -135,12 +135,12 @@ void EnemyNormal::NextPosChange()
 						continue;
 					}
 
-					// 通った事のある場所の記録
-					m_recordX.push_back(forX);
-					m_recordZ.push_back(forZ);
 					// 座標を記録
 					forX = tempX;
 					forZ = tempZ;
+					// 通った事のある場所の記録
+					m_recordX.push_back(forX);
+					m_recordZ.push_back(forZ);
 					// 敵の位置を更新
 					m_pos.x = ((forX)*block);
 					m_pos.z = ((forZ)*block);
