@@ -6,7 +6,7 @@
 
 namespace
 {
-	// ‘¬“x
+	// é€Ÿåº¦
 	constexpr float kSpeed = 3.0f;
 }
 
@@ -24,12 +24,12 @@ EnemyNormal::~EnemyNormal()
 
 void EnemyNormal::Init(VECTOR firstPos, int x, int z)
 {
-	// ‰ŠúˆÊ’u
+	// åˆæœŸä½ç½®
 	m_pos = firstPos;
 	forX = x;
 	forZ = z;
 
-	// ’Ê‚Á‚½–‚Ì‚ ‚éêŠ‚Ì‹L˜^
+	// é€šã£ãŸäº‹ã®ã‚ã‚‹å ´æ‰€ã®è¨˜éŒ²
 	m_recordX.push_back(forX);
 	m_recordZ.push_back(forZ);
 
@@ -43,23 +43,23 @@ void EnemyNormal::End()
 
 void EnemyNormal::Update()
 {
-	////**** ’Ç]‚ÌAI ****//
-	//// Œü‚«‚ğZo
+	////**** è¿½å¾“ã®AI ****//
+	//// å‘ãã‚’ç®—å‡º
 	//m_dir = VSub(m_targetPos, m_pos);
-	//// ƒvƒŒƒCƒ„[‚©‚çƒGƒlƒ~[‚Ü‚Å‚ÌŠp“x‚ğ‹‚ß‚é
+	//// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰ã‚¨ãƒãƒŸãƒ¼ã¾ã§ã®è§’åº¦ã‚’æ±‚ã‚ã‚‹
 	//const float angle = atan2(m_dir.y, m_dir.x);
-	//// Œ»İ“G‚ªŒü‚¢‚Ä‚¢‚é•ûŒü‚ÌƒxƒNƒgƒ‹‚ğ¶¬‚·‚é
+	//// ç¾åœ¨æ•µãŒå‘ã„ã¦ã„ã‚‹æ–¹å‘ã®ãƒ™ã‚¯ãƒˆãƒ«ã‚’ç”Ÿæˆã™ã‚‹
 	//const MATRIX enemyRotMtx = MGetRotY(angle);
 	//const VECTOR dir = VTransform(VGet(0, 0, 0), enemyRotMtx);
 	////printfDx("%2d\n",dir.z);
-	//// Î‚ß‚É‚È‚Á‚½‚Æ‚«((1, 1, 0)‚È‚Ç)‚É‚¢‚Á‚½‚ñ’·‚³‚P‚É–ß‚·(³‹K‰»)
+	//// æ–œã‚ã«ãªã£ãŸã¨ã((1, 1, 0)ãªã©)ã«ã„ã£ãŸã‚“é•·ã•ï¼‘ã«æˆ»ã™(æ­£è¦åŒ–)
 	//if (VSquareSize(m_dir) > 0)
 	//{
 	//	m_dir = VNorm(m_dir);
 	//}
-	//// ‘¬“x‚ğ‹‚ß‚é
+	//// é€Ÿåº¦ã‚’æ±‚ã‚ã‚‹
 	//const VECTOR velecity = VScale(m_dir, kSpeed);
-	//// ˆÊ’u‚ğ•Ï‚¦‚é
+	//// ä½ç½®ã‚’å¤‰ãˆã‚‹
 	//m_pos = VAdd(m_pos, velecity);
 	////	m_pModel->SetPos(m_pos);
 	////	m_pModel->SetRot(VGet(0, m_pPlayer->GetDir().y, 0));
@@ -69,16 +69,16 @@ void EnemyNormal::Update()
 
 void EnemyNormal::NextPosChange()
 {
-	// ”z—ñ‚ª–³‚©‚Á‚½‚ç...
+	// é…åˆ—ãŒç„¡ã‹ã£ãŸã‚‰...
 	assert(m_mapChip.size() != 0);
 
-	// ƒ}ƒbƒvƒ`ƒbƒvƒTƒCƒY
-	const int mapChipMaxZ = 13;// s
-	const int mapChipMaxX = 25;// —ñ
-	// ƒ}ƒbƒvƒ`ƒbƒvƒiƒ“ƒo[(“G‚Ì“¹)
+	// ãƒãƒƒãƒ—ãƒãƒƒãƒ—ã‚µã‚¤ã‚º
+	const int mapChipMaxZ = 13;// è¡Œ
+	const int mapChipMaxX = 25;// åˆ—
+	// ãƒãƒƒãƒ—ãƒãƒƒãƒ—ãƒŠãƒ³ãƒãƒ¼(æ•µã®é“)
 	const int enemyRoad = 2;
 	const int enemyStop = 4;
-	// ƒuƒƒbƒN1‚Â‚Ì‘å‚«‚³
+	// ãƒ–ãƒ­ãƒƒã‚¯1ã¤ã®å¤§ãã•
 	const float block = 50.0f;
 
 	m_pos.y = -block + 50.0f;
@@ -88,33 +88,47 @@ void EnemyNormal::NextPosChange()
 
 	bool isBreak = false;
 
-	if (Pad::isPress(PAD_INPUT_3)) {
-		// s
-		for (int z = forZ - 1; z <= forZ + 1; z++){
-			// ‘S‚Ä‚Ìfor•ª‚©‚ç’Eo‚·‚é
+
+	bool isStop = false;
+	bool isMove = false;
+	bool isStopNow = false;
+	bool isMoveNow = false;
+
+	int tempStopPosZ = 0;
+	int tempStopPosX = 0;
+
+	int tempMovePosZ = 0;
+	int tempMovePosX = 0;
+
+	if (Pad::isTrigger(PAD_INPUT_3)) {
+	//if (Pad::isPress(PAD_INPUT_3)) {
+		// è¡Œ
+		for (int z = forZ - 1; z <= forZ + 1; z++) {
+			// å…¨ã¦ã®foråˆ†ã‹ã‚‰è„±å‡ºã™ã‚‹
 			if (isBreak)
 			{
 				isBreak = false;
 				break;
 			}
-			// ”z—ñ‚Ì§Œä
+			// é…åˆ—ã®åˆ¶å¾¡
 			tempZ = z;
-			if (z >= mapChipMaxZ) { tempZ = mapChipMaxZ; }
+			if (z >= mapChipMaxZ) { tempZ = mapChipMaxZ - 1 ; }
 			if (z <= 0) { tempZ = 0; }
-			// —ñ
-			for (int x = forX - 1; x <= forX + 1; x++){
-				// ”z—ñ‚Ì§Œä
+			// åˆ—
+			for (int x = forX - 1; x <= forX + 1; x++) {
+				// é…åˆ—ã®åˆ¶å¾¡
 				tempX = x;
-				if (x >= mapChipMaxX){tempX = mapChipMaxX;}
-				if (x <= 0){tempX = 0;}
-				bool isStop = false;
-				bool isMove = false;
 
-				// ˆê“x’Ê‚Á‚½“¹‚Í‚İ‚È‚¢
+				if (x >= mapChipMaxX) { tempX = mapChipMaxX - 1; }
+				if (x <= 0) { tempX = 0; }
+
+				// ã“ã“ã§ç§»å‹•å‡¦ç†ã‚’
+
+				// ä¸€åº¦é€šã£ãŸé“ã¯ã¿ãªã„
 				bool back = false;
 				for (int i = 0; i < m_recordX.size(); i++)
 				{
-					// Œ©‚æ‚¤‚Æ‚µ‚Ä‚¢‚éê‡‚Ícontinu
+					// è¦‹ã‚ˆã†ã¨ã—ã¦ã„ã‚‹å ´åˆã¯continu
 					if (m_recordX[i] == tempX && m_recordZ[i] == tempZ)
 					{
 						back = true;
@@ -122,37 +136,85 @@ void EnemyNormal::NextPosChange()
 				}
 				if (back)
 				{
+
+					back = false;
+
 					printfDx("continue\n");
 					continue;
 				}
 
+
+				// [ç¾åœ¨ã®åˆ— + ç¾åœ¨ã®åˆ— * ãƒãƒƒãƒ—æœ€å¤§åˆ—]
+
 				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyStop)
 				{
-					printfDx("“¹‚ğ‘I‚Ñ‚Ü‚·B\n");
-				}
-				// [Œ»İ‚Ì—ñ + Œ»İ‚Ì—ñ * ƒ`ƒbƒvÅ‘å—ñ]
-				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad)
-				{			
-					printfDx("ˆÚ“®‚µ‚Ü‚·B\n");
+					printfDx("é“ã‚’é¸ã³ã¾ã™ã€‚\n");
+					isStop = true;
 
-					// À•W‚ğ‹L˜^
-					forX = tempX;
-					forZ = tempZ;
-					// ’Ê‚Á‚½–‚Ì‚ ‚éêŠ‚Ì‹L˜^
-					m_recordX.push_back(forX);
-					m_recordZ.push_back(forZ);
-					// “G‚ÌˆÊ’u‚ğXV
-					m_pos.x = ((forX)*block);
-					m_pos.z = ((forZ)*block);
-					// ‘S‚Ä‚Ìfor•ª‚©‚ç’Eo‚·‚é
+					tempStopPosX = tempX;
+					tempStopPosZ = tempZ;
+
+					isStopNow = true;
+
 					isBreak = true;
-					break;			
+					break;
+				}
+				// [ç¾åœ¨ã®åˆ— + ç¾åœ¨ã®åˆ— * ãƒãƒƒãƒ—æœ€å¤§åˆ—]
+				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad)
+				{
+					printfDx("ç§»å‹•ã—ã¾ã™ã€‚\n");
+					isMove = true;
+
+					tempMovePosX = tempX;
+					tempMovePosZ = tempZ;
+
+					isMoveNow = true;
+					
+					//isBreak = true;
+					//break;
 				}
 			}
-		}	
+		}
 
-		// ‚±‚±‚ÅˆÚ“®ˆ—‚ğ
+		if (isMove || isStop)
+		{
 
+			isMove = false;
+			isStop = false;
+
+			if (isStopNow)
+			{
+				//
+				isMoveNow = false;
+			}
+
+			// åº§æ¨™ã‚’è¨˜éŒ²
+			if (isMoveNow)
+			{
+				forX = tempMovePosX;
+				forZ = tempMovePosZ;
+
+				isMoveNow = false;
+			}
+			if (isStopNow)
+			{
+				forX = tempStopPosX;
+				forZ = tempStopPosZ;
+
+				isStopNow = false;
+			}
+			// é€šã£ãŸäº‹ã®ã‚ã‚‹å ´æ‰€ã®è¨˜éŒ²
+			m_recordX.push_back(forX);
+			m_recordZ.push_back(forZ);
+			// æ•µã®ä½ç½®ã‚’æ›´æ–°
+			m_testPosX.push_back((forX)*block);
+			m_testPosZ.push_back((forZ)*block);
+			m_pos.x = ((forX)*block);
+			m_pos.z = ((forZ)*block);
+			// å…¨ã¦ã®foråˆ†ã‹ã‚‰è„±å‡ºã™ã‚‹
+			//isBreak = true;
+			// break;
+		}
 	}
 }
 
