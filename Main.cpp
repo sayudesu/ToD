@@ -141,8 +141,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	//VERTEX2DSHADER Vert[6]{};
 
 	//// 画像の読み込み
-	m_handle = LoadGraph("end.png");
-	assert(m_handle != -1);
+	//m_handle = LoadGraph("end.png");
+	//assert(m_handle != -1);
 	//GetGraphSize(m_handle, &m_handleSizeX, &m_handleSizeY);
 
 	//// ピクセルシェーダーバイナリコードの読み込み
