@@ -28,7 +28,5 @@ private:
 
 	std::vector<int> m_recordX;
 	std::vector<int> m_recordZ;
-
-	VECTOR m_checkPos[9];
 };
 

@@ -12,6 +12,7 @@ MapDrawer::MapDrawer():
     m_hBlock(-1),
     m_hEnemyRoad(-1),
     m_hEnemySpawner(-1),
+    m_hEnemyStop(-1),
     m_dataNum(-1)
 {
 
@@ -128,6 +129,7 @@ void MapDrawer::Init()
     m_hBlock        = MV1LoadModel("Data/Model/NormalBlock2.mv1");
     m_hEnemyRoad    = MV1LoadModel("Data/Model/EnemyRoad.mv1");
     m_hEnemySpawner = MV1LoadModel("Data/Model/EnemySpawner.mv1");
+    m_hEnemyStop    = MV1LoadModel("Data/Model/EnemyStop.mv1");
 }
 
 void MapDrawer::End()
@@ -182,6 +184,14 @@ void MapDrawer::Draw()
                 m_pos.z = (z * block);
                 MV1SetPosition(m_hEnemySpawner, m_pos);
                 MV1DrawModel(m_hEnemySpawner);
+            }
+            // [åªç›ÇÃóÒ + åªç›ÇÃóÒ * É`ÉbÉvç≈ëÂóÒ]
+            if (m_loadData[x + z * mapChipMaxX] == 4)
+            {
+                m_pos.x = (x * block);
+                m_pos.z = (z * block);
+                MV1SetPosition(m_hEnemyStop, m_pos);
+                MV1DrawModel(m_hEnemyStop);
             }
         }
     }

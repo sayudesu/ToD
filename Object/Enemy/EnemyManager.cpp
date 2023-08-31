@@ -66,21 +66,31 @@ void EnemyManager::Create()
 
 	int forX = 0;
 	int forZ = 0;
-
+	int tempZ = 0;
+	int tempX = 0;
 	// 行
 	for (int z = 0; z < mapChipMaxZ; ++z)
 	{
+		// 配列の制御
+		tempZ = z;
+		if (z >= mapChipMaxZ) { tempZ = mapChipMaxZ; }
+		if (z <= 0) { tempZ = 0; }
 		// 列
 		for (int x = 0; x < mapChipMaxX; ++x)
 		{
+			// 配列の制御
+			tempX = x;
+			if (x >= mapChipMaxX) { tempX = mapChipMaxX; }
+			if (x <= 0) { tempX = 0; }
 			// [現在の列 + 現在の列 * チップ最大列]
 			if (m_mapChip[x + z * mapChipMaxX] == 3)
 			{
+				forX = tempX;
+				forZ = tempZ;
 				//// 敵の位置に代入
-				pos.x = (x * block);
-				pos.z = (z * block);
-				forX = x;
-				forZ = z;
+				pos.x = (forX * block);
+				pos.z = (forZ * block);
+				break;
 			}
 		}
 	}

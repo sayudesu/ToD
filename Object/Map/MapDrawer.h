@@ -22,6 +22,7 @@ private:
 	int m_hBlock;
 	int m_hEnemyRoad;
 	int m_hEnemySpawner;
+	int m_hEnemyStop;
 
 	// ÉfÅ[É^ï€ä«
 	std::vector<int>m_loadData;

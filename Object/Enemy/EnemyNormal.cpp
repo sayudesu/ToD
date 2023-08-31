@@ -30,8 +30,8 @@ void EnemyNormal::Init(VECTOR firstPos, int x, int z)
 	forZ = z;
 
 	// 通った事のある場所の記録
-	m_recordX.push_back(x);
-	m_recordZ.push_back(z);
+	m_recordX.push_back(forX);
+	m_recordZ.push_back(forZ);
 
 	m_testPosX.push_back(m_pos.x);
 	m_testPosZ.push_back(m_pos.z);
@@ -77,6 +77,7 @@ void EnemyNormal::NextPosChange()
 	const int mapChipMaxX = 25;// 列
 	// マップチップナンバー(敵の道)
 	const int enemyRoad = 2;
+	const int enemyStop = 4;
 	// ブロック1つの大きさ
 	const float block = 50.0f;
 
@@ -89,7 +90,7 @@ void EnemyNormal::NextPosChange()
 
 	if (Pad::isTrigger(PAD_INPUT_3)){
 		// 行
-		for (int z = forZ - 1; z < forZ + 1; z++){
+		for (int z = forZ - 1; z <= forZ + 1; z++){
 			// 全てのfor分から脱出する
 			if (isBreak)
 			{
@@ -101,15 +102,22 @@ void EnemyNormal::NextPosChange()
 			if (z >= mapChipMaxZ) { tempZ = mapChipMaxZ; }
 			if (z <= 0) { tempZ = 0; }
 			// 列
-			for (int x = forX - 1; x < forX + 1; x++){
+			for (int x = forX - 1; x <= forX + 1; x++){
 				// 配列の制御
 				tempX = x;
 				if (x >= mapChipMaxX){tempX = mapChipMaxX;}
 				if (x <= 0){tempX = 0;}
-
+				bool isStop = false;
+				bool isMove = false;
+				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyStop)
+				{
+					printfDx("道を選びます。\n");
+				}
 				// [現在の列 + 現在の列 * チップ最大列]
 				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad)
 				{			
+					printfDx("移動します。\n");
+
 					// 一度通った道はみない
 					bool back = false;
 					for (int i = 0; i < m_recordX.size(); i++)
@@ -120,39 +128,31 @@ void EnemyNormal::NextPosChange()
 							back = true;
 						}
 					}
+
 					if (back)
 					{
 						printfDx("continue\n");
 						continue;
 					}
+
 					// 通った事のある場所の記録
 					m_recordX.push_back(forX);
 					m_recordZ.push_back(forZ);
 					// 座標を記録
 					forX = tempX;
 					forZ = tempZ;
-					// 敵の位置に代入
-					m_pos.x = ((forX) * block);
-					m_pos.z = ((forZ) * block);
-
-#if _DEBUG
-					static int moveCount = 0;
-					moveCount++;
-					// デバッグ用
-					m_testPosX.push_back(m_pos.x);
-					m_testPosZ.push_back(m_pos.z);
-					//printfDx("通過\n");
-					printfDx(" x = %d  z = %d\n",x,z);
-					printfDx("tx = %d tz = %d\n",tempX, tempZ);
-					printfDx("fx = %d fz = %d\n", forX, forZ);
-					printfDx("%d\n", moveCount);
-#endif
+					// 敵の位置を更新
+					m_pos.x = ((forX)*block);
+					m_pos.z = ((forZ)*block);
 					// 全てのfor分から脱出する
 					isBreak = true;
-					break;
+					break;			
 				}
 			}
 		}	
+
+		// ここで移動処理を
+
 	}
 }
 
@@ -160,16 +160,11 @@ void EnemyNormal::NextPosChange()
 void EnemyNormal::Draw()
 {
 
-	for (int i = 0; i < m_testPosX.size(); i++)
-	{
-		VECTOR pos = VGet(m_testPosX[i], 0.0f, m_testPosZ[i]);
-		DrawSphere3D(pos, 16, 16, 0xff00ff, 0xff00ff, true);
-	}
-
-	DrawSphere3D(m_checkPos[0], 16, 16, 0xffffff, 0xffffff, true);
-	for (int i = 0; i < 9; i++)
-	{
-	}
+	//for (int i = 0; i < m_testPosX.size(); i++)
+	//{
+	//	VECTOR pos = VGet(m_testPosX[i], 0.0f, m_testPosZ[i]);
+	//	DrawSphere3D(pos, 16, 16, 0xff00ff, 0xff00ff, true);
+	//}
 
 	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
 }
