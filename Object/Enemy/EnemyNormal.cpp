@@ -100,6 +100,7 @@ void EnemyNormal::NextPosChange()
 	int tempMovePosX = 0;
 
 	if (Pad::isTrigger(PAD_INPUT_3)) {
+	//if (Pad::isPress(PAD_INPUT_3)) {
 		// 行
 		for (int z = forZ - 1; z <= forZ + 1; z++) {
 			// 全てのfor分から脱出する
@@ -110,13 +111,13 @@ void EnemyNormal::NextPosChange()
 			}
 			// 配列の制御
 			tempZ = z;
-			if (z >= mapChipMaxZ) { tempZ = mapChipMaxZ; }
+			if (z >= mapChipMaxZ) { tempZ = mapChipMaxZ - 1 ; }
 			if (z <= 0) { tempZ = 0; }
 			// 列
 			for (int x = forX - 1; x <= forX + 1; x++) {
 				// 配列の制御
 				tempX = x;
-				if (x >= mapChipMaxX) { tempX = mapChipMaxX; }
+				if (x >= mapChipMaxX) { tempX = mapChipMaxX - 1; }
 				if (x <= 0) { tempX = 0; }
 
 				// ここで移動処理を
@@ -147,6 +148,9 @@ void EnemyNormal::NextPosChange()
 					tempStopPosZ = tempZ;
 
 					isStopNow = true;
+
+					isBreak = true;
+					break;
 				}
 				// [現在の列 + 現在の列 * チップ最大列]
 				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad)
@@ -158,6 +162,9 @@ void EnemyNormal::NextPosChange()
 					tempMovePosZ = tempZ;
 
 					isMoveNow = true;
+					
+					//isBreak = true;
+					//break;
 				}
 			}
 		}
@@ -170,6 +177,7 @@ void EnemyNormal::NextPosChange()
 
 			if (isStopNow)
 			{
+				//
 				isMoveNow = false;
 			}
 
@@ -207,11 +215,11 @@ void EnemyNormal::NextPosChange()
 void EnemyNormal::Draw()
 {
 
-	for (int i = 0; i < m_testPosX.size(); i++)
-	{
-		VECTOR pos = VGet(m_testPosX[i], 0.0f, m_testPosZ[i]);
-		DrawSphere3D(pos, 16, 16, 0xff00ff, 0xff00ff, true);
-	}
+	//for (int i = 0; i < m_testPosX.size(); i++)
+	//{
+	//	VECTOR pos = VGet(m_testPosX[i], 0.0f, m_testPosZ[i]);
+	//	DrawSphere3D(pos, 16, 16, 0xff00ff, 0xff00ff, true);
+	//}
 
 	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
 }
