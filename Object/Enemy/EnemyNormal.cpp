@@ -88,7 +88,7 @@ void EnemyNormal::NextPosChange()
 
 	bool isBreak = false;
 
-	if (Pad::isTrigger(PAD_INPUT_3)){
+	if (Pad::isPress(PAD_INPUT_3)) {
 		// 行
 		for (int z = forZ - 1; z <= forZ + 1; z++){
 			// 全てのfor分から脱出する
@@ -109,6 +109,23 @@ void EnemyNormal::NextPosChange()
 				if (x <= 0){tempX = 0;}
 				bool isStop = false;
 				bool isMove = false;
+
+				// 一度通った道はみない
+				bool back = false;
+				for (int i = 0; i < m_recordX.size(); i++)
+				{
+					// 見ようとしている場合はcontinu
+					if (m_recordX[i] == tempX && m_recordZ[i] == tempZ)
+					{
+						back = true;
+					}
+				}
+				if (back)
+				{
+					printfDx("continue\n");
+					continue;
+				}
+
 				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyStop)
 				{
 					printfDx("道を選びます。\n");
@@ -117,23 +134,6 @@ void EnemyNormal::NextPosChange()
 				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad)
 				{			
 					printfDx("移動します。\n");
-
-					// 一度通った道はみない
-					bool back = false;
-					for (int i = 0; i < m_recordX.size(); i++)
-					{
-						// 見ようとしている場合はcontinu
-						if (m_recordX[i] == tempX && m_recordZ[i] == tempZ)
-						{
-							back = true;
-						}
-					}
-
-					if (back)
-					{
-						printfDx("continue\n");
-						continue;
-					}
 
 					// 座標を記録
 					forX = tempX;
