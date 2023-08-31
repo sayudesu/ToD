@@ -87,7 +87,6 @@ void EnemyNormal::NextPosChange()
 	int tempX = 0;
 
 	bool isBreak = false;
-	bool back = false;
 
 	bool isStop = false;
 	bool isMove = false;
@@ -120,29 +119,29 @@ void EnemyNormal::NextPosChange()
 				if (x >= mapChipMaxX) { tempX = mapChipMaxX; }
 				if (x <= 0) { tempX = 0; }
 
+				// ここで移動処理を
+				// 一度通った道はみない
+				bool back = false;
+				for (int i = 0; i < m_recordX.size(); i++)
+				{
+					// 見ようとしている場合はcontinu
+					if (m_recordX[i] == tempX && m_recordZ[i] == tempZ)
+					{
+						back = true;
+					}
+				}
+				if (back)
+				{
+					back = false;
+					printfDx("continue\n");
+					continue;
+				}
+
 				// [現在の列 + 現在の列 * チップ最大列]
 				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyStop)
 				{
 					printfDx("道を選びます。\n");
 					isStop = true;
-
-					// ここで移動処理を
-					// 一度通った道はみない
-
-					for (int i = 0; i < m_recordX.size(); i++)
-					{
-						// 見ようとしている場合はcontinu
-						if (m_recordX[i] == tempX && m_recordZ[i] == tempZ)
-						{
-							back = true;
-						}
-					}
-					if (back)
-					{
-						back = false;
-						printfDx("continue\n");
-						continue;
-					}
 
 					tempStopPosX = tempX;
 					tempStopPosZ = tempZ;
@@ -154,24 +153,6 @@ void EnemyNormal::NextPosChange()
 				{
 					printfDx("移動します。\n");
 					isMove = true;
-
-					// ここで移動処理を
-					// 一度通った道はみない
-
-					for (int i = 0; i < m_recordX.size(); i++)
-					{
-						// 見ようとしている場合はcontinu
-						if (m_recordX[i] == tempX && m_recordZ[i] == tempZ)
-						{
-							back = true;
-						}
-					}
-					if (back)
-					{
-						back = false;
-						printfDx("continue\n");
-						continue;
-					}
 
 					tempMovePosX = tempX;
 					tempMovePosZ = tempZ;
