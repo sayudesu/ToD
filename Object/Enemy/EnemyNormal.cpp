@@ -3,6 +3,8 @@
 #include <cassert>
 
 #include "../../Util/Pad.h"
+#include "../../Util/Vec2.h"
+#include <iostream>
 
 namespace
 {
@@ -88,11 +90,9 @@ void EnemyNormal::NextPosChange()
 
 	bool isBreak = false;
 
-
+	// どのマップチップの上にいるか
 	bool isStop = false;
 	bool isMove = false;
-	bool isStopNow = false;
-	bool isMoveNow = false;
 
 	int tempStopPosZ = 0;
 	int tempStopPosX = 0;
@@ -100,8 +100,9 @@ void EnemyNormal::NextPosChange()
 	int tempMovePosZ = 0;
 	int tempMovePosX = 0;
 
-	if (Pad::isTrigger(PAD_INPUT_3)) {
-	//if (Pad::isPress(PAD_INPUT_3)) {
+
+	//if (Pad::isTrigger(PAD_INPUT_3)) {
+	if (Pad::isPress(PAD_INPUT_3)) {
 		// 行
 		for (int z = forZ - 1; z <= forZ + 1; z++) {
 			// 全てのfor分から脱出する
@@ -138,71 +139,90 @@ void EnemyNormal::NextPosChange()
 				{
 
 					back = false;
-
-					printfDx("continue\n");
 					continue;
 				}
 
 
 				// [現在の列 + 現在の列 * チップ最大列]
 
-				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyStop)
+				if ((m_mapChip[tempX + tempZ * mapChipMaxX] == enemyStop) &&
+					!isRandMove)
 				{
-					printfDx("道を選びます。\n");
 					isStop = true;
 
 					tempStopPosX = tempX;
 					tempStopPosZ = tempZ;
 
-					isStopNow = true;
+					m_isStopNow = true;
 
 					isBreak = true;
 					break;
 				}
 				// [現在の列 + 現在の列 * チップ最大列]
-				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad)
+				if ((m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad) &&
+					!isRandMove)
 				{
-					printfDx("移動します。\n");
 					isMove = true;
 
 					tempMovePosX = tempX;
 					tempMovePosZ = tempZ;
 
-					isMoveNow = true;
-					
-					//isBreak = true;
+					// 動く事のできる方向を確認
+					moveDirX.push_back(tempX);
+					moveDirZ.push_back(tempZ);
+
+					m_isMoveNow = true;
+
+					//isBreak = true;					
 					//break;
 				}
 			}
 		}
 
+		if (isRandMove)
+		{
+			forX = moveDirX[GetRand(moveDirX.size()-1)];
+			forZ = moveDirZ[GetRand(moveDirZ.size()-1)];
+
+			for (int i = 0; i < moveDirX.size(); i++)
+			{
+				moveDirX.pop_back();
+				moveDirZ.pop_back();
+			}
+
+			isRandMove = false;
+		}
+
 		if (isMove || isStop)
 		{
-
+			
 			isMove = false;
 			isStop = false;
 
-			if (isStopNow)
+			if (m_isStopNow)
 			{
 				//
-				isMoveNow = false;
+				m_isMoveNow = false;
 			}
 
 			// 座標を記録
-			if (isMoveNow)
+			if (m_isMoveNow)
 			{
 				forX = tempMovePosX;
 				forZ = tempMovePosZ;
 
-				isMoveNow = false;
+				m_isMoveNow = false;
 			}
-			if (isStopNow)
+			if (m_isStopNow)
 			{
 				forX = tempStopPosX;
 				forZ = tempStopPosZ;
 
-				isStopNow = false;
+				isRandMove = true;
+
+				m_isStopNow = false;
 			}
+
 			// 通った事のある場所の記録
 			m_recordX.push_back(forX);
 			m_recordZ.push_back(forZ);
@@ -211,6 +231,7 @@ void EnemyNormal::NextPosChange()
 			m_testPosZ.push_back((forZ)*block);
 			m_pos.x = ((forX)*block);
 			m_pos.z = ((forZ)*block);
+
 			// 全てのfor分から脱出する
 			//isBreak = true;
 			// break;
