@@ -15,6 +15,8 @@ public:
 	void Draw();
 
 private:
+	// 敵の動く速さ　まだ仮なのでこれは消す
+	int moveCount;
 	// 向き
 	VECTOR m_dir;
 	// ターゲット位置

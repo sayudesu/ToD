@@ -13,6 +13,7 @@ namespace
 }
 
 EnemyNormal::EnemyNormal() :
+	moveCount(0),
 	m_dir(VGet(0, 0, 0)),
 	m_targetPos(VGet(0, 0, 0)),
 	m_count(-1),
@@ -99,10 +100,9 @@ void EnemyNormal::NextPosChange()
 
 	int tempMovePosZ = 0;
 	int tempMovePosX = 0;
-
-
-	//if (Pad::isTrigger(PAD_INPUT_3)) {
-	if (Pad::isPress(PAD_INPUT_3)) {
+	moveCount++;
+	if (moveCount > 30) {
+		moveCount = 0;
 		// 行
 		for (int z = forZ - 1; z <= forZ + 1; z++) {
 			// 全てのfor分から脱出する
@@ -135,77 +135,79 @@ void EnemyNormal::NextPosChange()
 						back = true;
 					}
 				}
+				// 飛ばす
 				if (back)
 				{
-
 					back = false;
 					continue;
 				}
 
-
 				// [現在の列 + 現在の列 * チップ最大列]
 
-				if ((m_mapChip[tempX + tempZ * mapChipMaxX] == enemyStop) &&
-					!isRandMove)
+				if ((m_mapChip[tempX + tempZ * mapChipMaxX] == enemyStop))
 				{
+					// 止まることを知らせる
 					isStop = true;
-
-					tempStopPosX = tempX;
-					tempStopPosZ = tempZ;
-
 					m_isStopNow = true;
+					// マップチップでの場所を記録
+					tempStopPosX = tempX;
+					tempStopPosZ = tempZ;	
 
+					// 止まる場所が決まったのでbraak
 					isBreak = true;
 					break;
 				}
 				// [現在の列 + 現在の列 * チップ最大列]
-				if ((m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad) &&
-					!isRandMove)
+				if ((m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad))
 				{
+					// 動くことを知らせる
 					isMove = true;
+					m_isMoveNow = true;
 
+					// マップチップでの場所を記録
 					tempMovePosX = tempX;
-					tempMovePosZ = tempZ;
+					tempMovePosZ = tempZ;	
 
 					// 動く事のできる方向を確認
 					moveDirX.push_back(tempX);
-					moveDirZ.push_back(tempZ);
-
-					m_isMoveNow = true;
-
-					//isBreak = true;					
-					//break;
+					moveDirZ.push_back(tempZ);				
 				}
 			}
 		}
 
-		if (isRandMove)
+		if (isRandMove && isMove)
 		{
-			forX = moveDirX[GetRand(moveDirX.size()-1)];
-			forZ = moveDirZ[GetRand(moveDirZ.size()-1)];
-
+			// 進む位置をランダムに決める
+			tempMovePosX = moveDirX[GetRand(moveDirX.size() - 1)];
+			tempMovePosZ = moveDirZ[GetRand(moveDirZ.size() - 1)];
+			isRandMove = false;
+		}
+		else
+		{
+			// 要素を消す
 			for (int i = 0; i < moveDirX.size(); i++)
 			{
 				moveDirX.pop_back();
 				moveDirZ.pop_back();
 			}
-
-			isRandMove = false;
 		}
 
+		// 動きがある場合のみ
 		if (isMove || isStop)
-		{
-			
+		{		
+			// フラグのリセット
 			isMove = false;
 			isStop = false;
 
+			// 立ち止まる場所
 			if (m_isStopNow)
 			{
-				//
+				// 動かない
 				m_isMoveNow = false;
 			}
 
 			// 座標を記録
+			// 次動く場所
 			if (m_isMoveNow)
 			{
 				forX = tempMovePosX;
@@ -213,6 +215,8 @@ void EnemyNormal::NextPosChange()
 
 				m_isMoveNow = false;
 			}
+			// 座標を記録
+			// 立ち止まる場所
 			if (m_isStopNow)
 			{
 				forX = tempStopPosX;
@@ -229,12 +233,15 @@ void EnemyNormal::NextPosChange()
 			// 敵の位置を更新
 			m_testPosX.push_back((forX)*block);
 			m_testPosZ.push_back((forZ)*block);
-			m_pos.x = ((forX)*block);
-			m_pos.z = ((forZ)*block);
+			m_pos.x = (forX*block);
+			m_pos.z = (forZ*block);
 
-			// 全てのfor分から脱出する
-			//isBreak = true;
-			// break;
+			// 要素を消す
+			for (int i = 0; i < moveDirX.size(); i++)
+			{
+				moveDirX.pop_back();
+				moveDirZ.pop_back();
+			}
 		}
 	}
 }
@@ -249,5 +256,6 @@ void EnemyNormal::Draw()
 	//	DrawSphere3D(pos, 16, 16, 0xff00ff, 0xff00ff, true);
 	//}
 
+	// 敵を描画
 	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
 }

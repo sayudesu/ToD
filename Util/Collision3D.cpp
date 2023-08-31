@@ -55,9 +55,6 @@ bool Collision3D::UpdateCheck(std::vector<VECTOR>pos1, std::vector<VECTOR>pos2)
 	const float del = VSize(vec);
 	if (del < 128 * 2 + 68)
 	{
-		static int count = 0;
-		count++;
-		printfDx("”»’è%d\n", count);
 		return true;
 	}
 
