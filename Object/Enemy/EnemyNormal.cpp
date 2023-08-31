@@ -89,6 +89,17 @@ void EnemyNormal::NextPosChange()
 	bool isBreak = false;
 	bool back = false;
 
+	bool isStop = false;
+	bool isMove = false;
+	bool isStopNow = false;
+	bool isMoveNow = false;
+
+	int tempStopPosZ = 0;
+	int tempStopPosX = 0;
+
+	int tempMovePosZ = 0;
+	int tempMovePosX = 0;
+
 	if (Pad::isTrigger(PAD_INPUT_3)) {
 		// 行
 		for (int z = forZ - 1; z <= forZ + 1; z++) {
@@ -109,34 +120,34 @@ void EnemyNormal::NextPosChange()
 				if (x >= mapChipMaxX) { tempX = mapChipMaxX; }
 				if (x <= 0) { tempX = 0; }
 
-				bool isStop = false;
-				bool isMove = false;
 				// [現在の列 + 現在の列 * チップ最大列]
 				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyStop)
 				{
 					printfDx("道を選びます。\n");
 					isStop = true;
 
-					//// ここで移動処理を
-					//// 一度通った道はみない
+					// ここで移動処理を
+					// 一度通った道はみない
 
-					//for (int i = 0; i < m_recordX.size(); i++)
-					//{
-					//	// 見ようとしている場合はcontinu
-					//	if (m_recordX[i] == tempX && m_recordZ[i] == tempZ)
-					//	{
-					//		back = true;
-					//	}
-					//}
-					//if (back)
-					//{
-					//	back = false;
-					//	printfDx("continue\n");
-					//	continue;
-					//}
-					//// 座標を記録
-					//forX = tempX;
-					//forZ = tempZ;
+					for (int i = 0; i < m_recordX.size(); i++)
+					{
+						// 見ようとしている場合はcontinu
+						if (m_recordX[i] == tempX && m_recordZ[i] == tempZ)
+						{
+							back = true;
+						}
+					}
+					if (back)
+					{
+						back = false;
+						printfDx("continue\n");
+						continue;
+					}
+
+					tempStopPosX = tempX;
+					tempStopPosZ = tempZ;
+
+					isStopNow = true;
 				}
 				// [現在の列 + 現在の列 * チップ最大列]
 				if (m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad)
@@ -161,25 +172,53 @@ void EnemyNormal::NextPosChange()
 						printfDx("continue\n");
 						continue;
 					}
-					// 座標を記録
-					forX = tempX;
-					forZ = tempZ;
-					// 通った事のある場所の記録
-					m_recordX.push_back(forX);
-					m_recordZ.push_back(forZ);
-					// 敵の位置を更新
-					m_pos.x = ((forX)*block);
-					m_pos.z = ((forZ)*block);
-					isBreak = true;
-					break;
+
+					tempMovePosX = tempX;
+					tempMovePosZ = tempZ;
+
+					isMoveNow = true;
 				}
 			}
 		}
-		
 
-		// 全てのfor分から脱出する
-		
-		//break;
+		if (isMove || isStop)
+		{
+
+			isMove = false;
+			isStop = false;
+
+			if (isStopNow)
+			{
+				isMoveNow = false;
+			}
+
+			// 座標を記録
+			if (isMoveNow)
+			{
+				forX = tempMovePosX;
+				forZ = tempMovePosZ;
+
+				isMoveNow = false;
+			}
+			if (isStopNow)
+			{
+				forX = tempStopPosX;
+				forZ = tempStopPosZ;
+
+				isStopNow = false;
+			}
+			// 通った事のある場所の記録
+			m_recordX.push_back(forX);
+			m_recordZ.push_back(forZ);
+			// 敵の位置を更新
+			m_testPosX.push_back((forX)*block);
+			m_testPosZ.push_back((forZ)*block);
+			m_pos.x = ((forX)*block);
+			m_pos.z = ((forZ)*block);
+			// 全てのfor分から脱出する
+			//isBreak = true;
+			// break;
+		}
 	}
 }
 
@@ -187,11 +226,11 @@ void EnemyNormal::NextPosChange()
 void EnemyNormal::Draw()
 {
 
-	//for (int i = 0; i < m_testPosX.size(); i++)
-	//{
-	//	VECTOR pos = VGet(m_testPosX[i], 0.0f, m_testPosZ[i]);
-	//	DrawSphere3D(pos, 16, 16, 0xff00ff, 0xff00ff, true);
-	//}
+	for (int i = 0; i < m_testPosX.size(); i++)
+	{
+		VECTOR pos = VGet(m_testPosX[i], 0.0f, m_testPosZ[i]);
+		DrawSphere3D(pos, 16, 16, 0xff00ff, 0xff00ff, true);
+	}
 
 	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
 }
