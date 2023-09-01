@@ -1,11 +1,11 @@
 #include "SoundSettingDrawer.h"
 #include <DxLib.h>
-#include "Util/game.h"
-#include "Util/Pad.h"
-#include "Util/SelectDrawer.h"
-#include "Util/SoundFunctions.h"
-#include "SaveDataFunctions.h"
-#include "Util/LoadGraphFunction.h"
+#include "../Util/game.h"
+#include "../Util/Pad.h"
+#include "../Util/SelectDrawer.h"
+#include "../Util/SoundFunctions.h"
+#include "../SaveDataFunctions.h"
+#include "../Util/LoadGraphFunction.h"
 
 namespace
 {

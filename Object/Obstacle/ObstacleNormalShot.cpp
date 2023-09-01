@@ -4,6 +4,8 @@
 #include "../../Util/SoundFunctions.h"
 #include <math.h>
 
+const bool ef = false;
+
 namespace
 {
 	// ショット最初打ち出すまでのフレームむカウント
@@ -34,7 +36,7 @@ ObstacleNormalShot::ObstacleNormalShot(VECTOR pos):
 	// 設置用関数に移動
 	m_updateFunc = &ObstacleNormalShot::UpdateSetting;
 
-	m_pEffect = new EffekseerDrawer;
+	if(ef)m_pEffect = new EffekseerDrawer;
 }
 
 ObstacleNormalShot::~ObstacleNormalShot()
@@ -43,7 +45,7 @@ ObstacleNormalShot::~ObstacleNormalShot()
 
 void ObstacleNormalShot::Init()
 {
-	m_pEffect->Init();
+	if (ef)m_pEffect->Init();
 	// 設置音
 	SoundFunctions::Play(SoundFunctions::SoundIdSet);
 
@@ -60,9 +62,12 @@ void ObstacleNormalShot::Init()
 
 void ObstacleNormalShot::End()
 {
-	m_pEffect->End();
-	delete m_pEffect;
-	m_pEffect = nullptr;
+	if (ef)
+	{
+		m_pEffect->End();
+		delete m_pEffect;
+		m_pEffect = nullptr;
+	}
 
 	// モデルのデリート
 	MV1DeleteModel(m_hCannonBaes);
@@ -76,9 +81,11 @@ void ObstacleNormalShot::Update()
 
 void ObstacleNormalShot::UpdateSetting()
 {
-	m_pEffect->Update();
-	m_pEffect->GetPos(m_pos);
-
+	if (ef)
+	{
+		m_pEffect->Update();
+		m_pEffect->GetPos(m_pos);
+	}
 	// ショットの打ち出しまでのフレームをカウントする
 	m_shotFirstDelayFrameCount++;
 	if (m_shotFirstDelayFrameCount > kShotFirstFrameMax)
@@ -91,10 +98,13 @@ void ObstacleNormalShot::UpdateSetting()
 		// カウントリセット
 		m_shotFirstDelayFrameCount = 0;
 
-		// エフェクトクラスのメモリ解放
-		m_pEffect->End();
-		delete m_pEffect;
-		m_pEffect = nullptr;
+		if (ef)
+		{
+			// エフェクトクラスのメモリ解放
+			m_pEffect->End();
+			delete m_pEffect;
+			m_pEffect = nullptr;
+		}
 	}
 }
 
@@ -123,11 +133,13 @@ void ObstacleNormalShot::Draw()
 	{
 		shot->Draw();
 	}
-
-	// エフェクト描画
-	if (m_updateFunc == &ObstacleNormalShot::UpdateSetting)
+	if (ef)
 	{
-		m_pEffect->Draw();
+		// エフェクト描画
+		if (m_updateFunc == &ObstacleNormalShot::UpdateSetting)
+		{
+			m_pEffect->Draw();
+		}
 	}
 
 	// 3D描画モデル

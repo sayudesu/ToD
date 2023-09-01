@@ -4,7 +4,7 @@
 #include "../Util/Pad.h"
 #include "../Util/game.h"
 #include "../Util/SelectDrawer.h"
-#include "../SettingDrawer.h"
+#include "../Menus/SettingDrawer.h"
 #include "../Util/SoundFunctions.h"
 #include "../SaveDataFunctions.h"
 

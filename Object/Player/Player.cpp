@@ -10,7 +10,7 @@ namespace
 {
 //	constexpr int kSetCost = 200;
 	constexpr int kSetCost = 1;
-	constexpr int kSetPosMoveSpeed = 50.0f;
+	constexpr float kSetPosMoveSpeed = 50.0f;
 
 	const char* kCostString = "オブジェクトコスト[%d]";
 	const char* kObjSelectString = "RBを押してオブジェクトを選ぶ！";

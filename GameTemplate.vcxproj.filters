@@ -87,10 +87,10 @@
     <ClCompile Include="Util\SelectDrawer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="PauseBase.cpp">
+    <ClCompile Include="Menus\PauseBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SoundSettingDrawer.cpp">
+    <ClCompile Include="Menus\SoundSettingDrawer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="SaveDataFunctions.cpp">
@@ -99,13 +99,13 @@
     <ClCompile Include="Util\LoadGraphFunction.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ManualDrawer.cpp">
+    <ClCompile Include="Menus\ManualDrawer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SettingDrawer.cpp">
+    <ClCompile Include="Menus\SettingDrawer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="UserSettingDrawer.cpp">
+    <ClCompile Include="Menus\UserSettingDrawer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Scene\SceneGameClear.cpp">
@@ -179,10 +179,10 @@
     <ClInclude Include="Util\SelectDrawer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="PauseBase.h">
+    <ClInclude Include="Menus\PauseBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SoundSettingDrawer.h">
+    <ClInclude Include="Menus\SoundSettingDrawer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameData.h">
@@ -194,13 +194,13 @@
     <ClInclude Include="Util\LoadGraphFunction.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ManualDrawer.h">
+    <ClInclude Include="Menus\ManualDrawer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SettingDrawer.h">
+    <ClInclude Include="Menus\SettingDrawer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="UserSettingDrawer.h">
+    <ClInclude Include="Menus\UserSettingDrawer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneGameClear.h">

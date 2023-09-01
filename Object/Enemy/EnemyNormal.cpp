@@ -8,6 +8,16 @@
 
 namespace
 {
+
+	// マップチップサイズ
+	constexpr int kMapChipMaxZ = 13;// 行
+	constexpr int kMapChipMaxX = 25;// 列
+	// マップチップナンバー(敵の道)
+	constexpr int kEnemyRoad = 2;
+	constexpr int kEnemyStop = 4;
+	// ブロック1つの大きさ
+	const float kBlockSize = 50.0f;
+
 	// 速度
 	constexpr float kSpeed = 3.0f;
 }
@@ -35,9 +45,6 @@ void EnemyNormal::Init(VECTOR firstPos, int x, int z)
 	// 通った事のある場所の記録
 	m_recordX.push_back(forX);
 	m_recordZ.push_back(forZ);
-
-	m_testPosX.push_back(m_pos.x);
-	m_testPosZ.push_back(m_pos.z);
 }
 
 void EnemyNormal::End()
@@ -67,24 +74,15 @@ void EnemyNormal::Update()
 	////	m_pModel->SetPos(m_pos);
 	////	m_pModel->SetRot(VGet(0, m_pPlayer->GetDir().y, 0));
 
-	NextPosChange();
+	ChangeNextPos();
 }
 
-void EnemyNormal::NextPosChange()
+void EnemyNormal::ChangeNextPos()
 {
 	// 配列が無かったら...
 	assert(m_mapChip.size() != 0);
 
-	// マップチップサイズ
-	const int mapChipMaxZ = 13;// 行
-	const int mapChipMaxX = 25;// 列
-	// マップチップナンバー(敵の道)
-	const int enemyRoad = 2;
-	const int enemyStop = 4;
-	// ブロック1つの大きさ
-	const float block = 50.0f;
-
-	m_pos.y = -block + 50.0f;
+	m_pos.y = -kBlockSize + 50.0f;
 
 	int tempZ = 0;
 	int tempX = 0;
@@ -104,7 +102,8 @@ void EnemyNormal::NextPosChange()
 	if (moveCount > 30) {
 		moveCount = 0;
 		// 行
-		for (int z = forZ - 1; z <= forZ + 1; z++) {
+		for (int z = forZ - 1; z <= forZ + 1; z++) 
+		{
 			// 全てのfor分から脱出する
 			if (isBreak)
 			{
@@ -113,14 +112,15 @@ void EnemyNormal::NextPosChange()
 			}
 			// 配列の制御
 			tempZ = z;
-			if (z >= mapChipMaxZ) { tempZ = mapChipMaxZ - 1 ; }
+			if (z >= kMapChipMaxZ) { tempZ = kMapChipMaxZ - 1 ; }
 			if (z <= 0) { tempZ = 0; }
 			// 列
-			for (int x = forX - 1; x <= forX + 1; x++) {
+			for (int x = forX - 1; x <= forX + 1; x++) 
+			{
 				// 配列の制御
 				tempX = x;
 
-				if (x >= mapChipMaxX) { tempX = mapChipMaxX - 1; }
+				if (x >= kMapChipMaxX) { tempX = kMapChipMaxX - 1; }
 				if (x <= 0) { tempX = 0; }
 
 				// ここで移動処理を
@@ -143,12 +143,11 @@ void EnemyNormal::NextPosChange()
 				}
 
 				// [現在の列 + 現在の列 * チップ最大列]
-
-				if ((m_mapChip[tempX + tempZ * mapChipMaxX] == enemyStop))
+				if ((m_mapChip[tempX + tempZ * kMapChipMaxX] == kEnemyStop))
 				{
 					// 止まることを知らせる
 					isStop = true;
-					m_isStopNow = true;
+
 					// マップチップでの場所を記録
 					tempStopPosX = tempX;
 					tempStopPosZ = tempZ;	
@@ -158,11 +157,10 @@ void EnemyNormal::NextPosChange()
 					break;
 				}
 				// [現在の列 + 現在の列 * チップ最大列]
-				if ((m_mapChip[tempX + tempZ * mapChipMaxX] == enemyRoad))
+				if ((m_mapChip[tempX + tempZ * kMapChipMaxX] == kEnemyRoad))
 				{
 					// 動くことを知らせる
 					isMove = true;
-					m_isMoveNow = true;
 
 					// マップチップでの場所を記録
 					tempMovePosX = tempX;
@@ -195,46 +193,42 @@ void EnemyNormal::NextPosChange()
 		// 動きがある場合のみ
 		if (isMove || isStop)
 		{		
-			// フラグのリセット
-			isMove = false;
-			isStop = false;
-
 			// 立ち止まる場所
-			if (m_isStopNow)
+			if (isStop)
 			{
 				// 動かない
-				m_isMoveNow = false;
+				isMove = false;
 			}
 
 			// 座標を記録
 			// 次動く場所
-			if (m_isMoveNow)
+			if (isMove)
 			{
 				forX = tempMovePosX;
 				forZ = tempMovePosZ;
-
-				m_isMoveNow = false;
 			}
 			// 座標を記録
 			// 立ち止まる場所
-			if (m_isStopNow)
+			if (isStop)
 			{
 				forX = tempStopPosX;
 				forZ = tempStopPosZ;
 
 				isRandMove = true;
 
-				m_isStopNow = false;
+				isStop = false;
 			}
+
+			// フラグのリセット
+			isMove = false;
+			isStop = false;
 
 			// 通った事のある場所の記録
 			m_recordX.push_back(forX);
 			m_recordZ.push_back(forZ);
-			// 敵の位置を更新
-			m_testPosX.push_back((forX)*block);
-			m_testPosZ.push_back((forZ)*block);
-			m_pos.x = (forX*block);
-			m_pos.z = (forZ*block);
+			// 位置を変更
+			m_pos.x = (forX* kBlockSize);
+			m_pos.z = (forZ* kBlockSize);
 
 			// 要素を消す
 			for (int i = 0; i < moveDirX.size(); i++)
@@ -249,13 +243,6 @@ void EnemyNormal::NextPosChange()
 
 void EnemyNormal::Draw()
 {
-
-	//for (int i = 0; i < m_testPosX.size(); i++)
-	//{
-	//	VECTOR pos = VGet(m_testPosX[i], 0.0f, m_testPosZ[i]);
-	//	DrawSphere3D(pos, 16, 16, 0xff00ff, 0xff00ff, true);
-	//}
-
 	// 敵を描画
 	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
 }

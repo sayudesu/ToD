@@ -17,6 +17,8 @@ namespace
 
 Camera::Camera():
 	m_pos(kCameraPos),
+	m_mouseScreenPos(VGet(0,0,0)),
+	m_mouseWorldPos(VGet(0, 0, 0)),
 	m_targetPos(kCameraTargetPos)
 {
 }
@@ -33,6 +35,9 @@ void Camera::Init()
 	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetPos);
 	// 遠近法のセットアップ( ラジアン値に変換しています )
 	SetupCamera_Perspective(kFovCalculation);
+
+	//// カメラを正射影に変更
+//	SetupCamera_Ortho(2000.0f);
 }
 
 void Camera::End()
@@ -48,7 +53,7 @@ void Camera::Update()
 
 	// スティックの位置からカメラ位置に変換
 	int x = (input.Rx - 0) * (500  - 0) / (1000 - 0);
-	int z = (input.Ry - 0) * (1000 - 0) / (1000 - 0);
+	int z = (input.Ry - 0) * (500 - 0) / (1000 - 0);
 	m_pos.x = x + kCameraPos.x;
 	m_pos.z = z + kCameraPos.z;
 

@@ -66,17 +66,17 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	// フォントのロード
-	LPCSTR fontPath = "Data/Fonts/Senobi-Gothic-Bold.ttf"; // 読み込むフォントファイルのパス
-	if (AddFontResourceEx(fontPath, FR_PRIVATE, NULL) > 0) 
-	{
-		ChangeFont("せのびゴシック Bold", DX_CHARSET_DEFAULT);
-	}
-	else 
-	{
-		// フォント読込エラー処理
-		MessageBox(NULL, "フォント読込失敗", "", MB_OK);
-	}
+	//// フォントのロード
+	//LPCSTR fontPath = "Data/Fonts/Senobi-Gothic-Bold.ttf"; // 読み込むフォントファイルのパス
+	//if (AddFontResourceEx(fontPath, FR_PRIVATE, NULL) > 0) 
+	//{
+	//	ChangeFont("せのびゴシック Bold", DX_CHARSET_DEFAULT);
+	//}
+	//else 
+	//{
+	//	// フォント読込エラー処理
+	//	MessageBox(NULL, "フォント読込失敗", "", MB_OK);
+	//}
 
 	// ファイルの読み込み
 	SaveDataFunctions::Load();
@@ -89,23 +89,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		
 	pScene->Init();
 
-	//int m_handle;
-	//int m_shader;
-	//int m_handleSizeX;
-	//int m_handleSizeY;
-	//int m_hScreen;
-	VERTEX2DSHADER Vert[6];
-
-	//// 画像の読み込み
-	//m_handle = LoadGraph("end.png");
-	//GetGraphSize(m_handle, &m_handleSizeX, &m_handleSizeY);
-	//assert(m_handle != -1);
-
-	//// ピクセルシェーダーバイナリコードの読み込み
-	//m_shader = LoadPixelShader("Shader/SamplePS.pso");
-	//assert(m_shader != -1);
 
 	// 頂点データの準備
+	VERTEX2DSHADER Vert[6];
 	Vert[0].pos = VGet(0.0f, 0.0f, 0.0f);
 	Vert[1].pos = VGet(Game::kScreenWidth - 1, 0.0f, 0.0f);
 	Vert[2].pos = VGet(0.0f, Game::kScreenHeight - 1, 0.0f);
@@ -127,85 +113,23 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	Vert[4] = Vert[2];
 	Vert[5] = Vert[1];
 
-	//m_hScreen = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
-	//// 使用するテクスチャをセット
-	//SetUseTextureToShader(0, m_hScreen);
-	//// 使用するピクセルシェーダーをセット
-	//SetUsePixelShader(m_shader);
-
-	int m_handle;
-	int m_shader;
-	//int m_handleSizeX;
-	//int m_handleSizeY;
-	int m_hScreen;
-	//VERTEX2DSHADER Vert[6]{};
-
-	//// 画像の読み込み
-	//m_handle = LoadGraph("end.png");
-	//assert(m_handle != -1);
-	//GetGraphSize(m_handle, &m_handleSizeX, &m_handleSizeY);
-
 	//// ピクセルシェーダーバイナリコードの読み込み
+	int m_shader;
 	m_shader = LoadPixelShader("Shader/SamplePS.pso");
 	assert(m_shader != -1);
 
-	//// 頂点データの準備
-	//Vert[0].pos = VGet(0.0f, 0.0f, 0.0f);
-	//Vert[1].pos = VGet(Game::kScreenWidth - 1, 0.0f, 0.0f);
-	//Vert[2].pos = VGet(0.0f, Game::kScreenHeight - 1, 0.0f);
-	//Vert[3].pos = VGet(Game::kScreenWidth - 1, Game::kScreenHeight - 1, 0.0f);
-	//Vert[0].dif = GetColorU8(255, 255, 255, 255);
-	//Vert[0].spc = GetColorU8(0, 0, 0, 0);
-	//Vert[0].u = 0.0f; Vert[0].v = 0.0f;
-	//Vert[1].u = 1.0f; Vert[1].v = 0.0f;
-	//Vert[2].u = 0.0f; Vert[2].v = 1.0f;
-	//Vert[3].u = 1.0f; Vert[3].v = 1.0f;
-	//Vert[0].su = 0.0f; Vert[0].sv = 0.0f;
-	//Vert[1].su = 1.0f; Vert[1].sv = 0.0f;
-	//Vert[2].su = 0.0f; Vert[2].sv = 1.0f;
-	//Vert[3].su = 1.0f; Vert[3].sv = 1.0f;
-	//Vert[0].rhw = 1.0f;
-	//Vert[1].rhw = 1.0f;
-	//Vert[2].rhw = 1.0f;
-	//Vert[3].rhw = 1.0f;
-	//Vert[4] = Vert[2];
-	//Vert[5] = Vert[1];
-
+	int m_hScreen;
 	m_hScreen = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
-	//// 使用するテクスチャをセット
-	//SetUseTextureToShader(0, m_hScreen);
-	//// 使用するピクセルシェーダーをセット
-	//SetUsePixelShader(m_shader);
-
-	//std::array< VERTEX2DSHADER, 4 > vertex;
-	//std::array< unsigned short, 6 > vertexIndex;
-
-	//auto Settings = [](VERTEX2DSHADER& vtx, float x, float y, float u, float v)
-	//{
-	//	vtx.pos = VGet(x, y, 0.0f);
-	//	vtx.u = u;
-	//	vtx.v = v;
-	//	vtx.su = u;
-	//	vtx.sv = v;
-	//	vtx.rhw = 1.0f;
-	//	vtx.dif = GetColorU8(255, 255, 255, 255);
-	//	vtx.spc = GetColorU8(0, 0, 0, 0);
-	//};
-
-	//Settings(vertex[0], 0.0f, 0.0f, 0.0f, 0.0f);
-	//Settings(vertex[1], Game::kScreenWidth, 0.0f, 0.0f, 0.0f);
-	//Settings(vertex[2], 0.0f, Game::kScreenHeight, 0.0f, 1.0f);
-	//Settings(vertex[3], Game::kScreenWidth, Game::kScreenHeight, 0.0f, 1.0f);
-
-	//vertexIndex = { 0, 1, 2, 2, 1, 3 };
 
 	SetUseTextureToShader(0, m_hScreen);
 
 	SetUsePixelShader(m_shader);
 
+	// シェーダー側の引数
 	float level = 30.0f;
 	SetPSConstSF(GetConstIndexToShader("alpha", m_shader), 1.0f);
 	SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), level);
+
 	while (ProcessMessage() == 0)
 	{
 		LONGLONG  time = GetNowHiPerformanceCount();
@@ -225,31 +149,14 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		}
 		SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), level);
 
-#if FALSE
+#if true
 		SetDrawScreen(DX_SCREEN_BACK);
 		DrawPrimitive2DToShader(Vert, 6, DX_PRIMTYPE_TRIANGLELIST);
 		SetDrawScreen(m_hScreen);
 #endif
 
-		//ClearDrawScreen();
-
-		//SetDrawScreen(DX_SCREEN_BACK);
-		//SetTextureAddressMode(DX_TEXADDRESS_CLAMP);
-	//	DrawPolygonIndexed2DToShader(vertex.data(), 4, vertexIndex.data(), 2);
-		//// 描画
-		//if (true)
-		//{
-		//	DrawGraph(0, 0, m_hScreen, false);
-
-		//}
-		//else
-		//{
-		//	DrawPrimitive2DToShader(Vert, 6, DX_PRIMTYPE_TRIANGLELIST);
-		//}
-
-
 #if _DEBUG
-		DrawFormatString(0, 0, 0xffffff,  "FPS       = %2f",DxLib::GetFPS());
+		DrawFormatString(0, 0, 0xffffff,  "FPS       = %1.2f",DxLib::GetFPS());
 		DrawFormatString(0, 10, 0xffffff, "DrawColl  = %d"  ,DxLib::GetDrawCallCount());
 #endif
 		// 裏画面を表画面を入れ替える
@@ -264,14 +171,14 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		}
 	}
 
-	// フォントのアンロード
-	if (RemoveFontResourceEx(fontPath, FR_PRIVATE, NULL)) 
-	{
-	}
-	else
-	{
-		MessageBox(NULL, "remove failure", "", MB_OK);
-	}
+	//// フォントのアンロード
+	//if (RemoveFontResourceEx(fontPath, FR_PRIVATE, NULL)) 
+	//{
+	//}
+	//else
+	//{
+	//	MessageBox(NULL, "remove failure", "", MB_OK);
+	//}
 
 	pScene->End();
 

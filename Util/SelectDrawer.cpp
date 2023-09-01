@@ -218,6 +218,7 @@ StringDrawer::StringDrawer(int frameX, int frameY, int stringX, int stringY, con
 {
 	// フォントデータを作成
 	m_fontHandle = CreateFontToHandle(kFontName, size, 3);
+//	m_fontHandle = CreateFontToHandle("a", size, 3);
 	assert(m_fontHandle != -1);
 
 }
