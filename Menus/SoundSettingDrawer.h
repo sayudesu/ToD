@@ -1,6 +1,6 @@
 #pragma once
 #include "PauseBase.h"
-#include "../GameData.h"
+#include "../Util/GameData.h"
 
 // 選択用クラス
 class SelectDrawer;

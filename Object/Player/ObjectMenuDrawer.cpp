@@ -7,7 +7,7 @@ ObjectMenuDrawer::ObjectMenuDrawer():
 	m_hObjMenuFrame(-1),
 	m_isMenu(false),
 	m_select(0),
-	m_CheckSelect(-1),
+	m_checkSelect(-1),
 	m_slierY(Game::kScreenHeight)
 {
 	for (int i = 0; i < 3; i++)
@@ -43,7 +43,8 @@ void ObjectMenuDrawer::Update()
 	// メニューを開いている場合
 	if (Pad::isPress(PAD_INPUT_6))
 	{
-		m_isMenu = true;
+		// なにか選択している場合
+		if(m_checkSelect == -1)m_isMenu = true;
 
 		// 選択
 		if (Pad::isTrigger(PAD_INPUT_LEFT))
@@ -55,9 +56,12 @@ void ObjectMenuDrawer::Update()
 			if (m_select < 3-1)m_select++;
 		}
 		// 決定
-		if (Pad::isTrigger(PAD_INPUT_1))
+		if (Pad::isPress(PAD_INPUT_1))
 		{
-			m_CheckSelect = m_select;
+			// 選択した番号を代入
+			m_checkSelect = m_select;
+			// メニューを非表示にする
+			m_isMenu = false;
 		}
 	}
 	else
@@ -130,4 +134,15 @@ void ObjectMenuDrawer::Draw()
 bool ObjectMenuDrawer::IsSetMenu()
 {
 	return m_isMenu;
+}
+// 選択し決定した番号を返す
+int ObjectMenuDrawer::SelectNo()
+{
+	return m_checkSelect;
+}
+
+// 選択した番号をリセットする
+void ObjectMenuDrawer::ResetSelectNo()
+{
+	m_checkSelect = -1;
 }

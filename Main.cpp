@@ -5,7 +5,7 @@
 #include "Util/game.h"
 #include "Util/SoundFunctions.h"
 
-#include "SaveDataFunctions.h"
+#include "Save/SaveDataFunctions.h"
 #include "Util/LoadGraphfunction.h"
 
 // ÉvÉçÉOÉâÉÄÇÕ WinMain Ç©ÇÁénÇ‹ÇËÇ‹Ç∑
@@ -149,7 +149,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		}
 		SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), level);
 
-#if true
+#if false
 		SetDrawScreen(DX_SCREEN_BACK);
 		DrawPrimitive2DToShader(Vert, 6, DX_PRIMTYPE_TRIANGLELIST);
 		SetDrawScreen(m_hScreen);

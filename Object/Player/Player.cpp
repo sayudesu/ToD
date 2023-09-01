@@ -2,7 +2,7 @@
 #include <DxLib.h>
 #include "../../Util/Pad.h"
 #include "../../Util/game.h"
-#include "../../SaveDataFunctions.h"
+#include "../../Save/SaveDataFunctions.h"
 #include "../../Util/SoundFunctions.h"
 #include "../../Util/LoadGraphFunction.h"
 #include "ObjectMenuDrawer.h"
@@ -11,6 +11,7 @@ namespace
 //	constexpr int kSetCost = 200;
 	constexpr int kSetCost = 1;
 	constexpr float kSetPosMoveSpeed = 50.0f;
+	constexpr float kSpecialAttackPosMoveSpeed = 20.0f;
 
 	const char* kCostString = "オブジェクトコスト[%d]";
 	const char* kObjSelectString = "RBを押してオブジェクトを選ぶ！";
@@ -18,6 +19,8 @@ namespace
 
 Player::Player() :
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
+	m_specialAttackPos(VGet(0.0f, 0.0f, 0.0f)),
+	m_isSpecialAttack(false),
 	m_screenToWorldPos(VGet(0.0f, 0.0f, 0.0f)),
 	m_isResultObject(false),
 	m_isSetObject(false),
@@ -53,10 +56,23 @@ void Player::End()
 void Player::Update()
 {	
 	// オブジェクトメニューを開いている場合
-	if (!m_pObjMenu->IsSetMenu())
+	if (!m_pObjMenu->IsSetMenu() && (m_pObjMenu->SelectNo() == -1))
 	{
 		// 操作の制御
 		UpdateControl();
+		// プレイヤーの位置を渡す
+		m_specialAttackPos = m_pos;
+	}
+
+	if (m_pObjMenu->SelectNo() != -1)
+	{
+		UpdateSpecialAttack();
+		// 技を出した後
+		if (m_isSpecialAttack)
+		{
+			// 選択した番号をリセット
+			m_pObjMenu->ResetSelectNo();
+		}
 	}
 
 	// オブジェクトの設置コスト
@@ -75,6 +91,18 @@ void Player::Draw()
 		0x0000ff,
 		0x0000ff,
 		true);
+
+	if (m_pObjMenu->SelectNo() == 0)
+	{
+		DrawCapsule3D(
+			m_specialAttackPos,
+			VGet(m_specialAttackPos.x, m_specialAttackPos.y, m_specialAttackPos.z),
+			100.0f,
+			8,
+			0x0000ff,
+			0x0000ff,
+			false);
+	}
 }
 
 void Player::DrawUI()
@@ -109,6 +137,16 @@ void Player::DrawUI()
 		true);
 
 	m_pObjMenu->Draw();
+}
+
+bool Player::isGetGameStop()
+{
+	if (m_pObjMenu->SelectNo()!= -1)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 void Player::UpdateControl()
@@ -158,6 +196,32 @@ void Player::UpdateControl()
 			// 設置した分のコスト
 			m_objectCostNum -= kSetCost;
 		}
+	}
+}
+
+void Player::UpdateSpecialAttack()
+{
+	m_isSpecialAttack = false;	
+	if (Pad::isPress(PAD_INPUT_UP))
+	{
+		m_specialAttackPos.z += kSpecialAttackPosMoveSpeed;
+	}
+	if (Pad::isPress(PAD_INPUT_DOWN))
+	{
+		m_specialAttackPos.z -= kSpecialAttackPosMoveSpeed;
+	}
+	if (Pad::isPress(PAD_INPUT_LEFT))
+	{
+		m_specialAttackPos.x -= kSpecialAttackPosMoveSpeed;
+	}
+	if (Pad::isPress(PAD_INPUT_RIGHT))
+	{
+		m_specialAttackPos.x += kSpecialAttackPosMoveSpeed;
+	}
+
+	if (Pad::isPress(PAD_INPUT_1))
+	{
+		m_isSpecialAttack = true;
 	}
 }
 

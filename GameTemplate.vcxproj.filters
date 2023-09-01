@@ -93,9 +93,6 @@
     <ClCompile Include="Menus\SoundSettingDrawer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SaveDataFunctions.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Util\LoadGraphFunction.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -115,6 +112,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Object\Player\ObjectMenuDrawer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Save\SaveDataFunctions.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CutInDrawer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -185,12 +188,6 @@
     <ClInclude Include="Menus\SoundSettingDrawer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="GameData.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="SaveDataFunctions.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Util\LoadGraphFunction.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -209,10 +206,13 @@
     <ClInclude Include="Util\Collision3D.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Collision2DData.h">
+    <ClInclude Include="Object\Player\ObjectMenuDrawer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Player\ObjectMenuDrawer.h">
+    <ClInclude Include="Save\SaveDataFunctions.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CutInDrawer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

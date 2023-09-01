@@ -8,8 +8,9 @@
 #include "../Object/Map/MapDrawer.h"
 #include "../Util/game.h"
 #include "../Util/SoundFunctions.h"
-#include "../SaveDataFunctions.h"
+#include "../Save/SaveDataFunctions.h"
 #include "../Util/Collision3D.h"
+#include "../CutInDrawer.h"
 
 // あとで消す
 #include "../Util/Pad.h"
@@ -20,7 +21,8 @@ SceneMain::SceneMain():
 	m_pObstacle(nullptr),
 	m_pPlayer(nullptr),
 	m_pMap(nullptr),
-	m_pColl(nullptr)
+	m_pColl(nullptr),
+	m_catIn(nullptr)
 {
 	// カメラクラスのインスタンス作成
 	m_pCamera = new Camera;
@@ -34,6 +36,8 @@ SceneMain::SceneMain():
 	m_pMap = new MapDrawer;
 	// 3D当たり判定用のインスタンス
 	m_pColl = new Collision3D;
+	// カットインのインスタンス
+	m_catIn = new CutInDrawer;
 }
 
 SceneMain::~SceneMain()
@@ -55,6 +59,8 @@ SceneMain::~SceneMain()
 	m_pMap = nullptr;
 	delete m_pColl;
 	m_pColl = nullptr;
+	delete m_catIn;
+	m_catIn = nullptr;
 }
 
 void SceneMain::Init()
@@ -69,6 +75,7 @@ void SceneMain::Init()
 	m_pObstacle->Init();
 	m_pPlayer->Init();
 	m_pMap->Init();
+	m_catIn->Init();
 
 	// マップチップをエネミーに渡す
 	// コードの処理の流れのせいでこうなっています治します
@@ -85,6 +92,7 @@ void SceneMain::End()
 	m_pObstacle->End();
 	m_pPlayer->End();
 	m_pMap->End();
+	m_catIn->End();
 }
 
 SceneBase* SceneMain::Update()
@@ -104,6 +112,8 @@ SceneBase* SceneMain::Update()
 	m_pEnemy->Update();
 	// マップ
 	m_pMap->Update();
+
+	m_catIn->Update();
 	
 	// 
 	m_pCamera->GetTargetPos(m_pPlayer->SetPos());
@@ -161,7 +171,7 @@ SceneBase* SceneMain::Update()
 void SceneMain::Draw()
 {
 
-	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xdddd888, true);
+	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xaaaa888, true);
 	m_pMap->Draw();
 	m_pEnemy->Draw();
 	m_pObstacle->Draw();
@@ -169,6 +179,8 @@ void SceneMain::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,180);
 	m_pPlayer->Draw();
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,255);
+
+	m_catIn->Draw();
 
 	SceneBase::DrawSliderDoor();
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "GameData.h"
+#include "../Util/GameData.h"
 
 namespace SaveDataFunctions
 {

@@ -24,14 +24,21 @@ public:
 	VECTOR SetPos() { return m_pos; }
 	// マウスが押されているかどうか
 	bool SetMouseLeft() { return m_isResultObject; }
+
+	// ゲームの進行を止めるかどうか
+	bool isGetGameStop();
 private:
 	// 操作を制御
 	void UpdateControl();
+	void UpdateSpecialAttack();
 	// オブジェクトのコスト関連
 	void ObjectCost();
 private:
 	// マウスの位置
 	VECTOR m_pos;
+
+	VECTOR m_specialAttackPos;
+	bool m_isSpecialAttack;
 	// 画面から3D空間に変換用
 	VECTOR m_screenToWorldPos;
 	VECTOR m_screenPos;

@@ -11,12 +11,14 @@ public:
 	void Init(VECTOR firstPos, int x, int z);
 	void End();
 	void Update();
-	void ChangeNextPos();
+	void ChangeNextPos(bool & isMoveing);
 	void Draw();
 
 private:
 	// 敵の動く速さ　まだ仮なのでこれは消す
 	int moveCount;
+	// 動くかどうか
+	bool m_isNextMove;
 	// 向き
 	VECTOR m_dir;
 	// ターゲット位置

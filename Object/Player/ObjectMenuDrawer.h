@@ -12,6 +12,10 @@ public:
 
 	// メニューを開いているかどうか
 	bool IsSetMenu();
+	// 選択し決定した番号を返す
+	int SelectNo();
+	// 選択した番号をリセットする
+	void ResetSelectNo();
 private:
 	// オブジェクトメニュー画像ハンドル
 	int m_hObjMenuFrame;
@@ -23,7 +27,7 @@ private:
 	bool m_isMenu;
 	// メニュー選択用
 	int m_select;
-	int m_CheckSelect;
+	int m_checkSelect;
 	// スライドの値
 	int m_slierY;
 };

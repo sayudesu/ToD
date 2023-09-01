@@ -7,6 +7,7 @@ class ObstacleManager;
 class Player;
 class MapDrawer;
 class Collision3D;
+class CutInDrawer;
 
 class SceneMain : public SceneBase
 {
@@ -26,4 +27,5 @@ private:
 	Player*          m_pPlayer;
 	MapDrawer*		 m_pMap;
 	Collision3D*	 m_pColl;
+	CutInDrawer*     m_catIn;
 };

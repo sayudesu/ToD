@@ -38,7 +38,6 @@ void ShotBase::Draw()
 {
 	if (!m_isScreenOut)
 	{
-	//	DrawSphere3D(m_pos, 8, 8, 0x00ff00, 0x00ff00, true);
 		MV1DrawModel(m_hShot);
 	}
 }
@@ -63,6 +62,4 @@ void ShotBase::VecCalculation()
 	const VECTOR velecity = VScale(m_dir, kSpeed);
 	// ˆÊ’u‚ð•Ï‚¦‚é
 	m_pos = VAdd(m_pos, velecity);
-	//	m_pModel->SetPos(m_pos);
-	//	m_pModel->SetRot(VGet(0, m_pPlayer->GetDir().y, 0));
 }

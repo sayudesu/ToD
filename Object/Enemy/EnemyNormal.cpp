@@ -8,7 +8,6 @@
 
 namespace
 {
-
 	// マップチップサイズ
 	constexpr int kMapChipMaxZ = 13;// 行
 	constexpr int kMapChipMaxX = 25;// 列
@@ -20,6 +19,8 @@ namespace
 
 	// 速度
 	constexpr float kSpeed = 3.0f;
+	// 距離
+	constexpr float kRange = 30.0f;
 }
 
 EnemyNormal::EnemyNormal() :
@@ -45,6 +46,8 @@ void EnemyNormal::Init(VECTOR firstPos, int x, int z)
 	// 通った事のある場所の記録
 	m_recordX.push_back(forX);
 	m_recordZ.push_back(forZ);
+
+	m_isNextMove = true;
 }
 
 void EnemyNormal::End()
@@ -53,31 +56,40 @@ void EnemyNormal::End()
 
 void EnemyNormal::Update()
 {
-	////**** 追従のAI ****//
-	//// 向きを算出
-	//m_dir = VSub(m_targetPos, m_pos);
-	//// プレイヤーからエネミーまでの角度を求める
-	//const float angle = atan2(m_dir.y, m_dir.x);
-	//// 現在敵が向いている方向のベクトルを生成する
-	//const MATRIX enemyRotMtx = MGetRotY(angle);
-	//const VECTOR dir = VTransform(VGet(0, 0, 0), enemyRotMtx);
-	////printfDx("%2d\n",dir.z);
-	//// 斜めになったとき((1, 1, 0)など)にいったん長さ１に戻す(正規化)
-	//if (VSquareSize(m_dir) > 0)
-	//{
-	//	m_dir = VNorm(m_dir);
-	//}
-	//// 速度を求める
-	//const VECTOR velecity = VScale(m_dir, kSpeed);
-	//// 位置を変える
-	//m_pos = VAdd(m_pos, velecity);
-	////	m_pModel->SetPos(m_pos);
-	////	m_pModel->SetRot(VGet(0, m_pPlayer->GetDir().y, 0));
+	// どこに移動するかを考える
+	ChangeNextPos(m_isNextMove);
 
-	ChangeNextPos();
+	// 移動
+	// 向きを算出
+	m_dir = VSub(m_targetPos, m_pos);
+	// プレイヤーからエネミーまでの角度を求める
+	const float angle = atan2(m_dir.y, m_dir.x);
+	// 現在向いている方向のベクトルを生成する
+	const MATRIX enemyRotMtx = MGetRotY(angle);
+	const VECTOR dir = VTransform(VGet(0, 0, 0), enemyRotMtx);
+	// 斜めになったとき((1, 1, 0)など)にいったん長さ１に戻す(正規化)
+	if (VSquareSize(m_dir) > 0)
+	{
+		m_dir = VNorm(m_dir);
+	}
+	// 速度を求める
+	const VECTOR velecity = VScale(m_dir, kSpeed);
+	// 位置を変える
+	m_pos = VAdd(m_pos, velecity);
+
+	// 距離を測る
+	float nowPosToNextPosX = sqrt(pow(m_pos.x - m_targetPos.x, 2) + pow(m_pos.x - m_targetPos.x, 2));
+	float nowPosToNextPosZ = sqrt(pow(m_pos.z - m_targetPos.z, 2) + pow(m_pos.z - m_targetPos.z, 2));
+
+	// 移動までの距離が短いと
+	if (nowPosToNextPosX < kRange &&
+		nowPosToNextPosZ < kRange)
+	{
+		m_isNextMove = true;
+	}
 }
 
-void EnemyNormal::ChangeNextPos()
+void EnemyNormal::ChangeNextPos(bool &isMoveing)
 {
 	// 配列が無かったら...
 	assert(m_mapChip.size() != 0);
@@ -99,7 +111,7 @@ void EnemyNormal::ChangeNextPos()
 	int tempMovePosZ = 0;
 	int tempMovePosX = 0;
 	moveCount++;
-	if (moveCount > 30) {
+	if (isMoveing) {
 		moveCount = 0;
 		// 行
 		for (int z = forZ - 1; z <= forZ + 1; z++) 
@@ -227,8 +239,9 @@ void EnemyNormal::ChangeNextPos()
 			m_recordX.push_back(forX);
 			m_recordZ.push_back(forZ);
 			// 位置を変更
-			m_pos.x = (forX* kBlockSize);
-			m_pos.z = (forZ* kBlockSize);
+			m_targetPos.x = (forX* kBlockSize);
+			m_targetPos.z = (forZ* kBlockSize);
+			isMoveing = false;
 
 			// 要素を消す
 			for (int i = 0; i < moveDirX.size(); i++)
