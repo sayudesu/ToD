@@ -23,7 +23,7 @@ ObjectMenuDrawer::~ObjectMenuDrawer()
 
 void ObjectMenuDrawer::Init()
 {
-	m_hObjMenuFrame = LoadGraph("Data/Image/objSelectFrame.png");
+	m_hObjMenuFrame = LoadGraph("Data/Image/FrameCat.png");
 	m_hObject[0] = LoadGraph("Data/Image/ObjCat.png");
 	m_hObject[1] = LoadGraph("Data/Image/Icon0.png");
 	m_hObject[2] = LoadGraph("Data/Image/Icon1.png");

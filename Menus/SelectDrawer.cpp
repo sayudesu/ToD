@@ -1,9 +1,9 @@
 #include "SelectDrawer.h"
 #include <DxLib.h>
 #include <cassert>
-#include "Pad.h"
-#include "SoundFunctions.h"
-#include "LoadGraphFunction.h"
+#include "../Util/Pad.h"
+#include "../Util/SoundFunctions.h"
+#include "../Util/LoadGraphFunction.h"
 
 namespace 
 {
@@ -17,7 +17,7 @@ namespace
 	const char* kSelectCatHandPath = "Data/Image/nikukyu_S.png";
 
 	// Šp“x
-	constexpr int kAngle = DX_PI / 180;
+	constexpr int kAngle = DX_PI_F / 180;
 }
 
 //////////////////////
@@ -29,7 +29,8 @@ SelectDrawer::SelectDrawer():
 	selectNow(0),
 	m_selectNo(-1),
 	selectRad(0),
-	m_catHandPosY(0)
+	m_catHandPosY(0),
+	m_tempPosY(0)
 {
 
 
@@ -149,14 +150,20 @@ void SelectDrawer::UpdatePos(int x, int y)
 
 void SelectDrawer::UpdateCatHandPos()
 {
+	if (m_tempPosY == selectNow)
+	{
+		m_catHandPosY = m_pText[selectNow]->GetFramePosY();
+	}
 
 	if (m_catHandPosY < m_pText[selectNow]->GetFramePosY() + 10)
 	{
-		m_catHandPosY += 26;
+		m_catHandPosY += 60;
+		m_tempPosY++;
 	}
 	if (m_catHandPosY > m_pText[selectNow]->GetFramePosY() + 10)
 	{
-		m_catHandPosY -= 26;
+		m_catHandPosY -= 60;
+		m_tempPosY--;
 	}
 
 	// ‘I‘ð—p“÷‹…‚ð•`‰æ

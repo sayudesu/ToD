@@ -1,5 +1,6 @@
 #include "ObstacleNormalShot.h"
 #include "../../Object/Shot/ShotBase.h"
+#include "../../Object/Shot/NormalShot.h"
 #include "../../Effeck/EffekseerDrawer.h"
 #include "../../Util/SoundFunctions.h"
 #include <math.h>
@@ -29,6 +30,7 @@ ObstacleNormalShot::ObstacleNormalShot(VECTOR pos):
 	m_hCannon(-1),
 	m_hCannonBaes(-1),
 	m_shotFirstDelayFrameCount(0),
+	m_countShotNum(-1),
 	m_shootFrameCount(0),
 	m_objColor(kObjColor1)
 {
@@ -114,7 +116,9 @@ void ObstacleNormalShot::UpdateShot()
 	// ショットを出すスピート
 	if (m_shootFrameCount > kShootFrameMax)
 	{
-		m_pShot.push_back(std::make_shared<ShotBase>(m_pos));
+		m_countShotNum++;
+		m_pShot.push_back(std::make_shared<NormalShot>(m_countShotNum,m_pos));
+		m_pShot[m_countShotNum]->Init();
 		m_shootFrameCount = 0;
 	}
 
@@ -151,6 +155,6 @@ void ObstacleNormalShot::SetTarGetPos(VECTOR pos)
 {
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
-		m_pShot[i]->GetTargetPos(pos);
+		m_pShot[i]->SetTargetPos(pos);
 	}
 }

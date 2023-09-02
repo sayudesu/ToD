@@ -6,6 +6,7 @@
 #include "../../Util/SoundFunctions.h"
 #include "../../Util/LoadGraphFunction.h"
 #include "ObjectMenuDrawer.h"
+#include "../Shot/NormalShot.h"
 namespace
 {
 //	constexpr int kSetCost = 200;
@@ -25,7 +26,10 @@ Player::Player() :
 	m_isResultObject(false),
 	m_isSetObject(false),
 	m_hCostBg(0),
-	m_objectCostNum(0)
+	m_objectCostNum(0),
+	m_isShot(false),
+	m_countShotNo(-1),
+	m_isTrackingShot(false)
 {
 	m_posHistory.push_back(VGet(-1.0f, -1.0f, -1.0f));
 }
@@ -63,7 +67,6 @@ void Player::Update()
 		// プレイヤーの位置を渡す
 		m_specialAttackPos = m_pos;
 	}
-
 	if (m_pObjMenu->SelectNo() != -1)
 	{
 		UpdateSpecialAttack();
@@ -74,6 +77,8 @@ void Player::Update()
 			m_pObjMenu->ResetSelectNo();
 		}
 	}
+	// ショット
+	UpdateShot();
 
 	// オブジェクトの設置コスト
 	ObjectCost();
@@ -102,6 +107,11 @@ void Player::Draw()
 			0x0000ff,
 			0x0000ff,
 			false);
+	}
+
+	if (m_countShotNo == 0)
+	{
+		m_pShot->Draw();
 	}
 }
 
@@ -135,7 +145,6 @@ void Player::DrawUI()
 		DX_PI_F * 180.0f,
 		m_hIcon[SaveDataFunctions::GetIconData().Icon],
 		true);
-
 	m_pObjMenu->Draw();
 }
 
@@ -147,6 +156,27 @@ bool Player::isGetGameStop()
 	}
 
 	return false;
+}
+
+// 特殊攻撃をおこなったかどうか
+bool Player::isSpecialAttack()
+{
+	return m_isSpecialAttack;
+}
+
+void Player::SpecialAttackReset()
+{
+	m_isSpecialAttack = false;
+}
+
+void Player::IsSetShot(bool isShot)
+{
+	m_isShot = isShot;
+}
+
+Tracking Player::GetTracingData()
+{
+	return m_trackingData;
 }
 
 void Player::UpdateControl()
@@ -219,10 +249,41 @@ void Player::UpdateSpecialAttack()
 		m_specialAttackPos.x += kSpecialAttackPosMoveSpeed;
 	}
 
-	if (Pad::isPress(PAD_INPUT_1))
+	if (Pad::isTrigger(PAD_INPUT_1))
 	{
 		m_isSpecialAttack = true;
+		m_targetPos = m_specialAttackPos;
 	}
+}
+
+void Player::UpdateShot()
+{
+	if (m_isShot)
+	{
+		m_countShotNo++;
+		m_isTrackingShot = true;
+		// インスタンス生成
+		m_pShot = new NormalShot(m_countShotNo, VGet(m_pos.x, m_pos.y + 2000.0f, m_pos.z));
+		m_pShot->Init(m_targetPos,VGet(10,10,10), 30.0f);
+		printfDx("%d\n", m_countShotNo);
+	}
+
+	if (m_countShotNo == 0)
+	{
+		m_pShot->Update();
+
+		if (m_pShot->IsGetEnd())
+		{
+			//m_isTrackingShot = false;
+			//m_countShotNo--;
+			//m_pShot->End();
+		}
+
+		// トラッキングデータの保存
+		m_trackingData.pos = m_pShot->SetPos();
+		m_trackingData.tracking = m_isTrackingShot;
+	}
+	
 }
 
 void Player::ObjectCost()

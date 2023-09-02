@@ -25,6 +25,8 @@ private:
 	// 大砲モデルハンドル
 	int m_hCannon;
 	int m_hCannonBaes;
+	// ショットの数
+	int m_countShotNum;
 	// ショットクラス
 	std::vector<std::shared_ptr<ShotBase>>m_pShot;
 	// エフェクア使用クラス

@@ -57,8 +57,19 @@ void Camera::Update()
 	m_pos.x = x + kCameraPos.x;
 	m_pos.z = z + kCameraPos.z;
 
+	VECTOR targetPos{};
+
+	if (trackingData.tracking)
+	{
+		targetPos = trackingData.pos;
+	}
+	else
+	{
+		targetPos = m_targetPos;
+	}
+
 	// ‚Ç‚±‚ð‹‚Ä‚Ç‚±‚ð‚Ý‚é‚©
-	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetPos);
+	SetCameraPositionAndTarget_UpVecY(m_pos, targetPos);
 }
 
 VECTOR Camera::SetPos() const
@@ -66,10 +77,16 @@ VECTOR Camera::SetPos() const
 	return m_pos;
 }
 
-void Camera::GetTargetPos(VECTOR targetPos)
+void Camera::SetTargetPos(VECTOR targetPos)
 {
 	VECTOR tempPos = targetPos;
 
 	//if (targetPos.z > m_targetPos.z)m_targetPos.z += 10;
 	//if (targetPos.z < m_targetPos.z)m_targetPos.z -= 10;
+}
+
+void Camera::SeTrackingData(Tracking data)
+{
+	trackingData.pos = data.pos;
+	trackingData.tracking = data.tracking;
 }

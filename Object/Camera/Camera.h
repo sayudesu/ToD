@@ -1,5 +1,6 @@
 #pragma once
 #include <DxLib.h>
+#include "../../Util/Tracking.h"
 class Camera
 {
 public:
@@ -12,10 +13,13 @@ public:
 
 	// カメラの位置
 	VECTOR SetPos() const;
-	void GetTargetPos(VECTOR targetPos);
+	void SetTargetPos(VECTOR targetPos);
 	// マウスの位置受け取る
-	void GetMouseScreenPos(VECTOR mousePos) { m_mouseScreenPos = mousePos; }
-	void GetMouseWorldPos(VECTOR mousePos) { m_mouseWorldPos = mousePos; }
+	void SetMouseScreenPos(VECTOR mousePos) { m_mouseScreenPos = mousePos; }
+	void SetMouseWorldPos(VECTOR mousePos) { m_mouseWorldPos = mousePos; }
+
+	// トラッキングデータを受け取る
+	void SeTrackingData(Tracking data);
 
 private:
 	// カメラの位置
@@ -25,5 +29,7 @@ private:
 	VECTOR m_mouseWorldPos;
 	// ターゲット
 	VECTOR m_targetPos;
+	// トラッキングをおこなうかどうか
+	Tracking trackingData;
 };
 

@@ -2,7 +2,7 @@
 #include <DxLib.h>
 #include "../Util/game.h"
 #include "../Util/Pad.h"
-#include "../Util/SelectDrawer.h"
+#include "SelectDrawer.h"
 #include "../Util/SoundFunctions.h"
 #include "../Save/SaveDataFunctions.h"
 #include "../Util/LoadGraphFunction.h"
@@ -13,7 +13,7 @@
 namespace
 {
 	// ”L‚Ì‰æ‘œ‚Ì‘¬‚³
-	constexpr int kVolCatSpeed = 20;
+	constexpr int kVolCatSpeed = 100;
 	// ƒXƒ‰ƒCƒh‚Ì‘¬‚³
 	constexpr int kSlideSpeed = 50;
 

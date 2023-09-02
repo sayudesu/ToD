@@ -1,10 +1,13 @@
 #pragma once
 #include <DxLib.h>
 #include "../../Util/Vec2.h"
+#include "../../Util/Tracking.h"
 #include <vector>
 
 
+
 class ObjectMenuDrawer;
+class NormalShot;
 
 // プレイヤークラス
 class Player
@@ -27,10 +30,19 @@ public:
 
 	// ゲームの進行を止めるかどうか
 	bool isGetGameStop();
+	// 特殊攻撃をおこなったかどうか
+	bool isSpecialAttack();
+	void SpecialAttackReset();
+	// ショットを撃つかどうか
+	void IsSetShot(bool isShot);
+	// カメラクラスに渡す
+	Tracking GetTracingData();
 private:
 	// 操作を制御
 	void UpdateControl();
 	void UpdateSpecialAttack();
+	// ショットを生成
+	void UpdateShot();
 	// オブジェクトのコスト関連
 	void ObjectCost();
 private:
@@ -38,6 +50,7 @@ private:
 	VECTOR m_pos;
 
 	VECTOR m_specialAttackPos;
+	VECTOR m_targetPos;
 	bool m_isSpecialAttack;
 	// 画面から3D空間に変換用
 	VECTOR m_screenToWorldPos;
@@ -59,7 +72,18 @@ private:
 	int m_hCostBg;
 	// コスト数
 	int m_objectCostNum;
+	// ショットの数
+	int m_countShotNo;
+	bool m_isTrackingShot;
+	// ショットを撃つかどうか
+	bool m_isShot;
 
+	// カメラに渡す用のデータ
+	Tracking m_trackingData;
+
+	// メニュー表記
 	ObjectMenuDrawer* m_pObjMenu;
+	// 必殺技(ショット)
+	NormalShot* m_pShot;
 };
 

@@ -8,46 +8,28 @@ namespace
 }
 
 ShotBase::ShotBase(VECTOR pos):
-	m_hShot(-1),
-	m_pos(pos),
-	m_targetPos(VGet(0,0,0)),
-	m_isScreenOut(false)
+	m_pos(pos)
 {
 //	SoundFunctions::Play(SoundFunctions::SoundIdShot);
-	// 3Dモデルのロード
-	m_hShot = MV1LoadModel("Data/Model/ShotCat.mv1");
-	MV1SetScale(m_hShot, VGet(1.0f, 1.0f, 1.0f));
 }
 
-ShotBase::~ShotBase()
+bool ShotBase::IsGetEnd()
 {
-	// メモリ解放
-	MV1DeleteModel(m_hShot);
-}
-
-void ShotBase::Update()
-{
-	if (!m_isScreenOut)
+	if (m_nowPosToNextPosX < 30.0f &&
+		m_nowPosToNextPosZ < 30.0f)
 	{
-		VecCalculation();
-		MV1SetPosition(m_hShot,m_pos);
+		return true;
 	}
-}
 
-void ShotBase::Draw()
-{
-	if (!m_isScreenOut)
-	{
-		MV1DrawModel(m_hShot);
-	}
+	return false;
 }
 
 // 移動の計算をしています
-void ShotBase::VecCalculation()
+void ShotBase::VecCalculation(VECTOR tagetPos,float speed)
 {
 	//**** 追従のAI ****//
 	// 向きを算出
-	m_dir = VSub(m_targetPos, m_pos);
+	m_dir = VSub(tagetPos, m_pos);
 	// プレイヤーからエネミーまでの角度を求める
 	const float angle = atan2(m_dir.y, m_dir.x);
 	// 現在敵が向いている方向のベクトルを生成する
@@ -59,7 +41,11 @@ void ShotBase::VecCalculation()
 		m_dir = VNorm(m_dir);
 	}
 	// 速度を求める
-	const VECTOR velecity = VScale(m_dir, kSpeed);
+	const VECTOR velecity = VScale(m_dir, speed);
 	// 位置を変える
 	m_pos = VAdd(m_pos, velecity);
+
+	// 距離を測る
+	m_nowPosToNextPosX = sqrt(pow(m_pos.x - tagetPos.x, 2) + pow(m_pos.x - tagetPos.x, 2));
+	m_nowPosToNextPosZ = sqrt(pow(m_pos.z - tagetPos.z, 2) + pow(m_pos.z - tagetPos.z, 2));
 }

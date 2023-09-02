@@ -20,7 +20,7 @@ namespace
 	// 速度
 	constexpr float kSpeed = 3.0f;
 	// 距離
-	constexpr float kRange = 30.0f;
+	constexpr float kRange = 50.0f;
 }
 
 EnemyNormal::EnemyNormal() :
@@ -78,8 +78,8 @@ void EnemyNormal::Update()
 	m_pos = VAdd(m_pos, velecity);
 
 	// 距離を測る
-	float nowPosToNextPosX = sqrt(pow(m_pos.x - m_targetPos.x, 2) + pow(m_pos.x - m_targetPos.x, 2));
-	float nowPosToNextPosZ = sqrt(pow(m_pos.z - m_targetPos.z, 2) + pow(m_pos.z - m_targetPos.z, 2));
+	const float nowPosToNextPosX = sqrt(pow(m_pos.x - m_targetPos.x, 2) + pow(m_pos.x - m_targetPos.x, 2));
+	const float nowPosToNextPosZ = sqrt(pow(m_pos.z - m_targetPos.z, 2) + pow(m_pos.z - m_targetPos.z, 2));
 
 	// 移動までの距離が短いと
 	if (nowPosToNextPosX < kRange &&

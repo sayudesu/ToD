@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CutInDrawer.cpp" />
+    <ClCompile Include="Object\Shot\NormalShot.cpp" />
     <ClCompile Include="Object\Player\ObjectMenuDrawer.cpp" />
     <ClCompile Include="Save\SaveDataFunctions.cpp" />
     <ClCompile Include="Util\Collision3D.cpp" />
@@ -167,14 +168,16 @@
     <ClCompile Include="Scene\SceneMain.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Object\Shot\ShotBase.cpp" />
-    <ClCompile Include="Util\SelectDrawer.cpp" />
+    <ClCompile Include="Menus\SelectDrawer.cpp" />
     <ClCompile Include="Util\SoundFunctions.cpp" />
     <ClCompile Include="util\Pad.cpp" />
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CutInDrawer.h" />
+    <ClInclude Include="Object\Shot\NormalShot.h" />
     <ClInclude Include="Object\Player\ObjectMenuDrawer.h" />
+    <ClInclude Include="Util\Tracking.h" />
     <ClInclude Include="Save\SaveDataFunctions.h" />
     <ClInclude Include="Util\Collision3D.h" />
     <ClInclude Include="Effeck\EffekseerDrawer.h" />
@@ -199,7 +202,7 @@
     <ClInclude Include="scene\SceneMain.h" />
     <ClInclude Include="scene\SceneManager.h" />
     <ClInclude Include="Object\Shot\ShotBase.h" />
-    <ClInclude Include="Util\SelectDrawer.h" />
+    <ClInclude Include="Menus\SelectDrawer.h" />
     <ClInclude Include="Util\SoundFunctions.h" />
     <ClInclude Include="Util\game.h" />
     <ClInclude Include="util\Pad.h" />

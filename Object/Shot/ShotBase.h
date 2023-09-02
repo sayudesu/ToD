@@ -6,19 +6,22 @@ class ShotBase
 {
 public:
 	ShotBase(VECTOR pos);
-	virtual~ShotBase();
+	virtual~ShotBase() {};
 
-	void Update();
-	void Draw();
+	virtual void Init() {};
+	virtual void End() {};
+	virtual void Update() {};
+	virtual void Draw() {};
 
 	// ショットの位置
-	VECTOR SetPos()const{ return m_pos; }
+	virtual VECTOR SetPos()const{ return m_pos; }
 	// ターゲット位置
-	void GetTargetPos(VECTOR pos) { m_targetPos = pos; }
-private:
+	virtual void SetTargetPos(VECTOR pos) { m_targetPos = pos; }
+	virtual bool IsGetEnd();
+protected:
 	// 移動の計算をしています
-	void VecCalculation();
-private:
+	void VecCalculation(VECTOR tagetPos, float speed);
+protected:
 	// 3Dモデルハンドル
 	int m_hShot;
 	// 位置
@@ -29,5 +32,8 @@ private:
 	VECTOR m_targetPos;
 	// 画面外処理
 	bool m_isScreenOut;
+	// 目的地と今の距離
+	float m_nowPosToNextPosX;
+	float m_nowPosToNextPosZ;
 };
 

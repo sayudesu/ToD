@@ -111,12 +111,9 @@ SceneBase* SceneMain::Update()
 	// 敵
 	m_pEnemy->Update();
 	// マップ
-	m_pMap->Update();
-
-	m_catIn->Update();
-	
+	m_pMap->Update();	
 	// 
-	m_pCamera->GetTargetPos(m_pPlayer->SetPos());
+	m_pCamera->SetTargetPos(m_pPlayer->SetPos());
 
 	// 敵を生成(デバッグ用)
 	if (Pad::isTrigger(PAD_INPUT_2))
@@ -143,6 +140,24 @@ SceneBase* SceneMain::Update()
 	}
 	m_pColl->UpdateCheck(pos1, pos2);
 
+
+	// 演出関係
+	m_pCamera->SeTrackingData(m_pPlayer->GetTracingData());
+
+	m_pPlayer->IsSetShot(m_catIn->IsGetEnd());
+	m_catIn->IsSetEndReset();
+	if (m_pPlayer->isSpecialAttack())
+	{
+		// 演出開始
+		m_catIn->Update();
+		if (m_catIn->IsGetEnd())
+		{
+			// ショットを撃てるかどうか
+			m_pPlayer->SpecialAttackReset();
+			// 演出リセット
+			m_catIn->Reset();
+		}
+	}
 
 	// シーンを切り替えます
 	if (Pad::isTrigger(PAD_INPUT_8))

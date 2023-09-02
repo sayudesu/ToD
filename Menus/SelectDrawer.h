@@ -1,5 +1,5 @@
 #pragma once
-#include "Vec2.h"
+#include "../Util/Vec2.h"
 #include <vector>
 #include <memory>
 
@@ -78,6 +78,8 @@ private:
 	int m_catHandPosX[kCatHandNum];
 	int m_catHandPosY;
 	int m_catHandSlideY;
+
+	int m_tempPosY;
 };
 
 class StringDrawer

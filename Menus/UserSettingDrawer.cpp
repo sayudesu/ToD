@@ -2,7 +2,7 @@
 #include <DxLib.h>
 #include "../Util/game.h"
 #include "../Util/Pad.h"
-#include "../Util/SelectDrawer.h"
+#include "SelectDrawer.h"
 #include "../Util/SoundFunctions.h"
 #include "../Save/SaveDataFunctions.h"
 #include "../Util/LoadGraphFunction.h"
@@ -10,7 +10,7 @@
 namespace
 {
 	// 猫の画像の速さ
-	constexpr int kVolCatSpeed = 20;
+	constexpr int kVolCatSpeed = 100;
 	// スライドの速さ
 	constexpr int kSlideSpeed = 50;
 	// 選択用表示文字
@@ -275,7 +275,6 @@ void UserSettingDrawer::UpdateEnd()
 
 		// 選択をリセットします
 		m_pSelect->ResetSelectNo();
-		printfDx("_Icon = %d\n", m_iconSelect);
 		// アイコンのデータを保管
 		m_iconData.Icon = m_iconSelect;
 	}
