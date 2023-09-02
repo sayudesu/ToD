@@ -1,6 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
+#include "../../Util/CollDatas.h"
 
 class EnemyBase
 {
@@ -16,12 +17,15 @@ public:
 	// エネミーの位置
 	VECTOR SetPos() const { return m_pos; }
 	VECTOR GetPos(VECTOR pos) { m_pos = pos; }
-
+	// 判定データを受け取る
+	virtual void SetCollData(std::vector<CollData>collData) { m_collData = collData; }
 	// 通る道
 	virtual void SetRoadPos(std::vector<int> mapChip) { m_mapChip = mapChip; }
 
 protected:
 	VECTOR m_pos = VGet(0.0f, 0.0f, 0.0f);
-	std::vector<int> m_mapChip;
+	std::vector<int> m_mapChip{};
+	// 判定データ
+	std::vector<CollData> m_collData{};
 };
 

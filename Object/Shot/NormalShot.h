@@ -11,7 +11,9 @@ public:
 	void End();
 	void Update();
 	void Draw();
-private:
+
+	CollData GetCollData();
+
 	VECTOR m_tagetPos;
 	float m_speed;
 };

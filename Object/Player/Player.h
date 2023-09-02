@@ -23,7 +23,7 @@ public:
 	void DrawUI();
 
 	// マウスの位置を返す
-	VECTOR SetMouseWorldPos() { return m_screenToWorldPos; }
+//	VECTOR SetMouseWorldPos() { return m_screenToWorldPos; }
 	VECTOR SetPos() { return m_pos; }
 	// マウスが押されているかどうか
 	bool SetMouseLeft() { return m_isResultObject; }
@@ -72,12 +72,13 @@ private:
 	int m_hCostBg;
 	// コスト数
 	int m_objectCostNum;
+
 	// ショットの数
 	int m_countShotNo;
 	bool m_isTrackingShot;
+	int m_deleteFrameCountShot;
 	// ショットを撃つかどうか
 	bool m_isShot;
-
 	// カメラに渡す用のデータ
 	Tracking m_trackingData;
 

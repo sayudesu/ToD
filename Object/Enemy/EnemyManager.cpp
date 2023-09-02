@@ -12,36 +12,7 @@ EnemyManager::~EnemyManager()
 
 void EnemyManager::Init()
 {
-	//VECTOR pos = VGet(0, 0, 0);
-	//int z = 250;
-	//int puls = -1;
-
-	//for (int i = 0; i < m_mapChip.size(); i++)
-	//{
-	//	// カウント
-	//	puls++;
-	//	// 右に押し詰める
-	//	int x = -600;
-	//	x += (puls * 50);
-
-	//	// Z軸変更
-	//	if (m_mapChip[i] == 0)
-	//	{
-	//		puls = -1;
-	//		z -= 50;
-	//	}
-
-	//	// 初期位置
-	//	if (m_mapChip[i] == 3)
-	//	{
-	//		pos = VGet(x, 0.0f, z);
-	//	}
-	//}
-
-	//for (auto& enemyNormal : m_pEnemyNormal)
-	//{
-	//	enemyNormal->Init(pos);
-	//}
+	
 }
 
 void EnemyManager::End()
@@ -131,10 +102,7 @@ VECTOR EnemyManager::SetNormalPos2(int num)
 
 int EnemyManager::SetNormalNum()
 {
-	for (auto& size : m_pEnemyNormal)
-	{
-		return m_pEnemyNormal.size();
-	}
+	return static_cast<int>(m_pEnemyNormal.size());
 }
 
 void EnemyManager::SetMapChip(std::vector<int> mapChip)
@@ -147,7 +115,15 @@ void EnemyManager::SetMapChip(std::vector<int> mapChip)
 	m_mapChip = mapChip;
 }
 
+void EnemyManager::SetObjCollData(std::vector<CollData> collData)
+{
+	for (auto& normalEnemy : m_pEnemyNormal)
+	{
+		normalEnemy->SetCollData(collData);
+	}
+}
+
 int EnemyManager::GetNormalNum()
 {
-	return m_pEnemyNormal.size();
+	return static_cast<int>(m_pEnemyNormal.size());
 }

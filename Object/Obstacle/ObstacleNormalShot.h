@@ -20,6 +20,8 @@ public:
 	void UpdateShot();
 	void Draw();
 
+	std::vector<CollData> GetCollDatas();
+
 	void SetTarGetPos(VECTOR pos);
 private:
 	// ‘å–Cƒ‚ƒfƒ‹ƒnƒ“ƒhƒ‹

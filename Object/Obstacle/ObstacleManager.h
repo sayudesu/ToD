@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include <vector>
 #include <memory>
+#include "../../Util/CollDatas.h"
 
 class ObstacleBase;
 class ObstacleManager
@@ -19,6 +20,8 @@ public:
 	void SetTarGetPos(VECTOR pos);
 
 	VECTOR GetPos(int num);
+
+	std::vector<std::vector<CollData>> GetCollDatas();
 
 	// ”z—ñ‚Ì”‚ğ“n‚·
 	int GetNormalNum();

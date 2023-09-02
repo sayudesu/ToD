@@ -55,7 +55,20 @@ VECTOR ObstacleManager::GetPos(int num)
 	return m_pObstacle[num]->GetPos();
 }
 
+std::vector<std::vector<CollData>> ObstacleManager::GetCollDatas()
+{
+	std::vector<std::vector<CollData>> collData{};
+
+	// ƒf[ƒ^‚ð•Û‘¶
+	for (auto& obstacle : m_pObstacle)
+	{
+		collData.push_back(obstacle->GetCollDatas());
+	}
+
+	return collData;
+}
+
 int ObstacleManager::GetNormalNum()
 {
-	return m_pObstacle.size();
+	return static_cast<int>(m_pObstacle.size());
 }

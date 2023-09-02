@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include <vector>
 #include <memory>
+#include "../../Util/CollDatas.h"
 
 class EnemyBase;
 class EnemyManager
@@ -21,6 +22,8 @@ public:
 	int SetNormalNum();
 
 	void SetMapChip(std::vector<int>mapChip);
+
+	void SetObjCollData(std::vector<CollData> collData);
 
 	// îzóÒÇÃêî
 	int GetNormalNum();

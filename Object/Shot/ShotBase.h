@@ -1,6 +1,8 @@
 #pragma once
 #include <DxLib.h>
 
+#include "../../Util/CollDatas.h"
+
 // ショットクラス
 class ShotBase
 {
@@ -13,6 +15,8 @@ public:
 	virtual void Update() {};
 	virtual void Draw() {};
 
+	// ショット判定データ
+	CollData GetCollData(){ return m_collData; }
 	// ショットの位置
 	virtual VECTOR SetPos()const{ return m_pos; }
 	// ターゲット位置
@@ -35,5 +39,7 @@ protected:
 	// 目的地と今の距離
 	float m_nowPosToNextPosX;
 	float m_nowPosToNextPosZ;
+	// 判定用データ
+	CollData m_collData;
 };
 

@@ -1,5 +1,7 @@
 #pragma once
 #include <DxLib.h>
+#include <vector>
+#include "../../Util/CollDatas.h"
 
 // 障害物クラスベース
 class ObstacleBase
@@ -17,10 +19,14 @@ public:
 	virtual VECTOR GetPos() const { return m_pos; }
 	// ターゲットの位置
 	virtual void SetTarGetPos(VECTOR pos) { m_targetPos = pos; }
+	// 当たり判定データ
+	virtual std::vector<CollData> GetCollDatas() { return m_collData; }
 
 protected:
 	// 位置
 	VECTOR m_pos = VGet(0.0f, 0.0f, 0.0f);
 	// ターゲット位置
 	VECTOR m_targetPos = VGet(0.0f, 0.0f, 0.0f);
+	// 当たり判定データ
+	std::vector<CollData> m_collData;
 };

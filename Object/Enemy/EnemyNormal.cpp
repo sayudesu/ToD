@@ -78,8 +78,8 @@ void EnemyNormal::Update()
 	m_pos = VAdd(m_pos, velecity);
 
 	// 距離を測る
-	const float nowPosToNextPosX = sqrt(pow(m_pos.x - m_targetPos.x, 2) + pow(m_pos.x - m_targetPos.x, 2));
-	const float nowPosToNextPosZ = sqrt(pow(m_pos.z - m_targetPos.z, 2) + pow(m_pos.z - m_targetPos.z, 2));
+	const float nowPosToNextPosX = static_cast<int>(sqrt(pow(m_pos.x - m_targetPos.x, 2) + pow(m_pos.x - m_targetPos.x, 2)));
+	const float nowPosToNextPosZ = static_cast<int>(sqrt(pow(m_pos.z - m_targetPos.z, 2) + pow(m_pos.z - m_targetPos.z, 2)));
 
 	// 移動までの距離が短いと
 	if (nowPosToNextPosX < kRange &&
@@ -188,8 +188,8 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 		if (isRandMove && isMove)
 		{
 			// 進む位置をランダムに決める
-			tempMovePosX = moveDirX[GetRand(moveDirX.size() - 1)];
-			tempMovePosZ = moveDirZ[GetRand(moveDirZ.size() - 1)];
+			tempMovePosX = moveDirX[GetRand(static_cast<int>(moveDirX.size()) - 1)];
+			tempMovePosZ = moveDirZ[GetRand(static_cast<int>(moveDirZ.size()) - 1)];
 			isRandMove = false;
 		}
 		else

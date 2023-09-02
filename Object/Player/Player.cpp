@@ -29,6 +29,7 @@ Player::Player() :
 	m_objectCostNum(0),
 	m_isShot(false),
 	m_countShotNo(-1),
+	m_deleteFrameCountShot(0),
 	m_isTrackingShot(false)
 {
 	m_posHistory.push_back(VGet(-1.0f, -1.0f, -1.0f));
@@ -265,7 +266,6 @@ void Player::UpdateShot()
 		// インスタンス生成
 		m_pShot = new NormalShot(m_countShotNo, VGet(m_pos.x, m_pos.y + 2000.0f, m_pos.z));
 		m_pShot->Init(m_targetPos,VGet(10,10,10), 30.0f);
-		printfDx("%d\n", m_countShotNo);
 	}
 
 	if (m_countShotNo == 0)
@@ -274,9 +274,14 @@ void Player::UpdateShot()
 
 		if (m_pShot->IsGetEnd())
 		{
-			//m_isTrackingShot = false;
-			//m_countShotNo--;
-			//m_pShot->End();
+			m_deleteFrameCountShot++;
+			if (m_deleteFrameCountShot > 30)
+			{
+				m_deleteFrameCountShot = 0;
+				m_isTrackingShot = false;
+				m_countShotNo--;
+				m_pShot->End();
+			}
 		}
 
 		// トラッキングデータの保存

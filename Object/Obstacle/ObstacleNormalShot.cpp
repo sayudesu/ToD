@@ -151,6 +151,19 @@ void ObstacleNormalShot::Draw()
 	MV1DrawModel(m_hCannon);
 }
 
+std::vector<CollData> ObstacleNormalShot::GetCollDatas()
+{
+	if (m_countShotNum != -1)
+	{
+		for(auto& shotData : m_pShot)
+		{
+			m_collData.push_back(shotData->GetCollData());
+		}
+	}
+
+	return m_collData;
+}
+
 void ObstacleNormalShot::SetTarGetPos(VECTOR pos)
 {
 	for (int i = 0; i < m_pShot.size(); i++)

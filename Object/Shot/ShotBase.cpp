@@ -11,6 +11,10 @@ ShotBase::ShotBase(VECTOR pos):
 	m_pos(pos)
 {
 //	SoundFunctions::Play(SoundFunctions::SoundIdShot);
+	m_collData.datage = 0;
+	m_collData.pos = VGet(0,0,0);
+	m_collData.radius = 0;
+
 }
 
 bool ShotBase::IsGetEnd()
@@ -46,6 +50,6 @@ void ShotBase::VecCalculation(VECTOR tagetPos,float speed)
 	m_pos = VAdd(m_pos, velecity);
 
 	// ‹——£‚ð‘ª‚é
-	m_nowPosToNextPosX = sqrt(pow(m_pos.x - tagetPos.x, 2) + pow(m_pos.x - tagetPos.x, 2));
-	m_nowPosToNextPosZ = sqrt(pow(m_pos.z - tagetPos.z, 2) + pow(m_pos.z - tagetPos.z, 2));
+	m_nowPosToNextPosX = static_cast<float>(sqrt(pow(m_pos.x - tagetPos.x, 2) + pow(m_pos.x - tagetPos.x, 2)));
+	m_nowPosToNextPosZ = static_cast<float>(sqrt(pow(m_pos.z - tagetPos.z, 2) + pow(m_pos.z - tagetPos.z, 2)));
 }

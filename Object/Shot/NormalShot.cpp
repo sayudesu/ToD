@@ -47,3 +47,11 @@ void NormalShot::Draw()
 		MV1DrawModel(m_hShot);
 	}
 }
+
+CollData NormalShot::GetCollData()
+{
+	m_collData.datage = 30.0f;
+	m_collData.pos = m_pos;
+	m_collData.radius = 30.0f;
+	return m_collData;
+}
