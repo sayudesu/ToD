@@ -1,7 +1,7 @@
 #include "CutInDrawer.h"
 #include <DxLib.h>
 #include <cassert>
-#include "Util/game.h"
+#include "game.h"
 
 namespace
 {
@@ -33,7 +33,7 @@ void CutInDrawer::Init()
 	assert(m_hNewChallenger != -1);
 	m_hSpacialAttack = LoadGraph("Data/Image/SpacialAttack.png");
 	assert(m_hSpacialAttack != -1);
-	m_hSpShot        = LoadGraph("Data/Image/FrameCat.png");
+	m_hSpShot        = LoadGraph("Data/Image/FrameCat0.png");
 	assert(m_hSpShot        != -1);
 }
 

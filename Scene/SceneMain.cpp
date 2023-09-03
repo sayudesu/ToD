@@ -10,7 +10,7 @@
 #include "../Util/SoundFunctions.h"
 #include "../Save/SaveDataFunctions.h"
 #include "../Util/Collision3D.h"
-#include "../CutInDrawer.h"
+#include "../Util/CutInDrawer.h"
 
 // Ç†Ç∆Ç≈è¡Ç∑
 #include "../Util/Pad.h"

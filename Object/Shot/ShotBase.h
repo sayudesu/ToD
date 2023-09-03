@@ -10,7 +10,7 @@ public:
 	ShotBase(VECTOR pos);
 	virtual~ShotBase() {};
 
-	virtual void Init(VECTOR taegetPos, VECTOR scale, float speed) {};
+	virtual void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed) {};
 	virtual void End() {};
 	virtual void Update() {};
 	virtual void Draw() {};

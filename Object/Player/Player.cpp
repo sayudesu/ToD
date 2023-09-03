@@ -265,7 +265,7 @@ void Player::UpdateShot()
 		m_isTrackingShot = true;
 		// インスタンス生成
 		m_pShot = new NormalShot(m_countShotNo, VGet(m_pos.x, m_pos.y + 2000.0f, m_pos.z));
-		m_pShot->Init(m_targetPos,VGet(10,10,10), 30.0f);
+		m_pShot->Init(m_targetPos,VGet(10,10,10), VGet(0.0f, 90.0f, 0.0f), 30.0f);
 	}
 
 	if (m_countShotNo == 0)

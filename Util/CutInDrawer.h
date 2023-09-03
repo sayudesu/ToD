@@ -1,5 +1,5 @@
 #pragma once
-#include "Util/Vec2.h"
+#include "Vec2.h"
 
 class CutInDrawer
 {

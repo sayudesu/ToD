@@ -14,13 +14,14 @@ NormalShot::~NormalShot()
 
 }
 
-void NormalShot::Init(VECTOR taegetPos,VECTOR scale, float speed)
+void NormalShot::Init(VECTOR taegetPos,VECTOR scale, VECTOR rotation, float speed)
 {
 	// 3DÉÇÉfÉãÇÃÉçÅ[Éh
 	m_hShot = MV1LoadModel("Data/Model/ShotCat.mv1");
 	assert(m_hShot != -1);
 	MV1SetScale(m_hShot, scale);
-	MV1SetRotationXYZ(m_hShot,VGet(0, 180.0f * DX_PI_F / 180.0f, 0));
+	MV1SetRotationXYZ(m_hShot, VGet(rotation.x * DX_PI_F / 180.0f, rotation.y * DX_PI_F / 180.0f, rotation.z * DX_PI_F / 180.0f));
+//	MV1SetRotationXYZ(m_hShot,VGet(0, 180.0f * DX_PI_F / 180.0f, 0));
 	m_tagetPos = taegetPos;
 	m_speed = speed;
 }

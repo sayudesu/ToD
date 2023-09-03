@@ -117,7 +117,7 @@
     <ClCompile Include="Save\SaveDataFunctions.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CutInDrawer.cpp">
+    <ClCompile Include="Util\CutInDrawer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Object\Shot\NormalShot.cpp">
@@ -215,7 +215,7 @@
     <ClInclude Include="Save\SaveDataFunctions.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="CutInDrawer.h">
+    <ClInclude Include="Util\CutInDrawer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Object\Shot\NormalShot.h">

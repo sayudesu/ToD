@@ -119,7 +119,7 @@ void ObstacleNormalShot::UpdateShot()
 	{
 		m_countShotNum++;
 		m_pShot.push_back(std::make_shared<NormalShot>(m_countShotNum,m_pos));
-		m_pShot[m_countShotNum]->Init(m_targetPos,VGet(1.0f, 1.0f, 1.0f),10.0f);
+		m_pShot[m_countShotNum]->Init(m_targetPos,VGet(1.0f, 1.0f, 1.0f), VGet(0.0f, 180.0f, 0.0f),10.0f);
 		m_shootFrameCount = 0;
 	}
 
