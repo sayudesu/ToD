@@ -181,11 +181,17 @@ void SceneMain::Draw()
 	m_pMap->Draw();
 	m_pEnemy->Draw();
 	m_pObstacle->Draw();
-	m_pPlayer->DrawUI();
+	
+	// プレイヤー用
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,180);
 	m_pPlayer->Draw();
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,255);
 
+	// オブジェクトのUI
+	m_pEnemy->DrawUI();
+	m_pPlayer->DrawUI();
+
+	// 演出UI
 	m_catIn->Draw();
 
 	SceneBase::DrawSliderDoor();

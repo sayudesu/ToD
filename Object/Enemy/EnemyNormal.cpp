@@ -29,11 +29,15 @@ EnemyNormal::EnemyNormal() :
 	moveCount(0),
 	m_dir(VGet(0, 0, 0)),
 	m_targetPos(VGet(0, 0, 0)),
+	m_screenPos(VGet(0, 0, 0)),
+	m_hp(0),
 	m_count(-1),
 	forX(0),
 	forZ(0),
-	m_isHit(false)
+	m_isHit(false),
+	m_tempCountHit(0)
 {
+	m_hp = 20.0f;
 }
 EnemyNormal::~EnemyNormal()
 {
@@ -94,6 +98,11 @@ void EnemyNormal::Update()
 	}
 
 	CheckColl();
+
+	// 3D座標から2D座標に変換
+	m_screenPos = ConvWorldPosToScreenPos(m_pos);
+
+	CheckHp();
 }
 
 void EnemyNormal::ChangeNextPos(bool &isMoveing)
@@ -264,13 +273,28 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 void EnemyNormal::Draw()
 {
 	// 敵を描画
-	if(!m_isHit)DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
+	if(m_hp >= -20)DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
+}
+
+void EnemyNormal::DrawUI()
+{
+	if (m_hp >= -20)
+	{
+		DrawBox(
+			m_screenPos.x - 20, m_screenPos.y - 30,
+			m_screenPos.x + 20, m_screenPos.y - 30 + 10,
+			0xffffff,
+			true);
+		DrawBox(
+			m_screenPos.x - 20, m_screenPos.y - 30,
+			m_screenPos.x + m_hp, m_screenPos.y - 30 + 10,
+			0xaa0000,
+			true);
+	}
 }
 
 void EnemyNormal::CheckColl()
 {
-//	m_isHit = false;
-
 	// ショットの数分
 	for (int i = 0; i < m_collData.size(); i++)
 	{
@@ -280,4 +304,29 @@ void EnemyNormal::CheckColl()
 			m_isHit = true;
 		}
 	}
+}
+
+void EnemyNormal::CheckHp()
+{
+	// 後で修正する
+	// 体力の処理
+	if (!m_isTempHit)
+	{
+		if (m_isHit)
+		{
+			m_isTempHit = true;
+			m_hp -= 3;
+		}
+	}
+	else
+	{
+		m_tempCountHit++;
+		if (m_tempCountHit > 30)
+		{
+			m_tempCountHit = 0;
+			m_isTempHit = false;
+			m_isHit = false;
+		}
+	}
+
 }

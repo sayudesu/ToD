@@ -92,6 +92,14 @@ void EnemyManager::Draw()
 	}
 }
 
+void EnemyManager::DrawUI()
+{
+	for (auto& enemyNormal : m_pEnemyNormal)
+	{
+		enemyNormal->DrawUI();
+	}
+}
+
 // ‚±‚ê‚ÍˆÓ–¡‚ª–³‚¢‚Ì‚ÅÁ‚µ‚Ü‚·
 VECTOR EnemyManager::SetNormalPos(int num)
 {

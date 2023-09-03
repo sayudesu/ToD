@@ -13,6 +13,7 @@ public:
 	virtual void End() = 0;
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
+	virtual void DrawUI() = 0;
 
 	// エネミーの位置
 	virtual VECTOR SetPos() const { return m_pos; }

@@ -16,6 +16,7 @@ public:
 	void Create();
 	void Update();
 	void Draw();
+	void DrawUI();
 	// ノーマルエネミーの位置
 	VECTOR SetNormalPos(int num);
 	VECTOR SetNormalPos2(int num);

@@ -72,7 +72,7 @@ std::vector<CollData> ObstacleManager::GetCollDatas()
 	for (int i = 0; i < m_pNormalObstacle.size(); i++)
 	{
 		// ショットの数
-		for (int j = 0; j < m_pNormalObstacle[m_pNormalObstacle.size()-1]->SetShotNum(); j++)
+		for (int j = 0; j < m_pNormalObstacle[i]->SetShotNum(); j++)
 		{
 			// 一次元配列にしてデータを受け取る
 			tempArray.push_back(tempArray2D[i][j]);

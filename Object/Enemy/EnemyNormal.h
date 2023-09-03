@@ -15,9 +15,13 @@ public:
 	void Update();
 	void ChangeNextPos(bool & isMoveing);
 	void Draw();
+	void DrawUI();
 
 private:
+	// 判定処理
 	void CheckColl();
+	// HPの処理
+	void CheckHp();
 private:
 	// 敵の動く速さ　まだ仮なのでこれは消す
 	int moveCount;
@@ -27,7 +31,13 @@ private:
 	VECTOR m_dir;
 	// ターゲット位置
 	VECTOR m_targetPos;
+	// 3D座標から2D座標に変換
+	VECTOR m_screenPos;
+	// 体力系
+	float m_hp;
+
 	int m_count;
+
 	int forX;
 	int forZ;
 
@@ -40,6 +50,8 @@ private:
 	std::vector<int>moveDirX;
 
 	bool m_isHit;
+	bool m_isTempHit;
+	int m_tempCountHit;
 
 	// 判定用
 	Collision3D* m_pColl;

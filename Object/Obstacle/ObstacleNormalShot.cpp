@@ -83,15 +83,16 @@ void ObstacleNormalShot::Update()
 
 void ObstacleNormalShot::UpdateSetting()
 {
+
 	if (ef)
 	{
 		m_pEffect->Update();
 		m_pEffect->GetPos(m_pos);
 	}
+
 	// ショットの打ち出しまでのフレームをカウントする
 	m_shotFirstDelayFrameCount++;
 	if (m_shotFirstDelayFrameCount > kShotFirstFrameMax)
-//	if (m_pEffect->SetPlayingNow() == -1)
 	{
 		// ショット用関数に移動
 		m_updateFunc = &ObstacleNormalShot::UpdateShot;
