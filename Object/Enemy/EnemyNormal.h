@@ -23,6 +23,7 @@ private:
 	// HP‚Ìˆ—
 	void CheckHp();
 private:
+	int m_hMouse;
 	// “G‚Ì“®‚­‘¬‚³@‚Ü‚¾‰¼‚È‚Ì‚Å‚±‚ê‚ÍÁ‚·
 	int moveCount;
 	// “®‚­‚©‚Ç‚¤‚©

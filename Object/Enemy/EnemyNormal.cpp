@@ -25,7 +25,8 @@ namespace
 	constexpr float kRange = 50.0f;
 }
 
-EnemyNormal::EnemyNormal() :
+EnemyNormal::EnemyNormal():
+	m_hMouse(0),
 	moveCount(0),
 	m_dir(VGet(0, 0, 0)),
 	m_targetPos(VGet(0, 0, 0)),
@@ -57,6 +58,10 @@ void EnemyNormal::Init(VECTOR firstPos, int x, int z)
 	m_isNextMove = true;
 
 	m_pColl = new Collision3D;
+
+	m_hMouse = MV1LoadModel("Data/Model/Mouse.mv1");
+	MV1SetPosition(m_hMouse, m_pos);
+	MV1SetRotationXYZ(m_hMouse,VGet(0, 90.0f * DX_PI_F / 18.0f, 0));
 }
 
 void EnemyNormal::End()
@@ -65,6 +70,7 @@ void EnemyNormal::End()
 
 void EnemyNormal::Update()
 {
+	MV1SetPosition(m_hMouse, m_pos);
 	// どこに移動するかを考える
 	ChangeNextPos(m_isNextMove);
 
@@ -96,6 +102,11 @@ void EnemyNormal::Update()
 	{
 		m_isNextMove = true;
 	}
+
+	// モデルの回転行列を計算して設定
+	VECTOR dir2 = VSub(m_targetPos, m_pos);
+	const float angle2 = atan2f(m_dir.x, m_dir.z) + -90.0f * DX_PI_F / 180.0f;
+	MV1SetRotationXYZ(m_hMouse, VGet(0.0f, angle2, 0.0f));
 
 	CheckColl();
 
@@ -273,7 +284,12 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 void EnemyNormal::Draw()
 {
 	// 敵を描画
-	if(m_hp >= -20)DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
+	if (m_hp >= -20)
+	{
+	//	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
+		MV1DrawModel(m_hMouse);
+	}
+
 }
 
 void EnemyNormal::DrawUI()

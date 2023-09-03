@@ -127,6 +127,11 @@ void ObstacleNormalShot::UpdateShot()
 	{
 		shot->Update();
 	}	
+
+	// ƒ‚ƒfƒ‹‚Ì‰ñ“]s—ñ‚ğŒvZ‚µ‚Äİ’è
+	VECTOR dir2 = VSub(m_targetPos, m_pos);
+	const float angle2 = atan2f(dir2.x, dir2.z) + -90.0f * DX_PI_F / 180.0f;
+	MV1SetRotationXYZ(m_hCannon, VGet(0.0f, angle2, 0.0f));
 }
 
 void ObstacleNormalShot::Draw()
