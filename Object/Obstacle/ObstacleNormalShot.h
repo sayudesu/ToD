@@ -20,7 +20,9 @@ public:
 	void UpdateShot();
 	void Draw();
 
+	// ”»’èƒf[ƒ^
 	std::vector<CollData> GetCollDatas();
+	int SetShotNum();
 
 	void SetTarGetPos(VECTOR pos);
 private:

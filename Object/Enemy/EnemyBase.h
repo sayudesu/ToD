@@ -15,8 +15,8 @@ public:
 	virtual void Draw() = 0;
 
 	// エネミーの位置
-	VECTOR SetPos() const { return m_pos; }
-	VECTOR GetPos(VECTOR pos) { m_pos = pos; }
+	virtual VECTOR SetPos() const { return m_pos; }
+	virtual void GetPos(VECTOR pos) { m_pos = pos; }
 	// 判定データを受け取る
 	virtual void SetCollData(std::vector<CollData>collData) { m_collData = collData; }
 	// 通る道

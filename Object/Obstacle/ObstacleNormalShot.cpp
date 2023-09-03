@@ -10,9 +10,9 @@ const bool ef = false;
 namespace
 {
 	// ショット最初打ち出すまでのフレームむカウント
-	constexpr int kShotFirstFrameMax = 60;
+	constexpr int kShotFirstFrameMax = 30;
 	// ショット再放出するまでのフレーム
-	constexpr int kShootFrameMax = 10;
+	constexpr int kShootFrameMax = 30;
 	// オブジェクトカラー(緑)
 	constexpr int kObjColor1 = 0x00ff00;
 	// オブジェクトカラー(黄色)
@@ -118,7 +118,7 @@ void ObstacleNormalShot::UpdateShot()
 	{
 		m_countShotNum++;
 		m_pShot.push_back(std::make_shared<NormalShot>(m_countShotNum,m_pos));
-		m_pShot[m_countShotNum]->Init();
+		m_pShot[m_countShotNum]->Init(m_targetPos,VGet(1.0f, 1.0f, 1.0f),10.0f);
 		m_shootFrameCount = 0;
 	}
 
@@ -151,17 +151,25 @@ void ObstacleNormalShot::Draw()
 	MV1DrawModel(m_hCannon);
 }
 
+// 判定データを渡す
 std::vector<CollData> ObstacleNormalShot::GetCollDatas()
 {
+	std::vector<CollData> collData;
+
 	if (m_countShotNum != -1)
 	{
 		for(auto& shotData : m_pShot)
 		{
-			m_collData.push_back(shotData->GetCollData());
+			collData.push_back(shotData->GetCollData());
 		}
 	}
 
-	return m_collData;
+	return collData;
+}
+
+int ObstacleNormalShot::SetShotNum()
+{
+	return static_cast<int>(m_pShot.size());
 }
 
 void ObstacleNormalShot::SetTarGetPos(VECTOR pos)

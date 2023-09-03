@@ -22,53 +22,68 @@ void ObstacleManager::End()
 void ObstacleManager::Create(VECTOR pos)
 {
 	m_count++;
-	m_pObstacle.push_back(std::make_shared<ObstacleNormalShot>(pos));
-	m_pObstacle[m_count]->Init();
+	m_pNormalObstacle.push_back(std::make_shared<ObstacleNormalShot>(pos));
+	m_pNormalObstacle[m_count]->Init();
 }
 
 void ObstacleManager::Update()
 {
-	for (auto& obstacle : m_pObstacle)
+	for (auto& nomalObstacle : m_pNormalObstacle)
 	{
-		obstacle->Update();
+		nomalObstacle->Update();
 	}
 }
 
 void ObstacleManager::Draw()
 {
-	for (auto& obstacle : m_pObstacle)
+	for (auto& nomalObstacle : m_pNormalObstacle)
 	{
-		obstacle->Draw();
+		nomalObstacle->Draw();
 	}
 }
 
 void ObstacleManager::SetTarGetPos(VECTOR pos)
 {
-	for (auto& obstacle : m_pObstacle)
+	for (auto& nomalObstacle : m_pNormalObstacle)
 	{
-		obstacle->SetTarGetPos(pos);
+		nomalObstacle->SetTarGetPos(pos);
 	}
 }
 
 VECTOR ObstacleManager::GetPos(int num)
 {
-	return m_pObstacle[num]->GetPos();
+	return m_pNormalObstacle[num]->GetPos();
 }
 
-std::vector<std::vector<CollData>> ObstacleManager::GetCollDatas()
+// 二次元配列を一次元配列にしてを返す
+std::vector<CollData> ObstacleManager::GetCollDatas()
 {
-	std::vector<std::vector<CollData>> collData{};
+	// 一時的に格納する用の配列を用意する
+	std::vector < std::vector<CollData>> tempArray2D{};
+	std::vector<CollData> tempArray{};
 
-	// データを保存
-	for (auto& obstacle : m_pObstacle)
+	// 二次元配列でデータを受け取る
+	for (auto& nomalObstacle : m_pNormalObstacle)
 	{
-		collData.push_back(obstacle->GetCollDatas());
+		tempArray2D.push_back(nomalObstacle->GetCollDatas());
 	}
 
-	return collData;
+	// オブジェクトの数
+	for (int i = 0; i < m_pNormalObstacle.size(); i++)
+	{
+		// ショットの数
+		for (int j = 0; j < m_pNormalObstacle[m_pNormalObstacle.size()-1]->SetShotNum(); j++)
+		{
+			// 一次元配列にしてデータを受け取る
+			tempArray.push_back(tempArray2D[i][j]);
+		}
+	}
+
+	// 一次元配列でデータを渡す
+	return tempArray;
 }
 
 int ObstacleManager::GetNormalNum()
 {
-	return static_cast<int>(m_pObstacle.size());
+	return static_cast<int>(m_pNormalObstacle.size());
 }

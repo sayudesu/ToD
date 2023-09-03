@@ -10,11 +10,13 @@ EnemyManager::~EnemyManager()
 {
 }
 
+// 敵の初期化
 void EnemyManager::Init()
 {
 	
 }
 
+// 敵のエンド処理
 void EnemyManager::End()
 {
 	for (auto& enemyNormal : m_pEnemyNormal)
@@ -23,6 +25,7 @@ void EnemyManager::End()
 	}
 }
 
+// 敵の初期設定
 void EnemyManager::Create()
 {
 	// マップチップサイズ
@@ -71,6 +74,7 @@ void EnemyManager::Create()
 	m_pEnemyNormal[m_count]->Init(pos, forX, forZ);
 }
 
+// 敵の更新処理
 void EnemyManager::Update()
 {
 	for (auto& enemyNormal : m_pEnemyNormal)
@@ -79,6 +83,7 @@ void EnemyManager::Update()
 	}
 }
 
+// 敵の描画
 void EnemyManager::Draw()
 {
 	for (auto& enemyNormal : m_pEnemyNormal)
@@ -87,6 +92,7 @@ void EnemyManager::Draw()
 	}
 }
 
+// これは意味が無いので消します
 VECTOR EnemyManager::SetNormalPos(int num)
 {
 	for (int i = 0; i < num; i++)
@@ -95,16 +101,19 @@ VECTOR EnemyManager::SetNormalPos(int num)
 	}
 }
 
+// 番号を指定してノーマルエネミーの位置を受け取ります
 VECTOR EnemyManager::SetNormalPos2(int num)
 {
 	return m_pEnemyNormal[num]->SetPos();
 }
 
+// ノーマルエネミーの数を返します
 int EnemyManager::SetNormalNum()
 {
 	return static_cast<int>(m_pEnemyNormal.size());
 }
 
+// マップチップの情報を受け取ります
 void EnemyManager::SetMapChip(std::vector<int> mapChip)
 {
 	for (auto& normalEnemy : m_pEnemyNormal)
@@ -115,6 +124,7 @@ void EnemyManager::SetMapChip(std::vector<int> mapChip)
 	m_mapChip = mapChip;
 }
 
+// プレイヤーが設置したオブジェクトの判定データーを受け取ります
 void EnemyManager::SetObjCollData(std::vector<CollData> collData)
 {
 	for (auto& normalEnemy : m_pEnemyNormal)
@@ -123,6 +133,7 @@ void EnemyManager::SetObjCollData(std::vector<CollData> collData)
 	}
 }
 
+// ノーマルエネミーの数を返します
 int EnemyManager::GetNormalNum()
 {
 	return static_cast<int>(m_pEnemyNormal.size());

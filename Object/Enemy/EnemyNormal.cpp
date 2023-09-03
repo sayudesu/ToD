@@ -6,6 +6,8 @@
 #include "../../Util/Vec2.h"
 #include <iostream>
 
+#include "../../Util/Collision3D.h"
+
 namespace
 {
 	// マップチップサイズ
@@ -29,7 +31,8 @@ EnemyNormal::EnemyNormal() :
 	m_targetPos(VGet(0, 0, 0)),
 	m_count(-1),
 	forX(0),
-	forZ(0)
+	forZ(0),
+	m_isHit(false)
 {
 }
 EnemyNormal::~EnemyNormal()
@@ -48,6 +51,8 @@ void EnemyNormal::Init(VECTOR firstPos, int x, int z)
 	m_recordZ.push_back(forZ);
 
 	m_isNextMove = true;
+
+	m_pColl = new Collision3D;
 }
 
 void EnemyNormal::End()
@@ -87,6 +92,8 @@ void EnemyNormal::Update()
 	{
 		m_isNextMove = true;
 	}
+
+	CheckColl();
 }
 
 void EnemyNormal::ChangeNextPos(bool &isMoveing)
@@ -257,5 +264,20 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 void EnemyNormal::Draw()
 {
 	// 敵を描画
-	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
+	if(!m_isHit)DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
+}
+
+void EnemyNormal::CheckColl()
+{
+//	m_isHit = false;
+
+	// ショットの数分
+	for (int i = 0; i < m_collData.size(); i++)
+	{
+		// 判定を見る
+		if (m_pColl->UpdateCheck(m_pos, m_collData[i].pos,16.0f, m_collData[i].radius))
+		{
+			m_isHit = true;
+		}
+	}
 }

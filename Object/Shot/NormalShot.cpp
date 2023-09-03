@@ -42,9 +42,10 @@ void NormalShot::Update()
 
 void NormalShot::Draw()
 {
-	if (!m_isScreenOut)
+	if (!IsGetEnd())
 	{
 		MV1DrawModel(m_hShot);
+		DrawSphere3D(m_pos, 16.0f, 16.0f, 0xffff00, 0xffff00, true);
 	}
 }
 
@@ -52,6 +53,6 @@ CollData NormalShot::GetCollData()
 {
 	m_collData.datage = 30.0f;
 	m_collData.pos = m_pos;
-	m_collData.radius = 30.0f;
+	m_collData.radius = 16.0f;
 	return m_collData;
 }

@@ -21,13 +21,14 @@ public:
 
 	VECTOR GetPos(int num);
 
-	std::vector<std::vector<CollData>> GetCollDatas();
+	// 二次元配列を一次元配列にしてを返す
+	std::vector<CollData> GetCollDatas();
 
 	// 配列の数を渡す
 	int GetNormalNum();
 
 private:
-	std::vector<std::shared_ptr<ObstacleBase>>m_pObstacle;
+	std::vector<std::shared_ptr<ObstacleBase>>m_pNormalObstacle;
 	// 出現数をカウントします
 	int m_count;
 };

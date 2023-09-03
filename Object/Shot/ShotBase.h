@@ -10,13 +10,13 @@ public:
 	ShotBase(VECTOR pos);
 	virtual~ShotBase() {};
 
-	virtual void Init() {};
+	virtual void Init(VECTOR taegetPos, VECTOR scale, float speed) {};
 	virtual void End() {};
 	virtual void Update() {};
 	virtual void Draw() {};
 
 	// ショット判定データ
-	CollData GetCollData(){ return m_collData; }
+	virtual CollData GetCollData() { return m_collData; }
 	// ショットの位置
 	virtual VECTOR SetPos()const{ return m_pos; }
 	// ターゲット位置
@@ -41,5 +41,10 @@ protected:
 	float m_nowPosToNextPosZ;
 	// 判定用データ
 	CollData m_collData;
+
+	// 速度
+	float m_speed;
+	// 半径
+	float m_radius;
 };
 

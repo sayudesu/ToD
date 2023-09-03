@@ -1,6 +1,8 @@
 #pragma once
 #include "EnemyBase.h"
 
+// ”»’è—p
+class Collision3D;
 
 class EnemyNormal : public EnemyBase
 {
@@ -14,6 +16,8 @@ public:
 	void ChangeNextPos(bool & isMoveing);
 	void Draw();
 
+private:
+	void CheckColl();
 private:
 	// “G‚Ì“®‚­‘¬‚³@‚Ü‚¾‰¼‚È‚Ì‚Å‚±‚ê‚ÍÁ‚·
 	int moveCount;
@@ -34,5 +38,10 @@ private:
 
 	std::vector<int>moveDirZ;
 	std::vector<int>moveDirX;
+
+	bool m_isHit;
+
+	// ”»’è—p
+	Collision3D* m_pColl;
 };
 

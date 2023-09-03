@@ -127,19 +127,10 @@ SceneBase* SceneMain::Update()
 		m_pObstacle->Create(m_pPlayer->SetPos());
 	}
 
-	// 判定処理
-	std::vector<VECTOR> pos1;
-	std::vector<VECTOR> pos2;
-	for (int i = 0; i < m_pObstacle->GetNormalNum(); i++)
-	{
-		pos1.push_back(m_pObstacle->GetPos(i));
-	}
-	for (int i = 0; i < m_pEnemy->GetNormalNum(); i++)
-	{
-		pos2.push_back(m_pEnemy->SetNormalPos2(i));
-	}
-	m_pColl->UpdateCheck(pos1, pos2);
-
+	// 判定情報
+	
+	// 設置したオブジェクトのCollDataをエネミーに渡す
+	m_pEnemy->SetObjCollData(m_pObstacle->GetCollDatas());
 
 	// 演出関係
 	m_pCamera->SeTrackingData(m_pPlayer->GetTracingData());

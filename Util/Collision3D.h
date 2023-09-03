@@ -8,7 +8,7 @@ public:
 	Collision3D();
 	~Collision3D();
 
-	bool UpdateCheck(std::vector<VECTOR>pos1, std::vector<VECTOR>pos2);
+	bool UpdateCheck(VECTOR pos1, VECTOR pos2, float radius1, float radius2);
 private:
 	// 配列の数分のサイズ
 	int m_pos1Num;

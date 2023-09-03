@@ -23,7 +23,8 @@ public:
 
 	void SetMapChip(std::vector<int>mapChip);
 
-	void SetObjCollData(std::vector<CollData> collData);
+	// 判定用データを受け取る
+ 	virtual void SetObjCollData(std::vector<CollData> collData);
 
 	// 配列の数
 	int GetNormalNum();
@@ -34,5 +35,7 @@ private:
 	std::vector<int>m_mapChip;
 	// 出現数をカウントします
 	int m_count;
+	// オブジェクトの数
+	int m_objNum;
 };
 
