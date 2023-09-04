@@ -26,6 +26,8 @@ public:
 
 	// 判定用データを受け取る
  	virtual void SetObjCollData(std::vector<CollData> collData);
+	// 自身の判定用データ
+ 	virtual std::vector<CollData> GetCollData();
 
 	// 配列の数
 	int GetNormalNum();

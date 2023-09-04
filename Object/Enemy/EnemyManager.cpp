@@ -141,6 +141,19 @@ void EnemyManager::SetObjCollData(std::vector<CollData> collData)
 	}
 }
 
+// 自身の判定用データ
+std::vector<CollData> EnemyManager::GetCollData()
+{
+	std::vector<CollData> collData;
+
+	for (auto& normalEnemy : m_pEnemyNormal)
+	{
+		collData.push_back(normalEnemy->GetCollDatas());
+	}
+
+	return collData;
+}
+
 // ノーマルエネミーの数を返します
 int EnemyManager::GetNormalNum()
 {

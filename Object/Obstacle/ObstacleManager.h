@@ -23,6 +23,8 @@ public:
 
 	// 二次元配列を一次元配列にしてを返す
 	std::vector<CollData> GetCollDatas();
+	// 敵の判定用データを受け取る
+	void SetCollEnemyDatas(std::vector<CollData> collEnemyData);
 
 	// 配列の数を渡す
 	int GetNormalNum();

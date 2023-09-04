@@ -17,6 +17,9 @@ public:
 	void Draw();
 	void DrawUI();
 
+	// 当たり判定用データ
+	virtual CollData GetCollDatas();
+
 private:
 	// 判定処理
 	void CheckColl();
@@ -56,5 +59,8 @@ private:
 
 	// 判定用
 	Collision3D* m_pColl;
+	// ダメ―ジをどんだけくらうか
+	float m_tempDamage;
+
 };
 

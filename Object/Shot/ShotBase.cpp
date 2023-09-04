@@ -8,7 +8,8 @@ namespace
 }
 
 ShotBase::ShotBase(VECTOR pos):
-	m_pos(pos)
+	m_pos(pos),
+	m_isEnd(false)
 {
 //	SoundFunctions::Play(SoundFunctions::SoundIdShot);
 	m_collData.datage = 0;
@@ -52,4 +53,10 @@ void ShotBase::VecCalculation(VECTOR tagetPos,float speed)
 	// ‹——£‚ð‘ª‚é
 	m_nowPosToNextPosX = static_cast<float>(sqrt(pow(m_pos.x - tagetPos.x, 2) + pow(m_pos.x - tagetPos.x, 2)));
 	m_nowPosToNextPosZ = static_cast<float>(sqrt(pow(m_pos.z - tagetPos.z, 2) + pow(m_pos.z - tagetPos.z, 2)));
+
+	if (m_nowPosToNextPosX <= 4 &&
+		m_nowPosToNextPosZ <= 4)
+	{
+		m_isEnd = true;
+	}
 }

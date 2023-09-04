@@ -309,15 +309,26 @@ void EnemyNormal::DrawUI()
 	}
 }
 
+// 当たり判定用データ
+CollData EnemyNormal::GetCollDatas()
+{
+	m_collData.datage = 0.0f;
+	m_collData.pos = m_pos;
+	m_collData.radius = 16.0f;
+
+	return m_collData;
+}
+
 void EnemyNormal::CheckColl()
 {
 	// ショットの数分
-	for (int i = 0; i < m_collData.size(); i++)
+	for (int i = 0; i < m_collObstacleShotData.size(); i++)
 	{
 		// 判定を見る
-		if (m_pColl->UpdateCheck(m_pos, m_collData[i].pos,16.0f, m_collData[i].radius))
+		if (m_pColl->UpdateCheck(m_pos, m_collObstacleShotData[i].pos,16.0f, m_collObstacleShotData[i].radius))
 		{
 			m_isHit = true;
+			m_tempDamage = m_collObstacleShotData[i].datage;
 		}
 	}
 }
@@ -331,7 +342,7 @@ void EnemyNormal::CheckHp()
 		if (m_isHit)
 		{
 			m_isTempHit = true;
-			m_hp -= 3;
+			m_hp -= m_tempDamage;
 		}
 	}
 	else

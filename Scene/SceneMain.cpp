@@ -131,6 +131,7 @@ SceneBase* SceneMain::Update()
 	
 	// 設置したオブジェクトのCollDataをエネミーに渡す
 	m_pEnemy->SetObjCollData(m_pObstacle->GetCollDatas());
+	m_pObstacle->SetCollEnemyDatas(m_pEnemy->GetCollData());
 
 	// 演出関係
 	m_pCamera->SeTrackingData(m_pPlayer->GetTracingData());

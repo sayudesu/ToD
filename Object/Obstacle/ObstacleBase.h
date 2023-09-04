@@ -21,6 +21,8 @@ public:
 	virtual void SetTarGetPos(VECTOR pos) { m_targetPos = pos; }
 	// 当たり判定データ
 	virtual std::vector<CollData> GetCollDatas() { return m_collData; }
+	// エネミーの判定用データ
+	virtual void SetCollEnemyDatas(std::vector<CollData> collEnemyData) { m_collEnemyData = collEnemyData; }
 	// ショットの数
 	virtual int SetShotNum() { return 0; }
 
@@ -31,4 +33,5 @@ protected:
 	VECTOR m_targetPos = VGet(0.0f, 0.0f, 0.0f);
 	// 当たり判定データ
 	std::vector<CollData> m_collData;
+	std::vector<CollData> m_collEnemyData;
 };

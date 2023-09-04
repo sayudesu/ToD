@@ -83,6 +83,14 @@ std::vector<CollData> ObstacleManager::GetCollDatas()
 	return tempArray;
 }
 
+void ObstacleManager::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
+{
+	for (auto& normalObstacle : m_pNormalObstacle)
+	{
+		normalObstacle->SetCollEnemyDatas(collEnemyData);
+	}
+}
+
 int ObstacleManager::GetNormalNum()
 {
 	return static_cast<int>(m_pNormalObstacle.size());

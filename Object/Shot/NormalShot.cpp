@@ -21,7 +21,6 @@ void NormalShot::Init(VECTOR taegetPos,VECTOR scale, VECTOR rotation, float spee
 	assert(m_hShot != -1);
 	MV1SetScale(m_hShot, scale);
 	MV1SetRotationXYZ(m_hShot, VGet(rotation.x * DX_PI_F / 180.0f, rotation.y * DX_PI_F / 180.0f, rotation.z * DX_PI_F / 180.0f));
-//	MV1SetRotationXYZ(m_hShot,VGet(0, 180.0f * DX_PI_F / 180.0f, 0));
 	m_tagetPos = taegetPos;
 	m_speed = speed;
 }
@@ -34,7 +33,7 @@ void NormalShot::End()
 
 void NormalShot::Update()
 {
-	if (!m_isScreenOut)
+	if (!m_isScreenOut && !m_isEnd)
 	{
 		VecCalculation(m_tagetPos,m_speed);
 		MV1SetPosition(m_hShot, m_pos);
@@ -43,10 +42,10 @@ void NormalShot::Update()
 
 void NormalShot::Draw()
 {
-	if (!IsGetEnd())
+	if (!IsGetEnd() && !m_isEnd)
 	{
 		MV1DrawModel(m_hShot);
-		DrawSphere3D(m_pos, 16.0f, 16.0f, 0xffff00, 0xffff00, true);
+		DrawSphere3D(m_pos, 16.0f, 4.0f, 0xffff00, 0xffff00, false);
 	}
 }
 

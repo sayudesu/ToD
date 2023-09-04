@@ -22,6 +22,11 @@ public:
 
 	// 判定データ
 	std::vector<CollData> GetCollDatas();
+	// エネミーの判定用データ
+	void SetCollEnemyDatas(std::vector<CollData> collEnemyData);
+	// 誰を狙うか
+	void TargetPos();
+
 	int SetShotNum();
 
 	void SetTarGetPos(VECTOR pos);
@@ -33,6 +38,8 @@ private:
 	int m_countShotNum;
 	// ショットクラス
 	std::vector<std::shared_ptr<ShotBase>>m_pShot;
+	// ショットを撃つかどうか
+	bool m_isShot;
 	// エフェクア使用クラス
 	EffekseerDrawer* m_pEffect;
 	// メンバ関数ポインタ
@@ -43,5 +50,9 @@ private:
 	int m_shootFrameCount;
 	// オブジェクトカラー
 	int m_objColor;
+	// 狙う敵を変更するかどうか
+	bool m_isTargetChange;
+	// 敵の番号
+	int m_tempTargetNo;
 };
 

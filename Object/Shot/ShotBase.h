@@ -46,5 +46,7 @@ protected:
 	float m_speed;
 	// ”¼Œa
 	float m_radius;
+	// –Ú“I’n‚É“’B‚·‚é‚Æˆ—‚ğ‚µ‚È‚¢
+	bool m_isEnd;
 };
 

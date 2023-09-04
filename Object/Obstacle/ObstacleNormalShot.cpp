@@ -12,7 +12,7 @@ namespace
 	// ショット最初打ち出すまでのフレームむカウント
 	constexpr int kShotFirstFrameMax = 30;
 	// ショット再放出するまでのフレーム
-	constexpr int kShootFrameMax = 30;
+	constexpr int kShootFrameMax = 8;
 	// オブジェクトカラー(緑)
 	constexpr int kObjColor1 = 0x00ff00;
 	// オブジェクトカラー(黄色)
@@ -31,10 +31,18 @@ ObstacleNormalShot::ObstacleNormalShot(VECTOR pos):
 	m_hCannonBaes(-1),
 	m_shotFirstDelayFrameCount(0),
 	m_countShotNum(-1),
+	m_isShot(false),
 	m_shootFrameCount(0),
-	m_objColor(kObjColor1)
+	m_objColor(kObjColor1),
+	m_isTargetChange(false),
+	m_tempTargetNo(-1)
 {
 	m_pos = pos;
+
+	m_isTargetChange = true;
+
+	m_targetPos = VGet(1000, 0, 300);
+
 	// 設置用関数に移動
 	m_updateFunc = &ObstacleNormalShot::UpdateSetting;
 
@@ -115,7 +123,7 @@ void ObstacleNormalShot::UpdateShot()
 {
 	m_shootFrameCount++;
 	// ショットを出すスピート
-	if (m_shootFrameCount > kShootFrameMax)
+	if (m_shootFrameCount > kShootFrameMax && (m_isShot))
 	{
 		m_countShotNum++;
 		m_pShot.push_back(std::make_shared<NormalShot>(m_countShotNum,m_pos));
@@ -132,12 +140,15 @@ void ObstacleNormalShot::UpdateShot()
 	VECTOR dir2 = VSub(m_targetPos, m_pos);
 	const float angle2 = atan2f(dir2.x, dir2.z) + -90.0f * DX_PI_F / 180.0f;
 	MV1SetRotationXYZ(m_hCannon, VGet(0.0f, angle2, 0.0f));
+
+	TargetPos();
 }
 
 void ObstacleNormalShot::Draw()
 {
-	// オブジェクト描画
-	DrawSphere3D(m_pos, 16, 16, m_objColor, m_objColor, true);
+#if _DEBUG
+	DrawSphere3D(m_pos, 300, 4, m_objColor, m_objColor, false);
+#endif
 
 	for (auto& shot : m_pShot)
 	{
@@ -155,6 +166,7 @@ void ObstacleNormalShot::Draw()
 	// 3D描画モデル
 	MV1DrawModel(m_hCannonBaes);
 	MV1DrawModel(m_hCannon);
+	
 }
 
 // 判定データを渡す
@@ -171,6 +183,59 @@ std::vector<CollData> ObstacleNormalShot::GetCollDatas()
 	}
 
 	return collData;
+}
+
+// エネミーの判定用データ
+void ObstacleNormalShot::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
+{
+	m_collEnemyData = collEnemyData;
+}
+
+void ObstacleNormalShot::TargetPos()
+{
+	if (m_isTargetChange)
+	{
+		// 敵の数分
+		for (int i = 0; i < m_collEnemyData.size(); i++)
+		{
+			// 近い敵を見る
+			const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[i].pos);
+			const float length = sqrtf((toPlayer.x * toPlayer.x) + (toPlayer.y * toPlayer.y) + (toPlayer.z * toPlayer.z));
+			if (length < 300)
+			{
+				// ターゲット指定
+				m_targetPos = m_collEnemyData[i].pos;
+				m_tempTargetNo = i;
+				m_isTargetChange = false;
+
+				// ショットを撃つ
+				m_isShot = true;
+			}
+			else
+			{
+				// ショットを撃たない
+				m_isShot = false;
+			}
+		}
+	}
+	else
+	{
+		const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[m_tempTargetNo].pos);
+		const float length = sqrtf((toPlayer.x * toPlayer.x) + (toPlayer.y * toPlayer.y) + (toPlayer.z * toPlayer.z));
+		if (length < 300)
+		{
+			// ターゲット指定
+			m_targetPos = m_collEnemyData[m_tempTargetNo].pos;
+			// ショットを撃つ
+			m_isShot = true;
+		}
+		else
+		{
+			m_isTargetChange = true;
+			// ショットを撃たない
+			m_isShot = false;
+		}
+	}
 }
 
 int ObstacleNormalShot::SetShotNum()
