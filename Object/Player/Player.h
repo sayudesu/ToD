@@ -46,14 +46,15 @@ private:
 	// オブジェクトのコスト関連
 	void ObjectCost();
 private:
-	// マウスの位置
+	// プレイヤーの位置
 	VECTOR m_pos;
-
+	// 特殊攻撃指定場所
 	VECTOR m_specialAttackPos;
+	// ターゲット位置
 	VECTOR m_targetPos;
+	// 特殊攻撃をおこなったかどうか
 	bool m_isSpecialAttack;
 	// 画面から3D空間に変換用
-	VECTOR m_screenToWorldPos;
 	VECTOR m_screenPos;
 	VECTOR m_start3DPos;
 	VECTOR m_end3DPos;

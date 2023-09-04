@@ -21,8 +21,8 @@ namespace
 Player::Player() :
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
 	m_specialAttackPos(VGet(0.0f, 0.0f, 0.0f)),
+	m_screenPos(VGet(0.0f, 0.0f, 0.0f)),
 	m_isSpecialAttack(false),
-	m_screenToWorldPos(VGet(0.0f, 0.0f, 0.0f)),
 	m_isResultObject(false),
 	m_isSetObject(false),
 	m_hCostBg(0),
@@ -60,6 +60,9 @@ void Player::End()
 
 void Player::Update()
 {	
+	// 3D座標から2D座標に変換
+	m_screenPos = ConvWorldPosToScreenPos(m_pos);
+
 	// オブジェクトメニューを開いている場合
 	if (!m_pObjMenu->IsSetMenu() && (m_pObjMenu->SelectNo() == -1))
 	{
@@ -118,9 +121,7 @@ void Player::Draw()
 
 void Player::DrawUI()
 {
-	VECTOR a = VGet(m_pos.x + 50.0f, m_pos.y, m_pos.z);
-	DrawLine3D(m_pos, a, 0xffffff);
-
+	// コスト描画背景
 	DrawRotaGraph(500, 100, 0.5f, DX_PI_F * 180.0f, m_hCostBg, true);
 
 	// オブジェクトコスト描画
@@ -128,7 +129,9 @@ void Player::DrawUI()
 
 	// オブジェクト選択
 	DrawFormatString(400, Game::kScreenHeight - 100, 0xffffff, kObjSelectString, m_objectCostNum);
-
+	
+	// あとで修正
+	// アイコンロード
 	int m_hIcon[8];
 	m_hIcon[0] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon0);
 	m_hIcon[1] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon1);
@@ -139,6 +142,7 @@ void Player::DrawUI()
 	m_hIcon[6] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon6);
 	m_hIcon[7] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon7);
 
+	// アイコン描画
 	DrawRotaGraph(
 		100,
 		100,
@@ -146,7 +150,18 @@ void Player::DrawUI()
 		DX_PI_F * 180.0f,
 		m_hIcon[SaveDataFunctions::GetIconData().Icon],
 		true);
+
+	// 特殊攻撃のメニュー
 	m_pObjMenu->Draw();
+
+	static int handle = LoadGraph("Data/Image/ObjSelect.png");
+	DrawRotaGraph(
+		m_screenPos.x,
+		m_screenPos.y,
+		1.0f,
+		DX_PI_F * 180.0f,
+		handle,
+		true);
 }
 
 bool Player::isGetGameStop()
