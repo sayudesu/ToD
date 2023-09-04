@@ -195,5 +195,14 @@ void SceneMain::Draw()
 	// ‰‰oUI
 	m_catIn->Draw();
 
+	static int handle = LoadGraph("Data/Image/Set.png");
+
+	DrawRotaGraph(
+		m_pPlayer->SetPos().x, m_pPlayer->SetPos().z,
+		0.2f,
+		DX_PI_F * 180.0f,
+		handle,
+		true);
+
 	SceneBase::DrawSliderDoor();
 }

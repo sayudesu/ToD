@@ -12,7 +12,7 @@ namespace
 	// ショット最初打ち出すまでのフレームむカウント
 	constexpr int kShotFirstFrameMax = 30;
 	// ショット再放出するまでのフレーム
-	constexpr int kShootFrameMax = 8;
+	constexpr int kShootFrameMax = 4;
 	// オブジェクトカラー(緑)
 	constexpr int kObjColor1 = 0x00ff00;
 	// オブジェクトカラー(黄色)
@@ -127,7 +127,7 @@ void ObstacleNormalShot::UpdateShot()
 	{
 		m_countShotNum++;
 		m_pShot.push_back(std::make_shared<NormalShot>(m_countShotNum,m_pos));
-		m_pShot[m_countShotNum]->Init(m_targetPos,VGet(1.0f, 1.0f, 1.0f), VGet(0.0f, 180.0f, 0.0f),10.0f);
+		m_pShot[m_countShotNum]->Init(m_targetPos,VGet(1.0f, 1.0f, 1.0f), VGet(0.0f, 180.0f, 0.0f),30.0f);
 		m_shootFrameCount = 0;
 	}
 
@@ -146,7 +146,8 @@ void ObstacleNormalShot::UpdateShot()
 
 void ObstacleNormalShot::Draw()
 {
-#if _DEBUG
+	// 攻撃範囲
+#if false
 	DrawSphere3D(m_pos, 300, 4, m_objColor, m_objColor, false);
 #endif
 
@@ -193,11 +194,19 @@ void ObstacleNormalShot::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
 
 void ObstacleNormalShot::TargetPos()
 {
+	// ここは後できれいにします。
 	if (m_isTargetChange)
 	{
 		// 敵の数分
 		for (int i = 0; i < m_collEnemyData.size(); i++)
 		{
+
+			if (!m_collEnemyData[i].isHit)
+			{
+				m_targetPos = VGet(1000,0, 300);
+				continue;
+			}
+
 			// 近い敵を見る
 			const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[i].pos);
 			const float length = sqrtf((toPlayer.x * toPlayer.x) + (toPlayer.y * toPlayer.y) + (toPlayer.z * toPlayer.z));
@@ -220,6 +229,7 @@ void ObstacleNormalShot::TargetPos()
 	}
 	else
 	{
+
 		const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[m_tempTargetNo].pos);
 		const float length = sqrtf((toPlayer.x * toPlayer.x) + (toPlayer.y * toPlayer.y) + (toPlayer.z * toPlayer.z));
 		if (length < 300)
@@ -234,6 +244,18 @@ void ObstacleNormalShot::TargetPos()
 			m_isTargetChange = true;
 			// ショットを撃たない
 			m_isShot = false;
+		}
+
+		// 判定がなしになったら
+		if (!m_collEnemyData[m_tempTargetNo].isHit)
+		{
+			// 最終ターゲットを指定
+			m_targetPos = m_collEnemyData[m_tempTargetNo].pos;
+			// ターゲットを再指定
+			m_isTargetChange = true;
+			// ショットを撃たない
+			m_isShot = false;
+
 		}
 	}
 }

@@ -29,7 +29,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// エラーが起きたら直ちに終了
 	if (DxLib_Init() == -1)		
 	{
-		return -1;			
+		return -1;
 	}
 	// Effekseerを初期化する。
 	// 引数には画面に表示する最大パーティクル数を設定する。
@@ -118,8 +118,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	m_shader = LoadPixelShader("Shader/SamplePS.pso");
 	assert(m_shader != -1);
 
-	int m_hScreen;
-	m_hScreen = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
+	int m_hScreen = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
 
 	SetUseTextureToShader(0, m_hScreen);
 
@@ -149,7 +148,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		}
 		SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), level);
 
-#if false
+#if true
 		SetDrawScreen(DX_SCREEN_BACK);
 		DrawPrimitive2DToShader(Vert, 6, DX_PRIMTYPE_TRIANGLELIST);
 		SetDrawScreen(m_hScreen);

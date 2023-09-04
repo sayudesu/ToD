@@ -48,5 +48,9 @@ protected:
 	float m_radius;
 	// –Ú“I’n‚É“’B‚·‚é‚Æˆ—‚ğ‚µ‚È‚¢
 	bool m_isEnd;
+
+
+	// test
+	bool m_isTest = true;
 };
 

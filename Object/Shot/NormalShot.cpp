@@ -51,8 +51,19 @@ void NormalShot::Draw()
 
 CollData NormalShot::GetCollData()
 {
-	m_collData.datage = 30.0f;
-	m_collData.pos = m_pos;
-	m_collData.radius = 16.0f;
+	if (!m_isEnd)
+	{
+		m_collData.datage = 30.0f;
+		m_collData.pos = m_pos;
+		m_collData.radius = 16.0f;
+		m_collData.isHit = true;
+	}
+	else
+	{
+		m_collData.datage = 0.0f;
+		m_collData.pos = m_pos;
+		m_collData.radius = 16.0f;
+		m_collData.isHit = false;
+	}
 	return m_collData;
 }

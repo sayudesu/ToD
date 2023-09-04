@@ -34,12 +34,12 @@ void ShotBase::VecCalculation(VECTOR tagetPos,float speed)
 {
 	//**** ’Ç]‚ÌAI ****//
 	// Œü‚«‚ðŽZo
-	m_dir = VSub(tagetPos, m_pos);
+	if(m_isTest)m_dir = VSub(tagetPos, m_pos);
+	m_isTest = false;
 	// ƒvƒŒƒCƒ„[‚©‚çƒGƒlƒ~[‚Ü‚Å‚ÌŠp“x‚ð‹‚ß‚é
 	const float angle = atan2(m_dir.y, m_dir.x);
 	// Œ»Ý“G‚ªŒü‚¢‚Ä‚¢‚é•ûŒü‚ÌƒxƒNƒgƒ‹‚ð¶¬‚·‚é
 	const MATRIX enemyRotMtx = MGetRotY(angle);
-	const VECTOR dir = VTransform(VGet(0, 0, 0), enemyRotMtx);
 	// ŽÎ‚ß‚É‚È‚Á‚½‚Æ‚«((1, 1, 0)‚È‚Ç)‚É‚¢‚Á‚½‚ñ’·‚³‚P‚É–ß‚·(³‹K‰»)
 	if (VSquareSize(m_dir) > 0)
 	{
@@ -54,8 +54,8 @@ void ShotBase::VecCalculation(VECTOR tagetPos,float speed)
 	m_nowPosToNextPosX = static_cast<float>(sqrt(pow(m_pos.x - tagetPos.x, 2) + pow(m_pos.x - tagetPos.x, 2)));
 	m_nowPosToNextPosZ = static_cast<float>(sqrt(pow(m_pos.z - tagetPos.z, 2) + pow(m_pos.z - tagetPos.z, 2)));
 
-	if (m_nowPosToNextPosX <= 4 &&
-		m_nowPosToNextPosZ <= 4)
+	if (m_nowPosToNextPosX <= 4.0f &&
+		m_nowPosToNextPosZ <= 4.0f)
 	{
 		m_isEnd = true;
 	}

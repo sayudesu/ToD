@@ -10,4 +10,6 @@ struct CollData
 	float radius;
 	// ƒ_ƒ[ƒW
 	float datage;
+	// ”»’è‚Í‚İ‚é‚©‚Ç‚¤‚©
+	bool isHit;
 };
