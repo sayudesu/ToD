@@ -97,23 +97,16 @@ void SceneMain::End()
 
 SceneBase* SceneMain::Update()
 {
-
-	m_pObstacle->SetTarGetPos(m_pEnemy->SetNormalPos(m_pEnemy->SetNormalNum()));
-
 	// プレイヤー操作
 	m_pPlayer->Update();
 	// プレイヤーの設置するオブジェクト
 	m_pObstacle->Update();
 	// カメラ
 	m_pCamera->Update();
-	//m_pCamera->GetMouseScreenPos(m_pPlayer->SetPos());
-	//m_pCamera->GetMouseWorldPos(m_pPlayer->SetMouseWorldPos());
 	// 敵
 	m_pEnemy->Update();
 	// マップ
 	m_pMap->Update();	
-	// 
-	m_pCamera->SetTargetPos(m_pPlayer->SetPos());
 
 	// 敵を生成(デバッグ用)
 	if (Pad::isTrigger(PAD_INPUT_2))
@@ -122,22 +115,25 @@ SceneBase* SceneMain::Update()
 		m_pEnemy->SetMapChip(m_pMap->GetMapChip());
 	}
 	// オブジェクトを生成
-	if (m_pPlayer->SetMouseLeft())
+	if (m_pPlayer->GetObjCreate())
 	{
 		m_pObstacle->Create(m_pPlayer->SetPos());
 	}
 
-	// 判定情報
-	
+	// 判定情報	
 	// 設置したオブジェクトのCollDataをエネミーに渡す
 	m_pEnemy->SetObjCollData(m_pObstacle->GetCollDatas());
 	m_pObstacle->SetCollEnemyDatas(m_pEnemy->GetCollData());
 
-	// 演出関係
-	m_pCamera->SeTrackingData(m_pPlayer->GetTracingData());
 
+	// 演出関係
+	// 演出の為にカメラのターゲット位置変更
+	m_pCamera->SeTrackingData(m_pPlayer->GetTracingData());
+	// カットインが終わっているかどうかの判定を渡す
 	m_pPlayer->IsSetShot(m_catIn->IsGetEnd());
+	// カットインを続てけしない為に
 	m_catIn->IsSetEndReset();
+	// 特殊攻撃をするかどうか
 	if (m_pPlayer->isSpecialAttack())
 	{
 		// 演出開始
@@ -157,7 +153,6 @@ SceneBase* SceneMain::Update()
 		m_isChangeScene = true;
 		m_isSliderOpen = true;
 	}
-
 	if (m_isChangeScene)
 	{
 		if (SceneBase::UpdateSliderClose())

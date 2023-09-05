@@ -46,5 +46,5 @@ float4 main(float2 uv : TEXCOORD0) : COLOR0
 
     float4 texc = tex2D(sampler0, uv1);
     
-    return texc;
+   return texc;
 }

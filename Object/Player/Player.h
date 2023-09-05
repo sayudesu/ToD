@@ -22,11 +22,9 @@ public:
 	void Draw();
 	void DrawUI();
 
-	// マウスの位置を返す
-//	VECTOR SetMouseWorldPos() { return m_screenToWorldPos; }
 	VECTOR SetPos() { return m_pos; }
 	// マウスが押されているかどうか
-	bool SetMouseLeft() { return m_isResultObject; }
+	bool GetObjCreate() { return m_isResultObject; }
 
 	// ゲームの進行を止めるかどうか
 	bool isGetGameStop();
@@ -62,7 +60,6 @@ private:
 	// 位置を記録します
 	std::vector<VECTOR>m_posHistory;
 
-	// マウスの左クリックが押されているかどうか
 	// false : 押していない true : 押している
 	bool m_isResultObject;
 	// 設置出来るかの最終確認

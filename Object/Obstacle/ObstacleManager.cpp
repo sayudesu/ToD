@@ -42,14 +42,6 @@ void ObstacleManager::Draw()
 	}
 }
 
-void ObstacleManager::SetTarGetPos(VECTOR pos)
-{
-	for (auto& nomalObstacle : m_pNormalObstacle)
-	{
-		nomalObstacle->SetTarGetPos(pos);
-	}
-}
-
 VECTOR ObstacleManager::GetPos(int num)
 {
 	return m_pNormalObstacle[num]->GetPos();

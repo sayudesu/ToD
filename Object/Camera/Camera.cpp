@@ -77,16 +77,34 @@ VECTOR Camera::SetPos() const
 	return m_pos;
 }
 
-void Camera::SetTargetPos(VECTOR targetPos)
-{
-	VECTOR tempPos = targetPos;
-
-	//if (targetPos.z > m_targetPos.z)m_targetPos.z += 10;
-	//if (targetPos.z < m_targetPos.z)m_targetPos.z -= 10;
-}
-
 void Camera::SeTrackingData(Tracking data)
 {
 	trackingData.pos = data.pos;
 	trackingData.tracking = data.tracking;
+
+	static int handle = LoadGraph("Data/Image/HpBg.png");
+	static int handle2 = LoadGraph("Data/Image/Hp.png");
+	static int handle3 = LoadGraph("Data/Image/Icon2.png");
+	static int hp2 = 0;
+	static float sizeX1;
+	static float sizeY1;
+
+	hp2--;
+
+	GetGraphSizeF(handle3, &sizeX1, &sizeY1);
+
+	sizeX1 += sizeX1;
+
+	DrawModiBillboard3D(
+		VGet(m_pos.x, m_pos.y, m_pos.z),
+		0.0f, 0.0f, sizeX1, 0.0f,
+		sizeX1, -sizeY1, 0.0f, -sizeY1,
+		handle, false);
+
+	DrawModiBillboard3D(
+		VGet(100.0f, 100.0f, 100.0f),
+		0.0f, 0.0f, sizeX1, 0.0f,
+		sizeX1, -sizeY1, 0.0f, -sizeY1,
+		handle, false);
+
 }

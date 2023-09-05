@@ -12,7 +12,10 @@ namespace
 	// ショット最初打ち出すまでのフレームむカウント
 	constexpr int kShotFirstFrameMax = 30;
 	// ショット再放出するまでのフレーム
-	constexpr int kShootFrameMax = 4;
+	constexpr int kShootFrameMax = 30;
+	// ショットの速度
+	constexpr float kShootSpeed = 10.0f;
+
 	// オブジェクトカラー(緑)
 	constexpr int kObjColor1 = 0x00ff00;
 	// オブジェクトカラー(黄色)
@@ -127,7 +130,7 @@ void ObstacleNormalShot::UpdateShot()
 	{
 		m_countShotNum++;
 		m_pShot.push_back(std::make_shared<NormalShot>(m_countShotNum,m_pos));
-		m_pShot[m_countShotNum]->Init(m_targetPos,VGet(1.0f, 1.0f, 1.0f), VGet(0.0f, 180.0f, 0.0f),30.0f);
+		m_pShot[m_countShotNum]->Init(m_targetPos,VGet(1.0f, 1.0f, 1.0f), VGet(0.0f, 180.0f, 0.0f), kShootSpeed);
 		m_shootFrameCount = 0;
 	}
 

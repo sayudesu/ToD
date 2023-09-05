@@ -329,6 +329,7 @@ CollData EnemyNormal::GetCollDatas()
 
 void EnemyNormal::CheckColl()
 {
+
 	// ショットの数分
 	for (int i = 0; i < m_collObstacleShotData.size(); i++)
 	{
@@ -343,6 +344,7 @@ void EnemyNormal::CheckColl()
 
 void EnemyNormal::CheckHp()
 {
+	static int hitCount = 0;
 	// 後で修正する
 	// 体力の処理
 	if (!m_isTempHit)
@@ -351,6 +353,8 @@ void EnemyNormal::CheckHp()
 		{
 			m_isTempHit = true;
 			m_hp -= m_tempDamage;
+			hitCount++;
+			printfDx("%d\n", hitCount);
 		}
 	}
 	else

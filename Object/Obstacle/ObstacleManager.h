@@ -17,8 +17,6 @@ public:
 	void Update();
 	void Draw();
 
-	void SetTarGetPos(VECTOR pos);
-
 	VECTOR GetPos(int num);
 
 	// “ñŽŸŒ³”z—ñ‚ðˆêŽŸŒ³”z—ñ‚É‚µ‚Ä‚ð•Ô‚·

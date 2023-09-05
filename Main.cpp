@@ -148,7 +148,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		}
 		SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), level);
 
-#if true
+#if false	
 		SetDrawScreen(DX_SCREEN_BACK);
 		DrawPrimitive2DToShader(Vert, 6, DX_PRIMTYPE_TRIANGLELIST);
 		SetDrawScreen(m_hScreen);

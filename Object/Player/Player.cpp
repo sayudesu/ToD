@@ -60,14 +60,13 @@ void Player::End()
 
 void Player::Update()
 {	
-	// 3D座標から2D座標に変換
-	m_screenPos = ConvWorldPosToScreenPos(m_pos);
-
 	// オブジェクトメニューを開いている場合
 	if (!m_pObjMenu->IsSetMenu() && (m_pObjMenu->SelectNo() == -1))
 	{
 		// 操作の制御
 		UpdateControl();
+		// 3D座標から2D座標に変換
+		m_screenPos = ConvWorldPosToScreenPos(m_pos);
 		// プレイヤーの位置を渡す
 		m_specialAttackPos = m_pos;
 	}
@@ -117,6 +116,8 @@ void Player::Draw()
 	{
 		m_pShot->Draw();
 	}
+
+
 }
 
 void Player::DrawUI()
@@ -153,15 +154,6 @@ void Player::DrawUI()
 
 	// 特殊攻撃のメニュー
 	m_pObjMenu->Draw();
-
-	static int handle = LoadGraph("Data/Image/ObjSelect.png");
-	DrawRotaGraph(
-		m_screenPos.x,
-		m_screenPos.y,
-		1.0f,
-		DX_PI_F * 180.0f,
-		handle,
-		true);
 }
 
 bool Player::isGetGameStop()

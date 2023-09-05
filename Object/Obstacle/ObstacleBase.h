@@ -17,8 +17,6 @@ public:
 
 	// 障害物の位置
 	virtual VECTOR GetPos() const { return m_pos; }
-	// ターゲットの位置
-	virtual void SetTarGetPos(VECTOR pos) { m_targetPos = pos; }
 	// 当たり判定データ
 	virtual std::vector<CollData> GetCollDatas() { return m_collData; }
 	// エネミーの判定用データ

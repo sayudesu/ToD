@@ -53,7 +53,7 @@ CollData NormalShot::GetCollData()
 {
 	if (!m_isEnd)
 	{
-		m_collData.datage = 30.0f;
+		m_collData.datage = 3.0f;
 		m_collData.pos = m_pos;
 		m_collData.radius = 16.0f;
 		m_collData.isHit = true;
