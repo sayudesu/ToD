@@ -99,12 +99,12 @@ void Camera::SeTrackingData(Tracking data)
 		VGet(m_pos.x, m_pos.y, m_pos.z),
 		0.0f, 0.0f, sizeX1, 0.0f,
 		sizeX1, -sizeY1, 0.0f, -sizeY1,
-		handle, false);
+		handle, true);
 
 	DrawModiBillboard3D(
 		VGet(100.0f, 100.0f, 100.0f),
 		0.0f, 0.0f, sizeX1, 0.0f,
 		sizeX1, -sizeY1, 0.0f, -sizeY1,
-		handle, false);
+		handle, true);
 
 }
