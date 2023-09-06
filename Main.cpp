@@ -23,7 +23,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	SetOutApplicationLogValidFlag(Game::kLogText);
 
 	// 使用する Direct3D のバージョンを 9EX に設定
-	   SetUseDirect3DVersion(DX_DIRECT3D_9EX);
+	SetUseDirect3DVersion(DX_DIRECT3D_9EX);
 
 	// ＤＸライブラリ初期化処理
 	// エラーが起きたら直ちに終了
@@ -50,7 +50,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// DXライブラリのデバイスロストした時のコールバックを設定する。
 	// ウインドウとフルスクリーンの切り替えが発生する場合は必ず実行する。
 	// ただし、DirectX11を使用する場合は実行する必要はない。
-//	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
 
 	// 3D関連の設定
 	// Zバッファを有効にする。

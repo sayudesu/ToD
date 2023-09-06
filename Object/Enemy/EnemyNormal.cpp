@@ -28,6 +28,7 @@ namespace
 EnemyNormal::EnemyNormal():
 	m_hMouse(0),
 	moveCount(0),
+	m_isEndPos(false),
 	m_dir(VGet(0, 0, 0)),
 	m_targetPos(VGet(0, 0, 0)),
 	m_screenPos(VGet(0, 0, 0)),
@@ -70,43 +71,47 @@ void EnemyNormal::End()
 
 void EnemyNormal::Update()
 {
-	MV1SetPosition(m_hMouse, m_pos);
-	// どこに移動するかを考える
-	ChangeNextPos(m_isNextMove);
 
-	// 移動
-	// 向きを算出
-	m_dir = VSub(m_targetPos, m_pos);
-	// プレイヤーからエネミーまでの角度を求める
-	const float angle = atan2(m_dir.y, m_dir.x);
-	// 現在向いている方向のベクトルを生成する
-	const MATRIX enemyRotMtx = MGetRotY(angle);
-	const VECTOR dir = VTransform(VGet(0, 0, 0), enemyRotMtx);
-	// 斜めになったとき((1, 1, 0)など)にいったん長さ１に戻す(正規化)
-	if (VSquareSize(m_dir) > 0)
+	if (!m_isEndPos)
 	{
-		m_dir = VNorm(m_dir);
+		MV1SetPosition(m_hMouse, m_pos);
+		// どこに移動するかを考える
+		ChangeNextPos(m_isNextMove);
+
+		// 移動
+		// 向きを算出
+		m_dir = VSub(m_targetPos, m_pos);
+		// プレイヤーからエネミーまでの角度を求める
+		const float angle = atan2(m_dir.y, m_dir.x);
+		// 現在向いている方向のベクトルを生成する
+		const MATRIX enemyRotMtx = MGetRotY(angle);
+		const VECTOR dir = VTransform(VGet(0, 0, 0), enemyRotMtx);
+		// 斜めになったとき((1, 1, 0)など)にいったん長さ１に戻す(正規化)
+		if (VSquareSize(m_dir) > 0)
+		{
+			m_dir = VNorm(m_dir);
+		}
+		// 速度を求める
+		const VECTOR velecity = VScale(m_dir, kSpeed);
+		// 位置を変える
+		m_pos = VAdd(m_pos, velecity);
+
+		// 距離を測る
+		const float nowPosToNextPosX = static_cast<int>(sqrt(pow(m_pos.x - m_targetPos.x, 2) + pow(m_pos.x - m_targetPos.x, 2)));
+		const float nowPosToNextPosZ = static_cast<int>(sqrt(pow(m_pos.z - m_targetPos.z, 2) + pow(m_pos.z - m_targetPos.z, 2)));
+
+		// 移動までの距離が短いと
+		if (nowPosToNextPosX < kRange &&
+			nowPosToNextPosZ < kRange)
+		{
+			m_isNextMove = true;
+		}
+
+		// モデルの回転行列を計算して設定
+		VECTOR dir2 = VSub(m_targetPos, m_pos);
+		const float angle2 = atan2f(m_dir.x, m_dir.z) + -90.0f * DX_PI_F / 180.0f;
+		MV1SetRotationXYZ(m_hMouse, VGet(0.0f, angle2, 0.0f));
 	}
-	// 速度を求める
-	const VECTOR velecity = VScale(m_dir, kSpeed);
-	// 位置を変える
-	m_pos = VAdd(m_pos, velecity);
-
-	// 距離を測る
-	const float nowPosToNextPosX = static_cast<int>(sqrt(pow(m_pos.x - m_targetPos.x, 2) + pow(m_pos.x - m_targetPos.x, 2)));
-	const float nowPosToNextPosZ = static_cast<int>(sqrt(pow(m_pos.z - m_targetPos.z, 2) + pow(m_pos.z - m_targetPos.z, 2)));
-
-	// 移動までの距離が短いと
-	if (nowPosToNextPosX < kRange &&
-		nowPosToNextPosZ < kRange)
-	{
-		m_isNextMove = true;
-	}
-
-	// モデルの回転行列を計算して設定
-	VECTOR dir2 = VSub(m_targetPos, m_pos);
-	const float angle2 = atan2f(m_dir.x, m_dir.z) + -90.0f * DX_PI_F / 180.0f;
-	MV1SetRotationXYZ(m_hMouse, VGet(0.0f, angle2, 0.0f));
 
 	CheckColl();
 
@@ -196,7 +201,7 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 					break;
 				}
 				// [現在の列 + 現在の列 * チップ最大列]
-				if ((m_mapChip[tempX + tempZ * kMapChipMaxX] == kEnemyRoad))
+				else if ((m_mapChip[tempX + tempZ * kMapChipMaxX] == kEnemyRoad))
 				{
 					// 動くことを知らせる
 					isMove = true;
@@ -277,6 +282,10 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 				moveDirZ.pop_back();
 			}
 		}
+		else
+		{
+			m_isEndPos = true;
+		}
 	}
 }
 
@@ -344,7 +353,7 @@ void EnemyNormal::CheckColl()
 
 void EnemyNormal::CheckHp()
 {
-	static int hitCount = 0;
+	printfDx("%f\n", m_hp);
 	// 後で修正する
 	// 体力の処理
 	if (!m_isTempHit)
@@ -353,8 +362,6 @@ void EnemyNormal::CheckHp()
 		{
 			m_isTempHit = true;
 			m_hp -= m_tempDamage;
-			hitCount++;
-			printfDx("%d\n", hitCount);
 		}
 	}
 	else

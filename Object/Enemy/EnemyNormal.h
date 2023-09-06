@@ -26,11 +26,14 @@ private:
 	// HPの処理
 	void CheckHp();
 private:
+	// モデルハンドル
 	int m_hMouse;
 	// 敵の動く速さ　まだ仮なのでこれは消す
 	int moveCount;
 	// 動くかどうか
 	bool m_isNextMove;
+	// 最終地点まで到着したら
+	bool m_isEndPos;
 	// 向き
 	VECTOR m_dir;
 	// ターゲット位置

@@ -258,7 +258,6 @@ void ObstacleNormalShot::TargetPos()
 			m_isTargetChange = true;
 			// ƒVƒ‡ƒbƒg‚ðŒ‚‚½‚È‚¢
 			m_isShot = false;
-
 		}
 	}
 }

@@ -25,13 +25,13 @@ void EffekseerDrawer::Init()
 void EffekseerDrawer::End()
 {
 	// Effekseerにより再生中の3Dエフェクトの描画を終了する。
-	DrawEffekseer3D_End();
+//	DrawEffekseer3D_End();
 	// エフェクトリソースを削除する。(Effekseer終了時に破棄されるので削除しなくてもいい)
 	DeleteEffekseerEffect(m_hEff);
 	// 3D表示のエフェクトを停止する。
-	StopEffekseer3DEffect(m_hPlayEff);
+//	StopEffekseer3DEffect(m_hPlayEff);
 
-	m_pos = VGet(0, 0, 0);	
+//	m_pos = VGet(0, 0, 0);	
 }
 
 void EffekseerDrawer::Update()
