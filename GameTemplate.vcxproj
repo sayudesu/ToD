@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="UIDrawer.cpp" />
     <ClCompile Include="Util\CutInDrawer.cpp" />
     <ClCompile Include="Object\Shot\NormalShot.cpp" />
     <ClCompile Include="Object\Player\ObjectMenuDrawer.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="util\Vec2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="UIDrawer.h" />
     <ClInclude Include="Util\CollDatas.h" />
     <ClInclude Include="Util\CutInDrawer.h" />
     <ClInclude Include="Object\Shot\NormalShot.h" />

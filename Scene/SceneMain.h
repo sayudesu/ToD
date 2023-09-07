@@ -8,6 +8,7 @@ class Player;
 class MapDrawer;
 class Collision3D;
 class CutInDrawer;
+class UIDrawer;
 
 class SceneMain : public SceneBase
 {
@@ -28,4 +29,5 @@ private:
 	MapDrawer*		 m_pMap;
 	Collision3D*	 m_pColl;
 	CutInDrawer*     m_catIn;
+	UIDrawer*		 m_pUI;
 };

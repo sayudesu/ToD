@@ -35,6 +35,8 @@ public:
 	void IsSetShot(bool isShot);
 	// カメラクラスに渡す
 	Tracking GetTracingData();
+	// 現在のオブジェクトコストを渡す
+	int GetObjectCostNum();
 private:
 	// 操作を制御
 	void UpdateControl();
@@ -65,9 +67,6 @@ private:
 	// 設置出来るかの最終確認
 	bool m_isSetObject;
 
-	// オブジェクトコスト関連
-	// 背景ハンドル
-	int m_hCostBg;
 	// コスト数
 	int m_objectCostNum;
 

@@ -11,6 +11,7 @@
 #include "../Save/SaveDataFunctions.h"
 #include "../Util/Collision3D.h"
 #include "../Util/CutInDrawer.h"
+#include "../UIDrawer.h"
 
 // あとで消す
 #include "../Util/Pad.h"
@@ -22,22 +23,25 @@ SceneMain::SceneMain():
 	m_pPlayer(nullptr),
 	m_pMap(nullptr),
 	m_pColl(nullptr),
-	m_catIn(nullptr)
+	m_catIn(nullptr),
+	m_pUI(nullptr)
 {
 	// カメラクラスのインスタンス作成
-	m_pCamera = new Camera;
+	m_pCamera = new Camera();
 	// 敵クラスのインスタンス作成
-	m_pEnemy = new EnemyManager;
+	m_pEnemy = new EnemyManager();
 	// 障害物クラスのインスタンス作成
-	m_pObstacle = new ObstacleManager;
+	m_pObstacle = new ObstacleManager();
 	// プレイヤークラスのインスタンス作成
-	m_pPlayer = new Player;
+	m_pPlayer = new Player();
 	// マップクラスのインスタンス作成
-	m_pMap = new MapDrawer;
+	m_pMap = new MapDrawer();
 	// 3D当たり判定用のインスタンス
-	m_pColl = new Collision3D;
+	m_pColl = new Collision3D();
 	// カットインのインスタンス
-	m_catIn = new CutInDrawer;
+	m_catIn = new CutInDrawer();
+	// UIを描画するクラスのインスタンス
+	m_pUI = new UIDrawer();
 }
 
 SceneMain::~SceneMain()
@@ -61,6 +65,8 @@ SceneMain::~SceneMain()
 	m_pColl = nullptr;
 	delete m_catIn;
 	m_catIn = nullptr;
+	delete m_pUI;
+	m_pUI = nullptr;
 }
 
 void SceneMain::Init()
@@ -76,6 +82,7 @@ void SceneMain::Init()
 	m_pPlayer->Init();
 	m_pMap->Init();
 	m_catIn->Init();
+	m_pUI->Init();
 
 	// マップチップをエネミーに渡す
 	// コードの処理の流れのせいでこうなっています治します
@@ -93,6 +100,7 @@ void SceneMain::End()
 	m_pPlayer->End();
 	m_pMap->End();
 	m_catIn->End();
+	m_pUI->End();
 }
 
 SceneBase* SceneMain::Update()
@@ -124,6 +132,10 @@ SceneBase* SceneMain::Update()
 	// 設置したオブジェクトのCollDataをエネミーに渡す
 	m_pEnemy->SetObjCollData(m_pObstacle->GetCollDatas());
 	m_pObstacle->SetCollEnemyDatas(m_pEnemy->GetCollData());
+
+	// UI関係
+	// オブジェクト設置コストの数を受け取る
+	m_pUI->SetCostSetObject(m_pPlayer->GetObjectCostNum());
 
 
 	// 演出関係
@@ -187,6 +199,8 @@ void SceneMain::Draw()
 	m_pEnemy->DrawUI();
 	m_pPlayer->DrawUI();
 
+	// UI
+	m_pUI->Draw();
 	// 演出UI
 	m_catIn->Draw();
 

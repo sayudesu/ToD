@@ -353,7 +353,6 @@ void EnemyNormal::CheckColl()
 
 void EnemyNormal::CheckHp()
 {
-	printfDx("%f\n", m_hp);
 	// 後で修正する
 	// 体力の処理
 	if (!m_isTempHit)

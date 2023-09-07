@@ -4,7 +4,6 @@
 #include "../../Util/game.h"
 #include "../../Save/SaveDataFunctions.h"
 #include "../../Util/SoundFunctions.h"
-#include "../../Util/LoadGraphFunction.h"
 #include "ObjectMenuDrawer.h"
 #include "../Shot/NormalShot.h"
 namespace
@@ -25,8 +24,6 @@ Player::Player() :
 	m_isSpecialAttack(false),
 	m_isResultObject(false),
 	m_isSetObject(false),
-	m_hCostBg(0),
-	m_objectCostNum(0),
 	m_isShot(false),
 	m_countShotNo(-1),
 	m_deleteFrameCountShot(0),
@@ -41,9 +38,6 @@ Player::~Player()
 
 void Player::Init()
 {
-	// 画像のロード
-	m_hCostBg = LoadGraph("Data/Image/Cost.png");
-
 	// インスタンス生成
 	m_pObjMenu = new ObjectMenuDrawer;
 
@@ -122,36 +116,6 @@ void Player::Draw()
 
 void Player::DrawUI()
 {
-	// コスト描画背景
-	DrawRotaGraph(500, 100, 0.5f, DX_PI_F * 180.0f, m_hCostBg, true);
-
-	// オブジェクトコスト描画
-	DrawFormatString(400, 80, 0xffffff, kCostString, m_objectCostNum);
-
-	// オブジェクト選択
-	DrawFormatString(400, Game::kScreenHeight - 100, 0xffffff, kObjSelectString, m_objectCostNum);
-	
-	// あとで修正
-	// アイコンロード
-	int m_hIcon[8];
-	m_hIcon[0] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon0);
-	m_hIcon[1] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon1);
-	m_hIcon[2] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon2);
-	m_hIcon[3] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon3);
-	m_hIcon[4] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon4);
-	m_hIcon[5] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon5);
-	m_hIcon[6] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon6);
-	m_hIcon[7] = LoadGraphFunction::GraphData(LoadGraphFunction::Icon7);
-
-	// アイコン描画
-	DrawRotaGraph(
-		100,
-		100,
-		1,
-		DX_PI_F * 180.0f,
-		m_hIcon[SaveDataFunctions::GetIconData().Icon],
-		true);
-
 	// 特殊攻撃のメニュー
 	m_pObjMenu->Draw();
 }
@@ -185,6 +149,11 @@ void Player::IsSetShot(bool isShot)
 Tracking Player::GetTracingData()
 {
 	return m_trackingData;
+}
+
+int Player::GetObjectCostNum()
+{
+	return m_objectCostNum;
 }
 
 void Player::UpdateControl()
