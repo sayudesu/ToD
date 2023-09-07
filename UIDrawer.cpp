@@ -1,5 +1,4 @@
 #include "UIDrawer.h"
-#include <DxLib.h>
 #include "Util/game.h"
 #include "Util/LoadGraphFunction.h"
 #include "Save/SaveDataFunctions.h"
@@ -19,6 +18,11 @@ namespace
 	const char* kFileNameBarSpecialAttack = "Data/Image/m_hBarTopicSpecialAttack.png";
 	const char* kFileNameBgHp             = "Data/Image/UI_BgHP.png";
 	const char* kFileNameHp               = "Data/Image/UI_HP.png";
+	// オブジェクト設置時
+	const char* kFileNameSelectObject     = "Data/Image/UI_SelectObj.png";
+	const char* kFileNameSelectCreate     = "Data/Image/UI_SelectObjB.png";
+	const char* kFileNameSelectDelete     = "Data/Image/UI_SelectObjA.png";
+	const char* kFileNameSelectPowerUp    = "Data/Image/UI_SelectObjY.png";
 }
 
 UIDrawer::UIDrawer() :
@@ -29,7 +33,9 @@ UIDrawer::UIDrawer() :
 	m_hBarTopicSpecialAttack(-1),
 	m_hBgHp(-1),
 	m_hHp(-1),
-	m_costNum(0)
+	m_hSelectObject(-1),
+	m_costNum(0),
+	m_playerPos(VGet(0,0,0))
 {
 }
 
@@ -47,6 +53,10 @@ void UIDrawer::Init()
 	m_hBarTopicSpecialAttack    = LoadGraph(kFileNameBarSpecialAttack);
 	m_hBgHp		                = LoadGraph(kFileNameBgHp);
 	m_hHp	                    = LoadGraph(kFileNameHp);
+	m_hSelectObject             = LoadGraph(kFileNameSelectObject);
+	m_hSelectObjectState[0]     = LoadGraph(kFileNameSelectCreate);
+	m_hSelectObjectState[1]     = LoadGraph(kFileNameSelectPowerUp);
+	m_hSelectObjectState[2]     = LoadGraph(kFileNameSelectDelete);
 }
 
 void UIDrawer::End()
@@ -62,15 +72,12 @@ void UIDrawer::Draw()
 	// 体力やコストやウェーブ数の背景
 	DrawGraph(0, 0, m_hBgUtil, true);
 
-	//// コスト描画背景
-	//DrawRotaGraph(500, 100, 0.5f, DX_PI_F * 180.0f, m_hObjectCost, true);
-
 	// オブジェクトコスト背景
 	DrawGraph(Game::kScreenWidth - 570, 20, m_hObjectCost, true);
 	DrawGraph(Game::kScreenWidth - 570, 20, m_hMeat, true);
 
 	// コスト数
-	DrawFormatString(0, 0, 0x000000, "%d", m_costNum);
+	DrawFormatString(Game::kScreenWidth - 570, 20, 0x000000, "%d", m_costNum);
 
 	// 特殊攻撃のボタン説明
 	DrawGraph(1150, Game::kScreenHeight - 150 , m_hTopicSpecialAttack, true);
@@ -79,6 +86,13 @@ void UIDrawer::Draw()
 	// 体力関係
 	DrawGraph(120, 20, m_hBgHp, true);
 	DrawGraph(120, 20, m_hHp, true);
+
+	// オブジェクト選択
+	for (int i = 0; i < 3; i++)
+	{
+		DrawGraph(m_selectPos[i].x, m_selectPos[i].y, m_hSelectObject, true);
+		DrawGraph(m_selectPos[i].x + 10.0f, m_selectPos[i].y + 10.0f, m_hSelectObjectState[i], true);
+	}
 
 	// あとで修正
 	// アイコンロード
@@ -110,7 +124,24 @@ void UIDrawer::Draw()
 #endif
 }
 
+// オブジェクトを設置するためのコストを受け取る
 void UIDrawer::SetCostSetObject(int cost)
 {
 	m_costNum = cost;
+}
+
+// プレイヤーの位置を受け取る
+void UIDrawer::SetPlayerPos(VECTOR pos)
+{
+	// 3D座標から2D座標に変換
+	m_playerPos = ConvWorldPosToScreenPos(pos);
+
+	m_selectPos[0].x = m_playerPos.x + 20.0f;
+	m_selectPos[0].y = m_playerPos.y - 30.0f;
+
+	m_selectPos[1].x = m_playerPos.x;
+	m_selectPos[1].y = m_selectPos[0].y - 60.0f;
+
+	m_selectPos[2].x = m_playerPos.x;
+	m_selectPos[2].y = m_selectPos[0].y + 60.0f;
 }

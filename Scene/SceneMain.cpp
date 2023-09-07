@@ -136,7 +136,8 @@ SceneBase* SceneMain::Update()
 	// UI関係
 	// オブジェクト設置コストの数を受け取る
 	m_pUI->SetCostSetObject(m_pPlayer->GetObjectCostNum());
-
+	// プレイヤーの位置を受け取る
+	m_pUI->SetPlayerPos(m_pPlayer->SetPos());
 
 	// 演出関係
 	// 演出の為にカメラのターゲット位置変更

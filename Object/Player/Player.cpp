@@ -12,15 +12,11 @@ namespace
 	constexpr int kSetCost = 1;
 	constexpr float kSetPosMoveSpeed = 50.0f;
 	constexpr float kSpecialAttackPosMoveSpeed = 20.0f;
-
-	const char* kCostString = "オブジェクトコスト[%d]";
-	const char* kObjSelectString = "RBを押してオブジェクトを選ぶ！";
 }
 
 Player::Player() :
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
 	m_specialAttackPos(VGet(0.0f, 0.0f, 0.0f)),
-	m_screenPos(VGet(0.0f, 0.0f, 0.0f)),
 	m_isSpecialAttack(false),
 	m_isResultObject(false),
 	m_isSetObject(false),
@@ -59,8 +55,6 @@ void Player::Update()
 	{
 		// 操作の制御
 		UpdateControl();
-		// 3D座標から2D座標に変換
-		m_screenPos = ConvWorldPosToScreenPos(m_pos);
 		// プレイヤーの位置を渡す
 		m_specialAttackPos = m_pos;
 	}

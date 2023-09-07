@@ -55,7 +55,6 @@ private:
 	// “ÁêUŒ‚‚ğ‚¨‚±‚È‚Á‚½‚©‚Ç‚¤‚©
 	bool m_isSpecialAttack;
 	// ‰æ–Ê‚©‚ç3D‹óŠÔ‚É•ÏŠ·—p
-	VECTOR m_screenPos;
 	VECTOR m_start3DPos;
 	VECTOR m_end3DPos;
 
