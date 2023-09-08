@@ -281,6 +281,8 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 				moveDirX.pop_back();
 				moveDirZ.pop_back();
 			}
+
+
 		}
 		else
 		{

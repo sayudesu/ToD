@@ -10,6 +10,8 @@ struct CollData
 	float radius;
 	// ダメージ
 	float datage;
-	// 判定はみるかどうか
+	// 判定をみるかどうか
 	bool isHit;
+	// オブジェクトに番号を付ける
+	int no;
 };

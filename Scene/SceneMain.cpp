@@ -122,6 +122,7 @@ SceneBase* SceneMain::Update()
 		m_pEnemy->Create();
 		m_pEnemy->SetMapChip(m_pMap->GetMapChip());
 	}
+
 	// オブジェクトを生成
 	if (m_pPlayer->GetObjCreate())
 	{

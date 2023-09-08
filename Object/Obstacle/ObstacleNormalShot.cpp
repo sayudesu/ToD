@@ -24,8 +24,8 @@ namespace
 	// ‘å–Cƒ‚ƒfƒ‹‚ÌƒpƒX‚ÌˆÊ’u
 	const char* kCannonBasePathName = "Data/Model/CannonBase.mv1";
 	const char* kCannonPathName = "Data/Model/Cannon.mv1";
-
-	//const VECTOR kConnonScale = VGet(0.1f, 0.1f, 0.1f);
+	
+	// ‘å–C‚Ì‘å‚«‚³
 	const VECTOR kConnonScale = VGet(1.0f, 1.0f, 1.0f);
 }
 
@@ -204,11 +204,11 @@ void ObstacleNormalShot::TargetPos()
 		for (int i = 0; i < m_collEnemyData.size(); i++)
 		{
 
-			if (!m_collEnemyData[i].isHit)
-			{
-				m_targetPos = VGet(1000,0, 300);
-				continue;
-			}
+			//if (!m_collEnemyData[i].isHit)
+			//{
+			//	m_targetPos = VGet(1000,0, 300);
+			//	continue;
+			//}
 
 			// ‹ß‚¢“G‚ðŒ©‚é
 			const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[i].pos);

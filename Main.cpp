@@ -22,8 +22,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// Log.txtでログを残すかどうか
 	SetOutApplicationLogValidFlag(Game::kLogText);
 
-	// 使用する Direct3D のバージョンを 9EX に設定
-	SetUseDirect3DVersion(DX_DIRECT3D_9EX);
 
 	// ＤＸライブラリ初期化処理
 	// エラーが起きたら直ちに終了
@@ -39,6 +37,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		return -1;
 	}
 
+	// 使用する Direct3D のバージョンを 9EX に設定
+	SetUseDirect3DVersion(DX_DIRECT3D_9EX);
 	// DirectX9を使用するようにする。(DirectX11も可)
 	// Effekseerを使用するには必ず設定する。
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
