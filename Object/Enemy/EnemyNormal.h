@@ -21,8 +21,6 @@ public:
 	virtual CollData GetCollDatas();
 
 private:
-	// ”»’èˆ—
-	void CheckColl();
 	// HP‚Ìˆ—
 	void CheckHp();
 private:

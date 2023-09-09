@@ -23,6 +23,8 @@ public:
 	virtual void SetCollEnemyDatas(std::vector<CollData> collEnemyData) { m_collEnemyData = collEnemyData; }
 	// ショットの数
 	virtual int SetShotNum() { return 0; }
+	// いらないショットの番号を受け取る
+	virtual void SetEraseShotNo(std::vector<int> eraseShotNo) {};
 
 protected:
 	// 位置

@@ -14,7 +14,7 @@ NormalShot::~NormalShot()
 
 }
 
-void NormalShot::Init(VECTOR taegetPos,VECTOR scale, VECTOR rotation, float speed)
+void NormalShot::Init(VECTOR taegetPos,VECTOR scale, VECTOR rotation, float speed, bool isTracking)
 {
 	// 3DÉÇÉfÉãÇÃÉçÅ[Éh
 	m_hShot = MV1LoadModel("Data/Model/ShotCat.mv1");
@@ -33,16 +33,16 @@ void NormalShot::End()
 
 void NormalShot::Update()
 {
-	if (!m_isScreenOut && !m_isEnd)
+	if (!IsGetEnd())
 	{
-		VecCalculation(m_tagetPos,m_speed);
+		VecCalculation(m_tagetPos,m_speed, false);
 		MV1SetPosition(m_hShot, m_pos);
 	}
 }
 
 void NormalShot::Draw()
 {
-	if (!IsGetEnd() && !m_isEnd)
+	if (!IsGetEnd())
 	{
 		MV1DrawModel(m_hShot);
 		DrawSphere3D(m_pos, 16.0f, 4.0f, 0xffff00, 0xffff00, false);
@@ -51,19 +51,11 @@ void NormalShot::Draw()
 
 CollData NormalShot::GetCollData()
 {
-	if (!m_isEnd)
-	{
-		m_collData.datage = 3.0f;
-		m_collData.pos = m_pos;
-		m_collData.radius = 16.0f;
-		m_collData.isHit = true;
-	}
-	else
-	{
-		m_collData.datage = 0.0f;
-		m_collData.pos = m_pos;
-		m_collData.radius = 16.0f;
-		m_collData.isHit = false;
-	}
+
+	m_collData.datage = 3.0f;
+	m_collData.pos = m_pos;
+	m_collData.radius = 16.0f;
+	m_collData.isHit = true;
+
 	return m_collData;
 }

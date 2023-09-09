@@ -23,9 +23,8 @@ public:
 	std::vector<CollData> GetCollDatas();
 	// 敵の判定用データを受け取る
 	void SetCollEnemyDatas(std::vector<CollData> collEnemyData);
-
-	// 配列の数を渡す
-	int GetNormalNum();
+	// 必要の無いshotの番号を受け取る
+	void SetEraseShotNo(std::vector<int> eraseShotNo);
 
 private:
 	std::vector<std::shared_ptr<ObstacleBase>>m_pNormalObstacle;

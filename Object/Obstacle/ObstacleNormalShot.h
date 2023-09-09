@@ -5,6 +5,7 @@
 
 class ShotBase;
 class EffekseerDrawer;
+
 class ObstacleNormalShot : public ObstacleBase
 {
 public:
@@ -30,6 +31,9 @@ public:
 	int SetShotNum();
 
 	void SetTarGetPos(VECTOR pos);
+private:
+	// いらないショットの番号を受け取る
+	void SetEraseShotNo(std::vector<int> eraseShotNo);
 private:
 	// 大砲モデルハンドル
 	int m_hCannon;

@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneBase.h"
+#include <vector>
 
 class Camera;
 class EnemyManager;
@@ -21,6 +22,9 @@ public:
 
 	SceneBase* Update();
 	void Draw();
+private:
+	// 判定をチェックします
+	std::vector<int> CheckColl();
 private:
 	Camera*          m_pCamera;
 	EnemyManager*    m_pEnemy;

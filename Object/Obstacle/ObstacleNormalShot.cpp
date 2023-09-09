@@ -130,7 +130,7 @@ void ObstacleNormalShot::UpdateShot()
 	{
 		m_countShotNum++;
 		m_pShot.push_back(std::make_shared<NormalShot>(m_countShotNum,m_pos));
-		m_pShot[m_countShotNum]->Init(m_targetPos,VGet(1.0f, 1.0f, 1.0f), VGet(0.0f, 180.0f, 0.0f), kShootSpeed);
+		m_pShot[m_countShotNum]->Init(m_targetPos,VGet(1.0f, 1.0f, 1.0f), VGet(0.0f, 180.0f, 0.0f), kShootSpeed,false);
 		m_shootFrameCount = 0;
 	}
 
@@ -203,13 +203,6 @@ void ObstacleNormalShot::TargetPos()
 		// ìGÇÃêîï™
 		for (int i = 0; i < m_collEnemyData.size(); i++)
 		{
-
-			//if (!m_collEnemyData[i].isHit)
-			//{
-			//	m_targetPos = VGet(1000,0, 300);
-			//	continue;
-			//}
-
 			// ãﬂÇ¢ìGÇå©ÇÈ
 			const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[i].pos);
 			const float length = sqrtf((toPlayer.x * toPlayer.x) + (toPlayer.y * toPlayer.y) + (toPlayer.z * toPlayer.z));
@@ -272,5 +265,12 @@ void ObstacleNormalShot::SetTarGetPos(VECTOR pos)
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
 		m_pShot[i]->SetTargetPos(pos);
+	}
+}
+
+void ObstacleNormalShot::SetEraseShotNo(std::vector<int> eraseShotNo)
+{
+	for (int i = 0; i < eraseShotNo.size(); i++)
+	{
 	}
 }

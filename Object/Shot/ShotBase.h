@@ -10,7 +10,7 @@ public:
 	ShotBase(VECTOR pos);
 	virtual~ShotBase() {};
 
-	virtual void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed) {};
+	virtual void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed, bool isTracking) {};
 	virtual void End() {};
 	virtual void Update() {};
 	virtual void Draw() {};
@@ -24,7 +24,7 @@ public:
 	virtual bool IsGetEnd();
 protected:
 	// 移動の計算をしています
-	void VecCalculation(VECTOR tagetPos, float speed);
+	void VecCalculation(VECTOR tagetPos, float speed, bool isTracking);
 protected:
 	// 3Dモデルハンドル
 	int m_hShot;
@@ -46,11 +46,7 @@ protected:
 	float m_speed;
 	// 半径
 	float m_radius;
-	// 目的地に到達すると処理をしない
-	bool m_isEnd;
-
-
-	// test
-	bool m_isTest = true;
+	// 追跡するかどうか
+	bool m_isTracking;
 };
 

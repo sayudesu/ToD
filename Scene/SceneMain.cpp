@@ -130,9 +130,11 @@ SceneBase* SceneMain::Update()
 	}
 
 	// 判定情報	
-	// 設置したオブジェクトのCollDataをエネミーに渡す
 	m_pEnemy->SetObjCollData(m_pObstacle->GetCollDatas());
 	m_pObstacle->SetCollEnemyDatas(m_pEnemy->GetCollData());
+
+	CheckColl();
+	
 
 	// UI関係
 	// オブジェクト設置コストの数を受け取る
@@ -207,4 +209,30 @@ void SceneMain::Draw()
 	m_catIn->Draw();
 
 	SceneBase::DrawSliderDoor();
+}
+
+// 判定チェック
+std::vector<int> SceneMain::CheckColl()
+{
+	// 当たったショットのナンバーをみる
+	std::vector<int> hitShotNo;
+
+	// 敵がショットに当たったかを判別
+	for (int enemyNum = 0; enemyNum < m_pEnemy->GetNormalNum(); enemyNum++)
+	{
+		for (int shotNum = 0; shotNum < m_pObstacle->GetCollDatas().size(); shotNum++)
+		{
+			if (m_pColl->UpdateCheck(
+				m_pEnemy->GetCollData()[enemyNum].pos,
+				m_pObstacle->GetCollDatas()[shotNum].pos,
+				m_pEnemy->GetCollData()[enemyNum].radius,
+				m_pObstacle->GetCollDatas()[enemyNum].radius))
+			{
+				printfDx("Hit\n");
+				hitShotNo.push_back(shotNum);
+			}
+		}
+	}
+
+	return hitShotNo;
 }

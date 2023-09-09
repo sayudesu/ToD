@@ -113,8 +113,6 @@ void EnemyNormal::Update()
 		MV1SetRotationXYZ(m_hMouse, VGet(0.0f, angle2, 0.0f));
 	}
 
-	CheckColl();
-
 	// 3D座標から2D座標に変換
 	m_screenPos = ConvWorldPosToScreenPos(m_pos);
 
@@ -336,21 +334,6 @@ CollData EnemyNormal::GetCollDatas()
 	}
 
 	return m_collData;
-}
-
-void EnemyNormal::CheckColl()
-{
-
-	// ショットの数分
-	for (int i = 0; i < m_collObstacleShotData.size(); i++)
-	{
-		// 判定を見る
-		if (m_pColl->UpdateCheck(m_pos, m_collObstacleShotData[i].pos,16.0f, m_collObstacleShotData[i].radius))
-		{
-			m_isHit = true;
-			m_tempDamage = m_collObstacleShotData[i].datage;
-		}
-	}
 }
 
 void EnemyNormal::CheckHp()

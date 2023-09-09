@@ -83,7 +83,10 @@ void ObstacleManager::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
 	}
 }
 
-int ObstacleManager::GetNormalNum()
+void ObstacleManager::SetEraseShotNo(std::vector<int> eraseShotNo)
 {
-	return static_cast<int>(m_pNormalObstacle.size());
+	for (auto& normalObstacle : m_pNormalObstacle)
+	{
+		normalObstacle->SetEraseShotNo(eraseShotNo);
+	}
 }

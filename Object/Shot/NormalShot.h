@@ -7,7 +7,7 @@ public:
 	NormalShot(int no,VECTOR pos);
 	~NormalShot();
 
-	void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed);
+	void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed, bool isTracking);
 	void End();
 	void Update();
 	void Draw();
