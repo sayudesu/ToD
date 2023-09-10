@@ -2,7 +2,7 @@
 #include "../../Object/Obstacle/ObstacleNormalShot.h"
 
 ObstacleManager::ObstacleManager():
-	m_count(-1)
+	m_countCreate(-1)
 {
 }
 
@@ -21,9 +21,9 @@ void ObstacleManager::End()
 
 void ObstacleManager::Create(VECTOR pos)
 {
-	m_count++;
+	m_countCreate++;
 	m_pNormalObstacle.push_back(std::make_shared<ObstacleNormalShot>(pos));
-	m_pNormalObstacle[m_count]->Init();
+	m_pNormalObstacle[m_countCreate]->Init();
 }
 
 void ObstacleManager::Update()
@@ -40,11 +40,6 @@ void ObstacleManager::Draw()
 	{
 		nomalObstacle->Draw();
 	}
-}
-
-VECTOR ObstacleManager::GetPos(int num)
-{
-	return m_pNormalObstacle[num]->GetPos();
 }
 
 // “ñŽŸŒ³”z—ñ‚ðˆêŽŸŒ³”z—ñ‚É‚µ‚Ä‚ð•Ô‚·

@@ -21,7 +21,7 @@ void NormalShot::Init(VECTOR taegetPos,VECTOR scale, VECTOR rotation, float spee
 	assert(m_hShot != -1);
 	MV1SetScale(m_hShot, scale);
 	MV1SetRotationXYZ(m_hShot, VGet(rotation.x * DX_PI_F / 180.0f, rotation.y * DX_PI_F / 180.0f, rotation.z * DX_PI_F / 180.0f));
-	m_tagetPos = taegetPos;
+	m_targetPos = taegetPos;
 	m_speed = speed;
 }
 
@@ -35,7 +35,7 @@ void NormalShot::Update()
 {
 	if (!IsGetEnd())
 	{
-		VecCalculation(m_tagetPos,m_speed, false);
+		VecCalculation(m_targetPos,m_speed, false);
 		MV1SetPosition(m_hShot, m_pos);
 	}
 }
@@ -51,7 +51,6 @@ void NormalShot::Draw()
 
 CollData NormalShot::GetCollData()
 {
-
 	m_collData.datage = 3.0f;
 	m_collData.pos = m_pos;
 	m_collData.radius = 16.0f;

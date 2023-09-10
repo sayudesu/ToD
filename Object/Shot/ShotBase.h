@@ -10,18 +10,18 @@ public:
 	ShotBase(VECTOR pos);
 	virtual~ShotBase() {};
 
-	virtual void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed, bool isTracking) {};
-	virtual void End() {};
-	virtual void Update() {};
-	virtual void Draw() {};
+	virtual void Init  (VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed, bool isTracking) {};
+	virtual void End   ()    {};
+	virtual void Update()    {};
+	virtual void Draw  ()    {};
 
 	// ショット判定データ
-	virtual CollData GetCollData() { return m_collData; }
+	virtual CollData GetCollData ()           { return m_collData; }
 	// ショットの位置
-	virtual VECTOR SetPos()const{ return m_pos; }
+	virtual VECTOR   SetPos      ()const      { return m_pos;      }
 	// ターゲット位置
-	virtual void SetTargetPos(VECTOR pos) { m_targetPos = pos; }
-	virtual bool IsGetEnd();
+	virtual void     SetTargetPos(VECTOR pos) { m_targetPos = pos; }
+	virtual bool     IsGetEnd    ();
 protected:
 	// 移動の計算をしています
 	void VecCalculation(VECTOR tagetPos, float speed, bool isTracking);
@@ -41,7 +41,6 @@ protected:
 	float m_nowPosToNextPosZ;
 	// 判定用データ
 	CollData m_collData;
-
 	// 速度
 	float m_speed;
 	// 半径

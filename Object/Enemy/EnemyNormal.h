@@ -1,9 +1,6 @@
 #pragma once
 #include "EnemyBase.h"
 
-// 判定用
-class Collision3D;
-
 class EnemyNormal : public EnemyBase
 {
 public:
@@ -19,15 +16,11 @@ public:
 
 	// 当たり判定用データ
 	virtual CollData GetCollDatas();
-
-private:
-	// HPの処理
-	void CheckHp();
 private:
 	// モデルハンドル
 	int m_hMouse;
 	// 敵の動く速さ　まだ仮なのでこれは消す
-	int moveCount;
+	int m_moveCount;
 	// 動くかどうか
 	bool m_isNextMove;
 	// 最終地点まで到着したら
@@ -40,28 +33,16 @@ private:
 	VECTOR m_screenPos;
 	// 体力系
 	float m_hp;
-
-	int m_count;
-
-	int forX;
-	int forZ;
-
-	bool isRandMove = false;
-
+	// チップ番号での現在位置
+	int m_ChipPosX;
+	int m_ChipPosZ;
+	// ランダムで動く処理を実行するかどうか
+	bool m_isRandMove;
+	// 動いた位置を記録し同じ場所を通らない様にする
 	std::vector<int> m_recordX;
 	std::vector<int> m_recordZ;
-
-	std::vector<int>moveDirZ;
-	std::vector<int>moveDirX;
-
-	bool m_isHit;
-	bool m_isTempHit;
-	int m_tempCountHit;
-
-	// 判定用
-	Collision3D* m_pColl;
-	// ダメ―ジをどんだけくらうか
-	float m_tempDamage;
-
+	// ランダムで動く場合どの方向に動くかを決める
+	std::vector<int>m_moveDirX;
+	std::vector<int>m_moveDirZ;
 };
 

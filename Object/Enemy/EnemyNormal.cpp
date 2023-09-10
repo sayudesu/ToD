@@ -1,12 +1,7 @@
 #include "EnemyNormal.h"
 #include <cmath>
 #include <cassert>
-
-#include "../../Util/Pad.h"
-#include "../../Util/Vec2.h"
 #include <iostream>
-
-#include "../../Util/Collision3D.h"
 
 namespace
 {
@@ -23,21 +18,21 @@ namespace
 	constexpr float kSpeed = 3.0f;
 	// 距離
 	constexpr float kRange = 50.0f;
+
+	const char* kFileNameMouse = "Data/Model/Mouse.mv1";
 }
 
 EnemyNormal::EnemyNormal():
 	m_hMouse(0),
-	moveCount(0),
+	m_moveCount(0),
 	m_isEndPos(false),
 	m_dir(VGet(0, 0, 0)),
 	m_targetPos(VGet(0, 0, 0)),
 	m_screenPos(VGet(0, 0, 0)),
 	m_hp(0),
-	m_count(-1),
-	forX(0),
-	forZ(0),
-	m_isHit(false),
-	m_tempCountHit(0)
+	m_ChipPosX(0),
+	m_ChipPosZ(0),
+	m_isRandMove(false)
 {
 	m_hp = 20.0f;
 }
@@ -49,18 +44,17 @@ void EnemyNormal::Init(VECTOR firstPos, int x, int z)
 {
 	// 初期位置
 	m_pos = firstPos;
-	forX = x;
-	forZ = z;
+	m_ChipPosX = x;
+	m_ChipPosZ = z;
 
 	// 通った事のある場所の記録
-	m_recordX.push_back(forX);
-	m_recordZ.push_back(forZ);
+	m_recordX.push_back(m_ChipPosX);
+	m_recordZ.push_back(m_ChipPosZ);
 
 	m_isNextMove = true;
 
-	m_pColl = new Collision3D;
 
-	m_hMouse = MV1LoadModel("Data/Model/Mouse.mv1");
+	m_hMouse = MV1LoadModel(kFileNameMouse);
 	MV1SetPosition(m_hMouse, m_pos);
 	MV1SetRotationXYZ(m_hMouse,VGet(0, 90.0f * DX_PI_F / 18.0f, 0));
 }
@@ -71,7 +65,6 @@ void EnemyNormal::End()
 
 void EnemyNormal::Update()
 {
-
 	if (!m_isEndPos)
 	{
 		MV1SetPosition(m_hMouse, m_pos);
@@ -115,8 +108,6 @@ void EnemyNormal::Update()
 
 	// 3D座標から2D座標に変換
 	m_screenPos = ConvWorldPosToScreenPos(m_pos);
-
-	CheckHp();
 }
 
 void EnemyNormal::ChangeNextPos(bool &isMoveing)
@@ -140,11 +131,11 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 
 	int tempMovePosZ = 0;
 	int tempMovePosX = 0;
-	moveCount++;
+	m_moveCount++;
 	if (isMoveing) {
-		moveCount = 0;
+		m_moveCount = 0;
 		// 行
-		for (int z = forZ - 1; z <= forZ + 1; z++) 
+		for (int z = m_ChipPosZ - 1; z <= m_ChipPosZ + 1; z++) 
 		{
 			// 全てのfor分から脱出する
 			if (isBreak)
@@ -157,7 +148,7 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 			if (z >= kMapChipMaxZ) { tempZ = kMapChipMaxZ - 1 ; }
 			if (z <= 0) { tempZ = 0; }
 			// 列
-			for (int x = forX - 1; x <= forX + 1; x++) 
+			for (int x = m_ChipPosX - 1; x <= m_ChipPosX + 1; x++) 
 			{
 				// 配列の制御
 				tempX = x;
@@ -209,26 +200,26 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 					tempMovePosZ = tempZ;	
 
 					// 動く事のできる方向を確認
-					moveDirX.push_back(tempX);
-					moveDirZ.push_back(tempZ);				
+					m_moveDirX.push_back(tempX);
+					m_moveDirZ.push_back(tempZ);				
 				}
 			}
 		}
 
-		if (isRandMove && isMove)
+		if (m_isRandMove && isMove)
 		{
 			// 進む位置をランダムに決める
-			tempMovePosX = moveDirX[GetRand(static_cast<int>(moveDirX.size()) - 1)];
-			tempMovePosZ = moveDirZ[GetRand(static_cast<int>(moveDirZ.size()) - 1)];
-			isRandMove = false;
+			tempMovePosX = m_moveDirX[GetRand(static_cast<int>(m_moveDirX.size()) - 1)];
+			tempMovePosZ = m_moveDirZ[GetRand(static_cast<int>(m_moveDirZ.size()) - 1)];
+			m_isRandMove = false;
 		}
 		else
 		{
 			// 要素を消す
-			for (int i = 0; i < moveDirX.size(); i++)
+			for (int i = 0; i < m_moveDirX.size(); i++)
 			{
-				moveDirX.pop_back();
-				moveDirZ.pop_back();
+				m_moveDirX.pop_back();
+				m_moveDirZ.pop_back();
 			}
 		}
 
@@ -246,17 +237,17 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 			// 次動く場所
 			if (isMove)
 			{
-				forX = tempMovePosX;
-				forZ = tempMovePosZ;
+				m_ChipPosX = tempMovePosX;
+				m_ChipPosZ = tempMovePosZ;
 			}
 			// 座標を記録
 			// 立ち止まる場所
 			if (isStop)
 			{
-				forX = tempStopPosX;
-				forZ = tempStopPosZ;
+				m_ChipPosX = tempStopPosX;
+				m_ChipPosZ = tempStopPosZ;
 
-				isRandMove = true;
+				m_isRandMove = true;
 
 				isStop = false;
 			}
@@ -266,18 +257,18 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 			isStop = false;
 
 			// 通った事のある場所の記録
-			m_recordX.push_back(forX);
-			m_recordZ.push_back(forZ);
+			m_recordX.push_back(m_ChipPosX);
+			m_recordZ.push_back(m_ChipPosZ);
 			// 位置を変更
-			m_targetPos.x = (forX* kBlockSize);
-			m_targetPos.z = (forZ* kBlockSize);
+			m_targetPos.x = (m_ChipPosX* kBlockSize);
+			m_targetPos.z = (m_ChipPosZ* kBlockSize);
 			isMoveing = false;
 
 			// 要素を消す
-			for (int i = 0; i < moveDirX.size(); i++)
+			for (int i = 0; i < m_moveDirX.size(); i++)
 			{
-				moveDirX.pop_back();
-				moveDirZ.pop_back();
+				m_moveDirX.pop_back();
+				m_moveDirZ.pop_back();
 			}
 
 
@@ -293,29 +284,23 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 void EnemyNormal::Draw()
 {
 	// 敵を描画
-	if (m_hp >= -20)
-	{
-	//	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
-		MV1DrawModel(m_hMouse);
-	}
-
+//	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
+	MV1DrawModel(m_hMouse);
 }
 
 void EnemyNormal::DrawUI()
 {
-	if (m_hp >= -20)
-	{
-		DrawBox(
-			m_screenPos.x - 20, m_screenPos.y - 30,
-			m_screenPos.x + 20, m_screenPos.y - 30 + 10,
-			0xffffff,
-			true);
-		DrawBox(
-			m_screenPos.x - 20, m_screenPos.y - 30,
-			m_screenPos.x + m_hp, m_screenPos.y - 30 + 10,
-			0xaa0000,
-			true);
-	}
+
+	DrawBox(
+		m_screenPos.x - 20, m_screenPos.y - 30,
+		m_screenPos.x + 20, m_screenPos.y - 30 + 10,
+		0xffffff,
+		true);
+	DrawBox(
+		m_screenPos.x - 20, m_screenPos.y - 30,
+		m_screenPos.x + m_hp, m_screenPos.y - 30 + 10,
+		0xaa0000,
+		true);
 }
 
 // 当たり判定用データ
@@ -334,29 +319,4 @@ CollData EnemyNormal::GetCollDatas()
 	}
 
 	return m_collData;
-}
-
-void EnemyNormal::CheckHp()
-{
-	// 後で修正する
-	// 体力の処理
-	if (!m_isTempHit)
-	{
-		if (m_isHit)
-		{
-			m_isTempHit = true;
-			m_hp -= m_tempDamage;
-		}
-	}
-	else
-	{
-		m_tempCountHit++;
-		if (m_tempCountHit > 30)
-		{
-			m_tempCountHit = 0;
-			m_isTempHit = false;
-			m_isHit = false;
-		}
-	}
-
 }

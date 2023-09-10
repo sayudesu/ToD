@@ -17,8 +17,6 @@ public:
 	void Update();
 	void Draw();
 
-	VECTOR GetPos(int num);
-
 	// 二次元配列を一次元配列にしてを返す
 	std::vector<CollData> GetCollDatas();
 	// 敵の判定用データを受け取る
@@ -29,6 +27,6 @@ public:
 private:
 	std::vector<std::shared_ptr<ObstacleBase>>m_pNormalObstacle;
 	// 出現数をカウントします
-	int m_count;
+	int m_countCreate;
 };
 

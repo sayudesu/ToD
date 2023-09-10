@@ -12,9 +12,9 @@ namespace
 	// ショット最初打ち出すまでのフレームむカウント
 	constexpr int kShotFirstFrameMax = 30;
 	// ショット再放出するまでのフレーム
-	constexpr int kShootFrameMax = 30;
+	constexpr int kShootFrameMax = 10;
 	// ショットの速度
-	constexpr float kShootSpeed = 10.0f;
+	constexpr float kShootSpeed = 50.0f;
 
 	// オブジェクトカラー(緑)
 	constexpr int kObjColor1 = 0x00ff00;
@@ -23,7 +23,7 @@ namespace
 
 	// 大砲モデルのパスの位置
 	const char* kCannonBasePathName = "Data/Model/CannonBase.mv1";
-	const char* kCannonPathName = "Data/Model/Cannon.mv1";
+	const char* kCannonPathName     = "Data/Model/Cannon.mv1";
 	
 	// 大砲の大きさ
 	const VECTOR kConnonScale = VGet(1.0f, 1.0f, 1.0f);
@@ -54,6 +54,11 @@ ObstacleNormalShot::ObstacleNormalShot(VECTOR pos):
 
 ObstacleNormalShot::~ObstacleNormalShot()
 {
+	if (ef)
+	{
+		delete m_pEffect;
+		m_pEffect = nullptr;
+	}
 }
 
 void ObstacleNormalShot::Init()
@@ -272,5 +277,6 @@ void ObstacleNormalShot::SetEraseShotNo(std::vector<int> eraseShotNo)
 {
 	for (int i = 0; i < eraseShotNo.size(); i++)
 	{
+	
 	}
 }

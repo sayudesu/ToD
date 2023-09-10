@@ -2,7 +2,7 @@
 #include "EnemyNormal.h"
 
 EnemyManager::EnemyManager() :
-	m_count(-1)
+	m_countCreate(-1)
 {
 }
 
@@ -69,9 +69,9 @@ void EnemyManager::Create()
 		}
 	}
 
-	m_count++;
+	m_countCreate++;
 	m_pEnemyNormal.push_back(std::make_shared<EnemyNormal>());
-	m_pEnemyNormal[m_count]->Init(pos, forX, forZ);
+	m_pEnemyNormal[m_countCreate]->Init(pos, forX, forZ);
 }
 
 // 敵の更新処理
@@ -100,23 +100,14 @@ void EnemyManager::DrawUI()
 	}
 }
 
-// これは意味が無いので消します
+// 番号を指定してノーマルエネミーの位置を受け取ります
 VECTOR EnemyManager::SetNormalPos(int num)
 {
-	for (int i = 0; i < num; i++)
-	{
-		return m_pEnemyNormal[i]->SetPos();
-	}
-}
-
-// 番号を指定してノーマルエネミーの位置を受け取ります
-VECTOR EnemyManager::SetNormalPos2(int num)
-{
-	return m_pEnemyNormal[num]->SetPos();
+	return m_pEnemyNormal[num]->GetPos();
 }
 
 // ノーマルエネミーの数を返します
-int EnemyManager::SetNormalNum()
+int EnemyManager::GetNormalNum()
 {
 	return static_cast<int>(m_pEnemyNormal.size());
 }
@@ -152,10 +143,4 @@ std::vector<CollData> EnemyManager::GetCollData()
 	}
 
 	return collData;
-}
-
-// ノーマルエネミーの数を返します
-int EnemyManager::GetNormalNum()
-{
-	return static_cast<int>(m_pEnemyNormal.size());
 }
