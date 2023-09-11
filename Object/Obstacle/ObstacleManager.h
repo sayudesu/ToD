@@ -22,7 +22,7 @@ public:
 	// 敵の判定用データを受け取る
 	void SetCollEnemyDatas(std::vector<CollData> collEnemyData);
 	// 必要の無いshotの番号を受け取る
-	void SetEraseShotNo(std::vector<int> eraseShotNo);
+	void SetEraseShotData(std::vector<CollData> eraseShotData);
 
 private:
 	std::vector<std::shared_ptr<ObstacleBase>>m_pNormalObstacle;

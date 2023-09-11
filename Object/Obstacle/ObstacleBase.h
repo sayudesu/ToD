@@ -7,24 +7,24 @@
 class ObstacleBase
 {
 public:
-	ObstacleBase(){};
+	ObstacleBase() {};
 	virtual ~ObstacleBase() {};
 
-	virtual void Init  () = 0;
-	virtual void End   () = 0;
+	virtual void Init() = 0;
+	virtual void End() = 0;
 	virtual void Update() = 0;
-	virtual void Draw  () = 0;
+	virtual void Draw() = 0;
 
 	// 障害物の位置
 	virtual VECTOR GetPos() const { return m_pos; }
 	// 当たり判定データ
-	virtual std::vector<CollData> GetCollDatas() { return m_collShotData; }
+	virtual std::vector<CollData> GetCollDatas() { return std::vector<CollData>(); }
 	// エネミーの判定用データ
 	virtual void SetCollEnemyDatas(std::vector<CollData> collEnemyData) { m_collEnemyData = collEnemyData; }
 	// ショットの数
 	virtual int SetShotNum() { return 0; }
 	// いらないショットの番号を受け取る
-	virtual void SetEraseShotNo(std::vector<int> eraseShotNo) {};
+	virtual void SetEraseShotData(std::vector<CollData> eraseShotData) {};
 
 protected:
 	// 位置

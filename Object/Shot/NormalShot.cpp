@@ -1,6 +1,12 @@
 #include "NormalShot.h"
 #include <cassert>
 
+namespace
+{
+	// ショットの半径
+	constexpr float kRadius = 16.0f * 2.0f;
+}
+
 NormalShot::NormalShot(VECTOR pos, int originNo, int no):
 	ShotBase(pos)
 {
@@ -9,12 +15,8 @@ NormalShot::NormalShot(VECTOR pos, int originNo, int no):
 	m_isScreenOut = false;
 
 	// 判定データの初期数値
-	m_collData.datage   = 3.0f;
-	m_collData.pos      = m_pos;
-	m_collData.radius   = 16.0f;
-	m_collData.isHit    = true;
-	m_collData.originNo = originNo;
-	m_collData.no       = no;
+	m_originNo = originNo;
+	m_no	   = no;
 }
 
 NormalShot::~NormalShot()
@@ -53,11 +55,19 @@ void NormalShot::Draw()
 	if (!IsGetEnd())
 	{
 		MV1DrawModel(m_hShot);
-		DrawSphere3D(m_pos, 16.0f, 4.0f, 0xffff00, 0xffff00, false);
+		DrawSphere3D(m_pos, kRadius, 4.0f, 0xffff00, 0xffff00, false);
 	}
 }
 
 CollData NormalShot::GetCollData()
 {
+
+	m_collData.datage   = 3.0f;
+	m_collData.pos      = m_pos;
+	m_collData.radius   = kRadius;
+	m_collData.isHit    = true;
+	m_collData.originNo = m_originNo;
+	m_collData.no       = m_no;
+
 	return m_collData;
 }

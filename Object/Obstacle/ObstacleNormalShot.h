@@ -27,13 +27,12 @@ public:
 	void SetCollEnemyDatas(std::vector<CollData> collEnemyData);
 	// 誰を狙うか
 	void TargetPos();
-
-	int SetShotNum();
-
+	// ショットの発射数を渡す
+	int GetShotNum();
+	// ターゲット位置を受け取る
 	void SetTarGetPos(VECTOR pos);
-private:
-	// いらないショットの番号を受け取る
-	void SetEraseShotNo(std::vector<int> eraseShotNo);
+	// いらないショットのデータを受け取る
+	void SetEraseShotData(std::vector<CollData> eraseShotData);
 private:
 	// 大砲モデルハンドル
 	int m_hCannon;

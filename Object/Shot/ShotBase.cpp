@@ -9,7 +9,9 @@ namespace
 
 ShotBase::ShotBase(VECTOR pos):
 	m_pos(pos),
-	m_isTracking(true)
+	m_isTracking(true),
+	m_originNo(0),
+	m_no(0)
 {
 //	SoundFunctions::Play(SoundFunctions::SoundIdShot);
 	m_collData.datage = 0;

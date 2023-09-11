@@ -53,6 +53,7 @@ std::vector<CollData> ObstacleManager::GetCollDatas()
 	for (auto& nomalObstacle : m_pNormalObstacle)
 	{
 		tempArray2D.push_back(nomalObstacle->GetCollDatas());
+		std::vector<CollData> data = nomalObstacle->GetCollDatas();
 	}
 
 	// オブジェクトの数
@@ -78,10 +79,14 @@ void ObstacleManager::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
 	}
 }
 
-void ObstacleManager::SetEraseShotNo(std::vector<int> eraseShotNo)
+void ObstacleManager::SetEraseShotData(std::vector<CollData> eraseShotData)
 {
 	for (auto& normalObstacle : m_pNormalObstacle)
 	{
-		normalObstacle->SetEraseShotNo(eraseShotNo);
+		normalObstacle->SetEraseShotData(eraseShotData);
+	}
+	for (int i = 0; i < eraseShotData.size(); i++)
+	{
+		CollData temp = eraseShotData[i];
 	}
 }

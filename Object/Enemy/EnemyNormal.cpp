@@ -20,6 +20,9 @@ namespace
 	constexpr float kRange = 50.0f;
 
 	const char* kFileNameMouse = "Data/Model/Mouse.mv1";
+
+	// 半径
+	constexpr float kRadius = 16.0f * 2.0f;
 }
 
 EnemyNormal::EnemyNormal():
@@ -284,7 +287,7 @@ void EnemyNormal::ChangeNextPos(bool &isMoveing)
 void EnemyNormal::Draw()
 {
 	// 敵を描画
-//	DrawSphere3D(m_pos, 16, 16, 0xff0000, 0xff0000, true);
+	DrawSphere3D(m_pos, kRadius, 6, 0xff0000, 0xff0000, false);
 	MV1DrawModel(m_hMouse);
 }
 
@@ -308,15 +311,10 @@ CollData EnemyNormal::GetCollDatas()
 {
 	m_collData.datage = 0.0f;
 	m_collData.pos = m_pos;
-	m_collData.radius = 16.0f;
-	if (m_hp >= -20)
-	{
-		m_collData.isHit = true;
-	}
-	else
-	{
-		m_collData.isHit = false;
-	}
+	m_collData.radius = kRadius;
+	m_collData.isHit = true;
+	m_collData.originNo = 0;
+	m_collData.no = 0;
 
 	return m_collData;
 }

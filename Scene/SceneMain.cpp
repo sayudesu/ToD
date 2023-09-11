@@ -136,6 +136,9 @@ SceneBase* SceneMain::Update()
 	m_pObstacle->SetCollEnemyDatas(m_pEnemy->GetCollData());
 
 	CheckColl();
+
+	// 軽量化処理
+	m_pObstacle->SetEraseShotData(m_eraseCollShotData);
 	
 
 	// UI関係
@@ -214,27 +217,33 @@ void SceneMain::Draw()
 }
 
 // 判定チェック
-std::vector<int> SceneMain::CheckColl()
+void SceneMain::CheckColl()
 {
-	// 当たったショットのナンバーをみる
-	std::vector<int> hitShotNo;
+	// 判定用のデータを空にする
+	for (int i = 0; i < m_eraseCollShotData.size(); i++)
+	{
+		m_eraseCollShotData.pop_back();
+	}
 
 	// 敵がショットに当たったかを判別
 	for (int enemyNum = 0; enemyNum < m_pEnemy->GetNormalNum(); enemyNum++)
 	{
+		int eNum = m_pEnemy->GetNormalNum();
+		int sNum = m_pObstacle->GetCollDatas().size();
+		CollData tempEnemyData = m_pEnemy->GetCollData()[enemyNum];
 		for (int shotNum = 0; shotNum < m_pObstacle->GetCollDatas().size(); shotNum++)
 		{
+			CollData tempShotData = m_pObstacle->GetCollDatas()[shotNum];
 			if (m_pColl->UpdateCheck(
 				m_pEnemy   ->GetCollData ()[enemyNum].pos,
 				m_pObstacle->GetCollDatas()[shotNum ].pos,
 				m_pEnemy   ->GetCollData ()[enemyNum].radius,
 				m_pObstacle->GetCollDatas()[shotNum ].radius))
 			{
-				printfDx("Hit\n");
-				hitShotNo.push_back(shotNum);
+				printfDx("HIT\n");
+				// 当たったショットのデータを代入
+				m_eraseCollShotData.push_back(m_pObstacle->GetCollDatas()[shotNum]);
 			}
 		}
 	}
-
-	return hitShotNo;
 }

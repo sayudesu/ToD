@@ -12,9 +12,9 @@ namespace
 	// ショット最初打ち出すまでのフレームむカウント
 	constexpr int kShotFirstFrameMax = 30;
 	// ショット再放出するまでのフレーム
-	constexpr int kShootFrameMax = 10;
+	constexpr int kShootFrameMax = 3;
 	// ショットの速度
-	constexpr float kShootSpeed = 50.0f;
+	constexpr float kShootSpeed = 10.0f;
 
 	// オブジェクトカラー(緑)
 	constexpr int kObjColor1 = 0x00ff00;
@@ -261,7 +261,7 @@ void ObstacleNormalShot::TargetPos()
 	}
 }
 
-int ObstacleNormalShot::SetShotNum()
+int ObstacleNormalShot::GetShotNum()
 {
 	return static_cast<int>(m_pShot.size());
 }
@@ -274,10 +274,10 @@ void ObstacleNormalShot::SetTarGetPos(VECTOR pos)
 	}
 }
 
-void ObstacleNormalShot::SetEraseShotNo(std::vector<int> eraseShotNo)
+void ObstacleNormalShot::SetEraseShotData(std::vector<CollData> eraseShotData)
 {
-	for (int i = 0; i < eraseShotNo.size(); i++)
+	for (int i = 0; i < eraseShotData.size(); i++)
 	{
-	
+		CollData temp = eraseShotData[i];
 	}
 }

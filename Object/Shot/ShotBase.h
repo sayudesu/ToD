@@ -47,5 +47,9 @@ protected:
 	float m_radius;
 	// 追跡するかどうか
 	bool m_isTracking;
+	// 何番目のオブジェクトから生成されるか
+	int m_originNo;
+	// 何回生成されたか
+	int m_no;
 };
 
