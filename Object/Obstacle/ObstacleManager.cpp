@@ -53,14 +53,13 @@ std::vector<CollData> ObstacleManager::GetCollDatas()
 	for (auto& nomalObstacle : m_pNormalObstacle)
 	{
 		tempArray2D.push_back(nomalObstacle->GetCollDatas());
-		std::vector<CollData> data = nomalObstacle->GetCollDatas();
 	}
 
 	// オブジェクトの数
 	for (int i = 0; i < m_pNormalObstacle.size(); i++)
 	{
 		// ショットの数
-		for (int j = 0; j < m_pNormalObstacle[i]->SetShotNum(); j++)
+		for (int j = 0; j < m_pNormalObstacle[i]->GetShotNum(); j++)
 		{
 			// 一次元配列にしてデータを受け取る
 			tempArray.push_back(tempArray2D[i][j]);
@@ -84,9 +83,5 @@ void ObstacleManager::SetEraseShotData(std::vector<CollData> eraseShotData)
 	for (auto& normalObstacle : m_pNormalObstacle)
 	{
 		normalObstacle->SetEraseShotData(eraseShotData);
-	}
-	for (int i = 0; i < eraseShotData.size(); i++)
-	{
-		CollData temp = eraseShotData[i];
 	}
 }

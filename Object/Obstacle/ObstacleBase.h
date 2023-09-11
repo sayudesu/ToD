@@ -22,7 +22,7 @@ public:
 	// エネミーの判定用データ
 	virtual void SetCollEnemyDatas(std::vector<CollData> collEnemyData) { m_collEnemyData = collEnemyData; }
 	// ショットの数
-	virtual int SetShotNum() { return 0; }
+	virtual int GetShotNum() { return 0; }
 	// いらないショットの番号を受け取る
 	virtual void SetEraseShotData(std::vector<CollData> eraseShotData) {};
 

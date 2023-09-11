@@ -28,7 +28,7 @@ public:
 	// 誰を狙うか
 	void TargetPos();
 	// ショットの発射数を渡す
-	int GetShotNum();
+	int GetShotNum()override;
 	// ターゲット位置を受け取る
 	void SetTarGetPos(VECTOR pos);
 	// いらないショットのデータを受け取る
@@ -40,7 +40,7 @@ private:
 	// ショットの数
 	int m_countShotNum;
 	// ショットクラス
-	std::vector<std::shared_ptr<ShotBase>>m_pShot;
+	std::vector<ShotBase*>m_pShot;
 	// ショットを撃つかどうか
 	bool m_isShot;
 	// エフェクア使用クラス
@@ -59,5 +59,7 @@ private:
 	int m_tempTargetNo;
 	// 自身の生成番号
 	int m_myNo;
+	// 消すデータの番号を保存する
+	std::vector<int>m_tempDeleteNo;
 };
 

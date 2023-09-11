@@ -22,6 +22,8 @@ public:
 	// ターゲット位置
 	virtual void     SetTargetPos(VECTOR pos) { m_targetPos = pos; }
 	virtual bool     IsGetEnd    ();
+	virtual bool     IsEnabled()const { return false; }
+	virtual void	 SetEnabled(bool isEnabled) {};
 protected:
 	// 移動の計算をしています
 	void VecCalculation(VECTOR tagetPos, float speed, bool isTracking);
@@ -51,5 +53,7 @@ protected:
 	int m_originNo;
 	// 何回生成されたか
 	int m_no;
+	// そのショットを消すかどうか
+	bool m_IsEnabled;
 };
 

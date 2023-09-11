@@ -12,6 +12,9 @@ public:
 	void Update();
 	void Draw();
 
+	bool IsEnabled()const;
+	void SetEnabled(bool isEnabled);
+
 	CollData GetCollData();
 };
 

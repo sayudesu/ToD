@@ -11,7 +11,8 @@ ShotBase::ShotBase(VECTOR pos):
 	m_pos(pos),
 	m_isTracking(true),
 	m_originNo(0),
-	m_no(0)
+	m_no(0),
+	m_IsEnabled(false)
 {
 //	SoundFunctions::Play(SoundFunctions::SoundIdShot);
 	m_collData.datage = 0;
@@ -30,6 +31,7 @@ bool ShotBase::IsGetEnd()
 
 	return false;
 }
+
 
 // ˆÚ“®‚ÌŒvŽZ‚ð‚µ‚Ä‚¢‚Ü‚·
 void ShotBase::VecCalculation(VECTOR tagetPos,float speed,bool isTracking)

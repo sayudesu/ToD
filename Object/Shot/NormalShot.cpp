@@ -17,6 +17,7 @@ NormalShot::NormalShot(VECTOR pos, int originNo, int no):
 	// 判定データの初期数値
 	m_originNo = originNo;
 	m_no	   = no;
+	m_IsEnabled = true;
 }
 
 NormalShot::~NormalShot()
@@ -57,6 +58,16 @@ void NormalShot::Draw()
 		MV1DrawModel(m_hShot);
 		DrawSphere3D(m_pos, kRadius, 4.0f, 0xffff00, 0xffff00, false);
 	}
+}
+
+bool NormalShot::IsEnabled()const
+{
+	return m_IsEnabled;
+}
+
+void NormalShot::SetEnabled(bool isEnabled)
+{
+	m_IsEnabled = isEnabled;
 }
 
 CollData NormalShot::GetCollData()

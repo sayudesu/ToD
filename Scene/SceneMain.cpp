@@ -213,6 +213,30 @@ void SceneMain::Draw()
 	// 演出UI
 	m_catIn->Draw();
 
+	DrawFormatString(500, 100, 0xff0000, "%d", m_pObstacle->GetCollDatas().size());
+
+	for (int enemyNum = 0; enemyNum < m_pEnemy->GetNormalNum(); enemyNum++)
+	{
+		for (int shotNum = 0; shotNum < m_pObstacle->GetCollDatas().size(); shotNum++)
+		{
+			//// 適当な範囲外処理
+			if (m_pObstacle->GetCollDatas()[shotNum].pos.x < 0.0f   ){}
+			if (m_pObstacle->GetCollDatas()[shotNum].pos.x > 3000.0f){}
+			if (m_pObstacle->GetCollDatas()[shotNum].pos.z < 0.0f   ){}
+			if (m_pObstacle->GetCollDatas()[shotNum].pos.z > 3000.0f){}
+
+		}
+	}
+
+	float y = 30.0f;
+	// 横線
+	DrawLine3D(VGet(-100, y, -100),   VGet(1300.0f, y, -100),   0xff0000);
+	DrawLine3D(VGet(-100, y,  700),    VGet(1300.0f, y, 700),   0xffff00);
+	// 縦線
+	DrawLine3D(VGet(-100,    y, 0), VGet(-100,    y, 600), 0xff0000);
+	DrawLine3D(VGet(1300.0f, y, 0), VGet(1300.0f, y, 600), 0xffff00);
+
+
 	SceneBase::DrawSliderDoor();
 }
 
@@ -228,12 +252,8 @@ void SceneMain::CheckColl()
 	// 敵がショットに当たったかを判別
 	for (int enemyNum = 0; enemyNum < m_pEnemy->GetNormalNum(); enemyNum++)
 	{
-		int eNum = m_pEnemy->GetNormalNum();
-		int sNum = m_pObstacle->GetCollDatas().size();
-		CollData tempEnemyData = m_pEnemy->GetCollData()[enemyNum];
 		for (int shotNum = 0; shotNum < m_pObstacle->GetCollDatas().size(); shotNum++)
 		{
-			CollData tempShotData = m_pObstacle->GetCollDatas()[shotNum];
 			if (m_pColl->UpdateCheck(
 				m_pEnemy   ->GetCollData ()[enemyNum].pos,
 				m_pObstacle->GetCollDatas()[shotNum ].pos,
@@ -242,6 +262,24 @@ void SceneMain::CheckColl()
 			{
 				printfDx("HIT\n");
 				// 当たったショットのデータを代入
+			//	m_eraseCollShotData.push_back(m_pObstacle->GetCollDatas()[shotNum]);
+			}
+
+			//// 適当な範囲外処理
+			if (m_pObstacle->GetCollDatas()[shotNum].pos.x < -100)
+			{
+				m_eraseCollShotData.push_back(m_pObstacle->GetCollDatas()[shotNum]);
+			}
+			if (m_pObstacle->GetCollDatas()[shotNum].pos.x > 1300.0f)
+			{
+				m_eraseCollShotData.push_back(m_pObstacle->GetCollDatas()[shotNum]);
+			}
+			if (m_pObstacle->GetCollDatas()[shotNum].pos.z < 0.0f)
+			{
+				m_eraseCollShotData.push_back(m_pObstacle->GetCollDatas()[shotNum]);
+			}
+			if (m_pObstacle->GetCollDatas()[shotNum].pos.z > 700)
+			{
 				m_eraseCollShotData.push_back(m_pObstacle->GetCollDatas()[shotNum]);
 			}
 		}
