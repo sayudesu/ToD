@@ -29,7 +29,7 @@ namespace
 	const VECTOR kConnonScale = VGet(1.0f, 1.0f, 1.0f);
 }
 
-ObstacleNormalShot::ObstacleNormalShot(VECTOR pos):
+ObstacleNormalShot::ObstacleNormalShot(VECTOR pos, int no):
 	m_hCannon(-1),
 	m_hCannonBaes(-1),
 	m_shotFirstDelayFrameCount(0),
@@ -38,7 +38,8 @@ ObstacleNormalShot::ObstacleNormalShot(VECTOR pos):
 	m_shootFrameCount(0),
 	m_objColor(kObjColor1),
 	m_isTargetChange(false),
-	m_tempTargetNo(-1)
+	m_tempTargetNo(-1),
+	m_myNo(no)
 {
 	m_pos = pos;
 
@@ -134,7 +135,7 @@ void ObstacleNormalShot::UpdateShot()
 	if (m_shootFrameCount > kShootFrameMax && (m_isShot))
 	{
 		m_countShotNum++;
-		m_pShot.push_back(std::make_shared<NormalShot>(m_countShotNum,m_pos));
+		m_pShot.push_back(std::make_shared<NormalShot>(m_pos, m_myNo,m_countShotNum));
 		m_pShot[m_countShotNum]->Init(m_targetPos,VGet(1.0f, 1.0f, 1.0f), VGet(0.0f, 180.0f, 0.0f), kShootSpeed,false);
 		m_shootFrameCount = 0;
 	}

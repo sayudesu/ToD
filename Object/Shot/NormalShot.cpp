@@ -1,12 +1,20 @@
 #include "NormalShot.h"
 #include <cassert>
 
-NormalShot::NormalShot(int no,VECTOR pos):
+NormalShot::NormalShot(VECTOR pos, int originNo, int no):
 	ShotBase(pos)
 {
 	m_hShot = -1;
 	m_targetPos = VGet(0, 0, 0);
 	m_isScreenOut = false;
+
+	// 判定データの初期数値
+	m_collData.datage   = 3.0f;
+	m_collData.pos      = m_pos;
+	m_collData.radius   = 16.0f;
+	m_collData.isHit    = true;
+	m_collData.originNo = originNo;
+	m_collData.no       = no;
 }
 
 NormalShot::~NormalShot()
@@ -51,10 +59,5 @@ void NormalShot::Draw()
 
 CollData NormalShot::GetCollData()
 {
-	m_collData.datage = 3.0f;
-	m_collData.pos = m_pos;
-	m_collData.radius = 16.0f;
-	m_collData.isHit = true;
-
 	return m_collData;
 }

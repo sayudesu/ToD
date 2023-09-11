@@ -126,7 +126,9 @@ SceneBase* SceneMain::Update()
 	// オブジェクトを生成
 	if (m_pPlayer->GetObjCreate())
 	{
-		m_pObstacle->Create(m_pPlayer->SetPos());
+		static int no = -1;
+		no++;
+		m_pObstacle->Create(m_pPlayer->SetPos(),no);
 	}
 
 	// 判定情報	
@@ -188,7 +190,7 @@ SceneBase* SceneMain::Update()
 
 void SceneMain::Draw()
 {
-
+	// 背景用
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xaaaa888, true);
 	m_pMap->Draw();
 	m_pEnemy->Draw();
@@ -223,10 +225,10 @@ std::vector<int> SceneMain::CheckColl()
 		for (int shotNum = 0; shotNum < m_pObstacle->GetCollDatas().size(); shotNum++)
 		{
 			if (m_pColl->UpdateCheck(
-				m_pEnemy->GetCollData()[enemyNum].pos,
-				m_pObstacle->GetCollDatas()[shotNum].pos,
-				m_pEnemy->GetCollData()[enemyNum].radius,
-				m_pObstacle->GetCollDatas()[enemyNum].radius))
+				m_pEnemy   ->GetCollData ()[enemyNum].pos,
+				m_pObstacle->GetCollDatas()[shotNum ].pos,
+				m_pEnemy   ->GetCollData ()[enemyNum].radius,
+				m_pObstacle->GetCollDatas()[shotNum ].radius))
 			{
 				printfDx("Hit\n");
 				hitShotNo.push_back(shotNum);

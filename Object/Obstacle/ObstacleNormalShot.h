@@ -9,7 +9,7 @@ class EffekseerDrawer;
 class ObstacleNormalShot : public ObstacleBase
 {
 public:
-	ObstacleNormalShot(VECTOR pos);
+	ObstacleNormalShot(VECTOR pos,int no);
 	virtual ~ObstacleNormalShot();
 
 	void Init();
@@ -58,5 +58,7 @@ private:
 	bool m_isTargetChange;
 	// ìGÇÃî‘çÜ
 	int m_tempTargetNo;
+	// é©êgÇÃê∂ê¨î‘çÜ
+	int m_myNo;
 };
 

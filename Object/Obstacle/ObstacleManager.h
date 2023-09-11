@@ -13,7 +13,7 @@ public:
 
 	void Init();
 	void End();
-	void Create(VECTOR pos);
+	void Create(VECTOR pos, int no);
 	void Update();
 	void Draw();
 

@@ -19,10 +19,10 @@ void ObstacleManager::End()
 {
 }
 
-void ObstacleManager::Create(VECTOR pos)
+void ObstacleManager::Create(VECTOR pos,int no)
 {
 	m_countCreate++;
-	m_pNormalObstacle.push_back(std::make_shared<ObstacleNormalShot>(pos));
+	m_pNormalObstacle.push_back(std::make_shared<ObstacleNormalShot>(pos, no));
 	m_pNormalObstacle[m_countCreate]->Init();
 }
 

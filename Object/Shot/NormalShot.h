@@ -4,7 +4,7 @@
 class NormalShot : public ShotBase
 {
 public:
-	NormalShot(int no,VECTOR pos);
+	NormalShot(VECTOR pos, int originNo,int no);
 	~NormalShot();
 
 	void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed, bool isTracking);
