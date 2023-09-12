@@ -24,6 +24,10 @@ public:
 	virtual CollData GetCollDatas() { return m_collData; }
 	// 通る道
 	virtual void SetRoadPos(std::vector<int> mapChip) { m_mapChip = mapChip; }
+	// 与えられるダメージを受け取る
+	virtual void SetHitDamage(int damage) {};
+	// そのデータが必要なのかどうか
+	virtual bool GetErase() { return false; }
 
 protected:
 	VECTOR m_pos = VGet(0.0f, 0.0f, 0.0f);
@@ -33,5 +37,9 @@ protected:
 	CollData m_collData{};
 	// プレイヤー設置オブジェクトのデータ
 	std::vector<CollData> m_collObstacleShotData{};
+	// 体力
+	int m_hp = 0;
+	// ダメージ
+	int m_damage = 0;
 };
 

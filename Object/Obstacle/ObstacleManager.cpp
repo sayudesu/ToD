@@ -42,32 +42,22 @@ void ObstacleManager::Draw()
 	}
 }
 
-// 二次元配列を一次元配列にしてを返す
-std::vector<CollData> ObstacleManager::GetCollDatas()
+// オブジェクトの数を返す
+int ObstacleManager::GetNum()
 {
-	// 一時的に格納する用の配列を用意する
-	std::vector < std::vector<CollData>> tempArray2D{};
-	std::vector<CollData> tempArray{};
+	return static_cast<int>(m_pNormalObstacle.size());
+}
 
-	// 二次元配列でデータを受け取る
-	for (auto& nomalObstacle : m_pNormalObstacle)
-	{
-		tempArray2D.push_back(nomalObstacle->GetCollDatas());
-	}
+// ショットの数を返します
+int ObstacleManager::GetShotNum(int objNum)
+{
+	return m_pNormalObstacle[objNum]->GetShotNum();
+}
 
-	// オブジェクトの数
-	for (int i = 0; i < m_pNormalObstacle.size(); i++)
-	{
-		// ショットの数
-		for (int j = 0; j < m_pNormalObstacle[i]->GetShotNum(); j++)
-		{
-			// 一次元配列にしてデータを受け取る
-			tempArray.push_back(tempArray2D[i][j]);
-		}
-	}
-
-	// 一次元配列でデータを渡す
-	return tempArray;
+// ショットのデータを受け取る
+CollData ObstacleManager::GetCollShotDatas(int objNum,int shotNum)
+{
+	return m_pNormalObstacle[objNum]->GetCollShotDatas(shotNum);
 }
 
 void ObstacleManager::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
@@ -84,4 +74,10 @@ void ObstacleManager::SetEraseShotData(std::vector<CollData> eraseShotData)
 	{
 		normalObstacle->SetEraseShotData(eraseShotData);
 	}
+}
+
+// 必要のないショット番号を受け取る
+void ObstacleManager::SetShotErase(int objNum,int shotNum, bool erase)
+{
+	m_pNormalObstacle[objNum]->SetShotErase(shotNum, erase);
 }

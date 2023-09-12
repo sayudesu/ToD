@@ -18,13 +18,15 @@ public:
 	// 障害物の位置
 	virtual VECTOR GetPos() const { return m_pos; }
 	// 当たり判定データ
-	virtual std::vector<CollData> GetCollDatas() { return std::vector<CollData>(); }
+	virtual CollData GetCollShotDatas(int shotNum) { return CollData(); }
 	// エネミーの判定用データ
 	virtual void SetCollEnemyDatas(std::vector<CollData> collEnemyData) { m_collEnemyData = collEnemyData; }
 	// ショットの数
 	virtual int GetShotNum() { return 0; }
 	// いらないショットの番号を受け取る
 	virtual void SetEraseShotData(std::vector<CollData> eraseShotData) {};
+	// 必要のないショット番号を受け取る
+	virtual void SetShotErase(int shotNum, bool erase){};
 
 protected:
 	// 位置

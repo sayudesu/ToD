@@ -32,12 +32,12 @@ EnemyNormal::EnemyNormal():
 	m_dir(VGet(0, 0, 0)),
 	m_targetPos(VGet(0, 0, 0)),
 	m_screenPos(VGet(0, 0, 0)),
-	m_hp(0),
 	m_ChipPosX(0),
 	m_ChipPosZ(0),
 	m_isRandMove(false)
 {
 	m_hp = 20.0f;
+	m_damage = 0;
 }
 EnemyNormal::~EnemyNormal()
 {
@@ -64,6 +64,7 @@ void EnemyNormal::Init(VECTOR firstPos, int x, int z)
 
 void EnemyNormal::End()
 {
+	MV1DeleteModel(m_hMouse);
 }
 
 void EnemyNormal::Update()
@@ -294,9 +295,11 @@ void EnemyNormal::Draw()
 void EnemyNormal::DrawUI()
 {
 
+	VECTOR hp = VGet(m_screenPos.x, m_screenPos.y, m_screenPos.z);
+	
 	DrawBox(
-		m_screenPos.x - 20, m_screenPos.y - 30,
-		m_screenPos.x + 20, m_screenPos.y - 30 + 10,
+		hp.x - 20, hp.y - 30,
+		hp.x + m_hp, hp.y - 30 + 10,
 		0xffffff,
 		true);
 	DrawBox(
@@ -317,4 +320,27 @@ CollData EnemyNormal::GetCollDatas()
 	m_collData.no = 0;
 
 	return m_collData;
+}
+
+// 与えられるダメージを受け取る
+void EnemyNormal::SetHitDamage(int damage)
+{
+	// あとで修正
+	if (m_damage != damage)
+	{
+		m_damage = damage;
+		m_hp -= damage;
+		m_damage = 0;
+	}
+}
+
+// このオブジェクトが必要かどうか
+bool EnemyNormal::GetErase()
+{
+	if (m_hp < -20)
+	{
+		m_hp = -20;
+		return true;
+	}
+	return false;
 }

@@ -22,7 +22,7 @@ public:
 	void Draw();
 
 	// 判定データ
-	std::vector<CollData> GetCollDatas();
+	CollData GetCollShotDatas(int shotNum);
 	// エネミーの判定用データ
 	void SetCollEnemyDatas(std::vector<CollData> collEnemyData);
 	// 誰を狙うか
@@ -31,8 +31,8 @@ public:
 	int GetShotNum()override;
 	// ターゲット位置を受け取る
 	void SetTarGetPos(VECTOR pos);
-	// いらないショットのデータを受け取る
-	void SetEraseShotData(std::vector<CollData> eraseShotData);
+	// 弾の判定をなくすかどうか
+	void SetShotErase(int shotNum, bool erase);
 private:
 	// 大砲モデルハンドル
 	int m_hCannon;

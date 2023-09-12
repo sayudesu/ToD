@@ -15,7 +15,11 @@ public:
 	void DrawUI();
 
 	// 当たり判定用データ
-	virtual CollData GetCollDatas();
+	CollData GetCollDatas();
+	// 与えられるダメージを受け取る
+	void SetHitDamage(int damage);
+	// このオブジェクトが必要かどうか
+	bool GetErase();
 private:
 	// モデルハンドル
 	int m_hMouse;
@@ -31,8 +35,6 @@ private:
 	VECTOR m_targetPos;
 	// 3D座標から2D座標に変換
 	VECTOR m_screenPos;
-	// 体力系
-	float m_hp;
 	// チップ番号での現在位置
 	int m_ChipPosX;
 	int m_ChipPosZ;

@@ -86,9 +86,8 @@ void SceneMain::Init()
 
 	// マップチップをエネミーに渡す
 	// コードの処理の流れのせいでこうなっています治します
-	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
-	m_pEnemy->Create();
-	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
+	m_pEnemy   ->SetMapChip(m_pMap->GetMapChip());
+	m_pPlayer  ->SetMapChip(m_pMap->GetMapChip());
 
 }
 
@@ -132,9 +131,7 @@ SceneBase* SceneMain::Update()
 	}
 
 	// 判定情報	
-	m_pEnemy->SetObjCollData(m_pObstacle->GetCollDatas());
 	m_pObstacle->SetCollEnemyDatas(m_pEnemy->GetCollData());
-
 	CheckColl();
 
 	// 軽量化処理
@@ -213,21 +210,17 @@ void SceneMain::Draw()
 	// 演出UI
 	m_catIn->Draw();
 
-	DrawFormatString(500, 100, 0xff0000, "%d", m_pObstacle->GetCollDatas().size());
-
-	for (int enemyNum = 0; enemyNum < m_pEnemy->GetNormalNum(); enemyNum++)
+#if _DEBUG
+	// ショットの数を確認
+	for (int objNum = 0; objNum < m_pObstacle->GetNum(); objNum++)
 	{
-		for (int shotNum = 0; shotNum < m_pObstacle->GetCollDatas().size(); shotNum++)
+		for (int shotNum = 0; shotNum < m_pObstacle->GetShotNum(objNum); shotNum++)
 		{
-			//// 適当な範囲外処理
-			if (m_pObstacle->GetCollDatas()[shotNum].pos.x < 0.0f   ){}
-			if (m_pObstacle->GetCollDatas()[shotNum].pos.x > 3000.0f){}
-			if (m_pObstacle->GetCollDatas()[shotNum].pos.z < 0.0f   ){}
-			if (m_pObstacle->GetCollDatas()[shotNum].pos.z > 3000.0f){}
-
+			DrawFormatString(500, 100, 0xff0000, "%d", m_pObstacle->GetShotNum(objNum));
 		}
 	}
 
+	// 枠線
 	float y = 30.0f;
 	// 横線
 	DrawLine3D(VGet(-100, y, -100),   VGet(1300.0f, y, -100),   0xff0000);
@@ -235,7 +228,7 @@ void SceneMain::Draw()
 	// 縦線
 	DrawLine3D(VGet(-100,    y, 0), VGet(-100,    y, 600), 0xff0000);
 	DrawLine3D(VGet(1300.0f, y, 0), VGet(1300.0f, y, 600), 0xffff00);
-
+#endif
 
 	SceneBase::DrawSliderDoor();
 }
@@ -243,44 +236,28 @@ void SceneMain::Draw()
 // 判定チェック
 void SceneMain::CheckColl()
 {
-	// 判定用のデータを空にする
-	for (int i = 0; i < m_eraseCollShotData.size(); i++)
-	{
-		m_eraseCollShotData.pop_back();
-	}
-
 	// 敵がショットに当たったかを判別
+	// 敵の数分
 	for (int enemyNum = 0; enemyNum < m_pEnemy->GetNormalNum(); enemyNum++)
 	{
-		for (int shotNum = 0; shotNum < m_pObstacle->GetCollDatas().size(); shotNum++)
+		// プレイヤー設置オブジェクトの数分
+		for (int objNum = 0; objNum < m_pObstacle->GetNum(); objNum++)
 		{
-			if (m_pColl->UpdateCheck(
-				m_pEnemy   ->GetCollData ()[enemyNum].pos,
-				m_pObstacle->GetCollDatas()[shotNum ].pos,
-				m_pEnemy   ->GetCollData ()[enemyNum].radius,
-				m_pObstacle->GetCollDatas()[shotNum ].radius))
+			// オブジェクトが出す弾の数分
+			for (int shotNum = 0; shotNum < m_pObstacle->GetShotNum(objNum); shotNum++)
 			{
-				printfDx("HIT\n");
-				// 当たったショットのデータを代入
-			//	m_eraseCollShotData.push_back(m_pObstacle->GetCollDatas()[shotNum]);
-			}
-
-			//// 適当な範囲外処理
-			if (m_pObstacle->GetCollDatas()[shotNum].pos.x < -100)
-			{
-				m_eraseCollShotData.push_back(m_pObstacle->GetCollDatas()[shotNum]);
-			}
-			if (m_pObstacle->GetCollDatas()[shotNum].pos.x > 1300.0f)
-			{
-				m_eraseCollShotData.push_back(m_pObstacle->GetCollDatas()[shotNum]);
-			}
-			if (m_pObstacle->GetCollDatas()[shotNum].pos.z < 0.0f)
-			{
-				m_eraseCollShotData.push_back(m_pObstacle->GetCollDatas()[shotNum]);
-			}
-			if (m_pObstacle->GetCollDatas()[shotNum].pos.z > 700)
-			{
-				m_eraseCollShotData.push_back(m_pObstacle->GetCollDatas()[shotNum]);
+				// 当たり判定処理
+				if (m_pColl->UpdateCheck(
+					m_pEnemy   ->GetCollData     ()[enemyNum]     .pos,
+					m_pObstacle->GetCollShotDatas(objNum, shotNum).pos,
+					m_pEnemy   ->GetCollData     ()[enemyNum]     .radius,
+					m_pObstacle->GetCollShotDatas(objNum, shotNum).radius))
+				{
+					// ショットのメモリ解放用関数
+					m_pObstacle->SetShotErase(objNum, shotNum, true);
+					// ダメージを与える
+					m_pEnemy->SetHitDamage(enemyNum, m_pObstacle->GetCollShotDatas(objNum, shotNum).datage);
+				}
 			}
 		}
 	}

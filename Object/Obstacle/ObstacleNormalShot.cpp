@@ -14,7 +14,7 @@ namespace
 	// ショット再放出するまでのフレーム
 	constexpr int kShootFrameMax = 3;
 	// ショットの速度
-	constexpr float kShootSpeed = 10.0f;
+	constexpr float kShootSpeed = 20.0f;
 
 	// オブジェクトカラー(緑)
 	constexpr int kObjColor1 = 0x00ff00;
@@ -26,7 +26,11 @@ namespace
 	const char* kCannonPathName     = "Data/Model/Cannon.mv1";
 	
 	// 大砲の大きさ
-	const VECTOR kConnonScale = VGet(1.0f, 1.0f, 1.0f);
+	const VECTOR kConnonScale  = VGet(1.0f, 1.0f, 1.0f);
+	// ショットの大きさ
+	const VECTOR kShotScale    = VGet(1.0f, 1.0f, 1.0f);
+	// ショットの初期角度
+	const VECTOR kShotRotation = VGet(0.0f, 180.0f, 0.0f);
 }
 
 ObstacleNormalShot::ObstacleNormalShot(VECTOR pos, int no):
@@ -130,54 +134,12 @@ void ObstacleNormalShot::UpdateSetting()
 
 void ObstacleNormalShot::UpdateShot()
 {
-	// 消したい要素数(基本は1つ)
-	for (int i = 0; i < m_tempDeleteNo.size(); i++)
+	for (auto& shot : m_pShot)
 	{
-		if (m_tempDeleteNo[i] < m_pShot.size())
-		{
-			m_pShot[m_tempDeleteNo[i]]->SetEnabled(false);
-		}
-
-		//for (int j = 0; j < m_tempDeleteNo.size(); j++)
-		//{
-		//	if (m_collShotData[i].no == m_tempDeleteNo[j])
-		//	{
-		//		m_pShot[m_tempDeleteNo[i]]->SetEnabled(false);
-		//	}
-		//}
-
-		// 範囲外ではないか確認
-		//if (m_tempDeleteNo[i] < m_pShot.size())
-		//{
-			//m_pShot[m_tempDeleteNo[i]]->End();
-
-			//// メモリ解放
-			//delete m_pShot[m_tempDeleteNo[i]];
-			//m_pShot[m_tempDeleteNo[i]] = nullptr;
-
-			//// デリート番号位置の要素を削除
-			//m_pShot.erase(m_pShot.begin() + m_tempDeleteNo[i]);
-		//}
-	}
-	// デリートナンバーのリセット
-	for (int i = 0; i < m_tempDeleteNo.size(); i++)
-	{
-		m_tempDeleteNo.pop_back();
+		shot->Update();
 	}
 
-	// いなくなった敵は消す
-	// 消す命令だが、実際には消してなくて、うしろによけているだけ
-	// 条件に合致したものを消す
-	// 対象はenemies_の最初から
-	// 最後まで
-	// 消えてもらう条件を表すラムダ式
-	// trueだと消える。falseだと消えない
-	auto rmIt = std::remove_if(m_pShot.begin(),m_pShot.end(),				 
-		[](const ShotBase* enemy)
-		{
-			return !enemy->IsEnabled();
-		});
-	m_pShot.erase(rmIt, m_pShot.end());
+	TargetPos();
 
 	m_shootFrameCount++;
 	// ショットを出すスピート
@@ -185,13 +147,8 @@ void ObstacleNormalShot::UpdateShot()
 	{
 		m_countShotNum++;
 		m_pShot.push_back(new NormalShot(m_pos, m_myNo, m_countShotNum));
-		m_pShot.back()->Init(m_targetPos, VGet(1.0f, 1.0f, 1.0f), VGet(0.0f, 180.0f, 0.0f), kShootSpeed, false);
+		m_pShot.back()->Init(m_targetPos, kShotScale, kShotRotation, kShootSpeed, false);
 		m_shootFrameCount = 0;
-	}
-
-	for (auto& shot : m_pShot)
-	{
-		shot->Update();
 	}
 
 	// モデルの回転行列を計算して設定
@@ -199,7 +156,35 @@ void ObstacleNormalShot::UpdateShot()
 	const float angle2 = atan2f(dir2.x, dir2.z) + -90.0f * DX_PI_F / 180.0f;
 	MV1SetRotationXYZ(m_hCannon, VGet(0.0f, angle2, 0.0f));
 
-	TargetPos();
+
+
+	for (int i = 0; i < m_pShot.size(); i++)
+	{
+		// 適当な範囲外処理
+		if (m_pShot[i]->GetCollData().pos.x < -100.0f)
+		{
+			m_pShot[i]->SetEnabled(true);
+		}
+		if (m_pShot[i]->GetCollData().pos.x > 1300.0f)
+		{
+			m_pShot[i]->SetEnabled(true);
+		}
+		if (m_pShot[i]->GetCollData().pos.z < 0.0f)
+		{
+			m_pShot[i]->SetEnabled(true);
+		}
+		if (m_pShot[i]->GetCollData().pos.z > 700.0f)
+		{
+			m_pShot[i]->SetEnabled(true);
+		}
+
+
+		if (m_pShot[i]->IsEnabled())
+		{
+			m_pShot[i]->End();
+			m_pShot.erase(m_pShot.begin() + i);
+		}
+	}
 }
 
 void ObstacleNormalShot::Draw()
@@ -232,19 +217,9 @@ void ObstacleNormalShot::Draw()
 }
 
 // 判定データを渡す
-std::vector<CollData> ObstacleNormalShot::GetCollDatas()
+CollData ObstacleNormalShot::GetCollShotDatas(int shotNum)
 {
-	std::vector<CollData> collData;
-
-	if (m_countShotNum != -1)
-	{
-		for(auto& shotData : m_pShot)
-		{
-			collData.push_back(shotData->GetCollData());
-		}
-	}
-
-	return collData;
+	return m_pShot[shotNum]->GetCollData();
 }
 
 // エネミーの判定用データ
@@ -256,59 +231,18 @@ void ObstacleNormalShot::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
 void ObstacleNormalShot::TargetPos()
 {
 	// ここは後できれいにします。
-	if (m_isTargetChange)
+	// 敵の数分
+	m_isShot = false;
+	for (int i = 0; i < m_collEnemyData.size(); i++)
 	{
-		// 敵の数分
-		for (int i = 0; i < m_collEnemyData.size(); i++)
-		{
-			// 近い敵を見る
-			const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[i].pos);
-			const float length = sqrtf((toPlayer.x * toPlayer.x) + (toPlayer.y * toPlayer.y) + (toPlayer.z * toPlayer.z));
-			if (length < 300)
-			{
-				// ターゲット指定
-				m_targetPos = m_collEnemyData[i].pos;
-				m_tempTargetNo = i;
-				m_isTargetChange = false;
-
-				// ショットを撃つ
-				m_isShot = true;
-			}
-			else
-			{
-				// ショットを撃たない
-				m_isShot = false;
-			}
-		}
-	}
-	else
-	{
-
-		const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[m_tempTargetNo].pos);
+		// 近い敵を見る
+		const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[i].pos);
 		const float length = sqrtf((toPlayer.x * toPlayer.x) + (toPlayer.y * toPlayer.y) + (toPlayer.z * toPlayer.z));
 		if (length < 300)
 		{
 			// ターゲット指定
-			m_targetPos = m_collEnemyData[m_tempTargetNo].pos;
-			// ショットを撃つ
+			m_targetPos = m_collEnemyData[i].pos;
 			m_isShot = true;
-		}
-		else
-		{
-			m_isTargetChange = true;
-			// ショットを撃たない
-			m_isShot = false;
-		}
-
-		// 判定がなしになったら
-		if (!m_collEnemyData[m_tempTargetNo].isHit)
-		{
-			// 最終ターゲットを指定
-			m_targetPos = m_collEnemyData[m_tempTargetNo].pos;
-			// ターゲットを再指定
-			m_isTargetChange = true;
-			// ショットを撃たない
-			m_isShot = false;
 		}
 	}
 }
@@ -326,14 +260,8 @@ void ObstacleNormalShot::SetTarGetPos(VECTOR pos)
 	}
 }
 
-void ObstacleNormalShot::SetEraseShotData(std::vector<CollData> eraseShotData)
+// 弾の判定をなくすかどうか
+void ObstacleNormalShot::SetShotErase(int shotNum,bool erase)
 {
-	for (int i = 0; i < eraseShotData.size(); i++)
-	{
-		// もし自身の番号が消したい番号と同じだったら
-		if (m_myNo == eraseShotData[i].originNo)
-		{
-			m_tempDeleteNo.push_back(eraseShotData[i].no);
-		}
-	}
+	m_pShot[shotNum]->SetEnabled(erase);
 }

@@ -69,9 +69,8 @@ void EnemyManager::Create()
 		}
 	}
 
-	m_countCreate++;
-	m_pEnemyNormal.push_back(std::make_shared<EnemyNormal>());
-	m_pEnemyNormal[m_countCreate]->Init(pos, forX, forZ);
+	m_pEnemyNormal.push_back(new EnemyNormal());
+	m_pEnemyNormal.back()->Init(pos, forX, forZ);
 }
 
 // 敵の更新処理
@@ -81,6 +80,8 @@ void EnemyManager::Update()
 	{
 		enemyNormal->Update();
 	}
+
+	EraseObject();
 }
 
 // 敵の描画
@@ -143,4 +144,28 @@ std::vector<CollData> EnemyManager::GetCollData()
 	}
 
 	return collData;
+}
+
+// 受けるダメージを受け取る
+void EnemyManager::SetHitDamage(int enemyNo, int damage)
+{
+	m_pEnemyNormal[enemyNo]->SetHitDamage(damage);
+}
+
+// 必要のないオブジェクトを削除する
+void EnemyManager::EraseObject()
+{
+	for (int i = 0; i < m_pEnemyNormal.size(); i++)
+	{
+		if (m_pEnemyNormal[i]->GetErase())
+		{
+			// メモリ解放
+			m_pEnemyNormal[i]->End();
+			// デリート処理
+			delete m_pEnemyNormal[i];
+			m_pEnemyNormal[i] = nullptr;
+			// 要素の削除
+			m_pEnemyNormal.erase(m_pEnemyNormal.begin() + i);
+		}
+	}
 }

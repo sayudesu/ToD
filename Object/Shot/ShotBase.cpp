@@ -7,31 +7,20 @@ namespace
 	constexpr float kSpeed = 30.0f;
 }
 
-ShotBase::ShotBase(VECTOR pos):
-	m_pos(pos),
-	m_isTracking(true),
-	m_originNo(0),
-	m_no(0),
-	m_IsEnabled(false)
+ShotBase::ShotBase(VECTOR pos)
 {
+	m_pos = pos;
+	m_isTracking = true;
+	m_originNo = 0;
+	m_no = 0;
+	m_IsEnabled = false;
+
 //	SoundFunctions::Play(SoundFunctions::SoundIdShot);
 	m_collData.datage = 0;
-	m_collData.pos = VGet(0,0,0);
+	m_collData.pos = pos;
 	m_collData.radius = 0;
 
 }
-
-bool ShotBase::IsGetEnd()
-{
-	if (m_nowPosToNextPosX < 30.0f &&
-		m_nowPosToNextPosZ < 30.0f)
-	{
-	//	return true;
-	}
-
-	return false;
-}
-
 
 // ˆÚ“®‚ÌŒvŽZ‚ð‚µ‚Ä‚¢‚Ü‚·
 void ShotBase::VecCalculation(VECTOR tagetPos,float speed,bool isTracking)

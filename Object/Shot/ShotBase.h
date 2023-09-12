@@ -16,12 +16,11 @@ public:
 	virtual void Draw  ()    {};
 
 	// ショット判定データ
-	virtual CollData GetCollData ()           { return m_collData; }
+	virtual CollData GetCollData ()  { return m_collData; }
 	// ショットの位置
 	virtual VECTOR   SetPos      ()const      { return m_pos;      }
 	// ターゲット位置
 	virtual void     SetTargetPos(VECTOR pos) { m_targetPos = pos; }
-	virtual bool     IsGetEnd    ();
 	virtual bool     IsEnabled()const { return false; }
 	virtual void	 SetEnabled(bool isEnabled) {};
 protected:

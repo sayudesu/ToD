@@ -27,10 +27,14 @@ public:
  	virtual void SetObjCollData(std::vector<CollData> collData);
 	// 自身の判定用データ
  	virtual std::vector<CollData> GetCollData();
-
+	// 受けるダメージを受け取る
+	virtual void SetHitDamage(int enemyNo,int damage);
+private:
+	// 必要のないオブジェクトを削除する
+	virtual void EraseObject();
 private:
 	// ノーマルエネミー
-	std::vector<std::shared_ptr<EnemyBase>>m_pEnemyNormal;
+	std::vector<EnemyBase*>m_pEnemyNormal;
 	// マップチップのデータ
 	std::vector<int>m_mapChip;
 	// 出現数をカウントします
