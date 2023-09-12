@@ -1,8 +1,7 @@
 #include "ObstacleManager.h"
 #include "../../Object/Obstacle/ObstacleNormalShot.h"
 
-ObstacleManager::ObstacleManager():
-	m_countCreate(-1)
+ObstacleManager::ObstacleManager()
 {
 }
 
@@ -17,13 +16,20 @@ void ObstacleManager::Init()
 
 void ObstacleManager::End()
 {
+	for (int i = 0; i < m_pNormalObstacle.size(); i++)
+	{
+		m_pNormalObstacle[i]->End();
+		delete m_pNormalObstacle[i];
+		m_pNormalObstacle[i] = nullptr;
+	} 
 }
 
 void ObstacleManager::Create(VECTOR pos,int no)
 {
-	m_countCreate++;
-	m_pNormalObstacle.push_back(std::make_shared<ObstacleNormalShot>(pos, no));
-	m_pNormalObstacle[m_countCreate]->Init();
+	// インスタンスの作成
+	m_pNormalObstacle.push_back(new ObstacleNormalShot(pos, no));
+	// 初期化
+	m_pNormalObstacle.back()->Init();
 }
 
 void ObstacleManager::Update()
@@ -60,6 +66,7 @@ CollData ObstacleManager::GetCollShotDatas(int objNum,int shotNum)
 	return m_pNormalObstacle[objNum]->GetCollShotDatas(shotNum);
 }
 
+// 敵の判定用データを受け取る
 void ObstacleManager::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
 {
 	for (auto& normalObstacle : m_pNormalObstacle)
@@ -67,7 +74,7 @@ void ObstacleManager::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
 		normalObstacle->SetCollEnemyDatas(collEnemyData);
 	}
 }
-
+// 必要の無いshotの番号を受け取る
 void ObstacleManager::SetEraseShotData(std::vector<CollData> eraseShotData)
 {
 	for (auto& normalObstacle : m_pNormalObstacle)

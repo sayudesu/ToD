@@ -1,8 +1,7 @@
 #include "EnemyManager.h"
-#include "EnemyNormal.h"
+#include "EnemyMouse.h"
 
-EnemyManager::EnemyManager() :
-	m_countCreate(-1)
+EnemyManager::EnemyManager()
 {
 }
 
@@ -10,18 +9,20 @@ EnemyManager::~EnemyManager()
 {
 }
 
-// “G‚Ì‰Šú‰»
+// ‰Šú‰»
 void EnemyManager::Init()
 {
 	
 }
 
-// “G‚ÌƒGƒ“ƒhˆ—
+// ƒƒ‚ƒŠ‰ğ•ú
 void EnemyManager::End()
 {
-	for (auto& enemyNormal : m_pEnemyNormal)
+	for (int i = 0; i < m_pEnemyNormal.size(); i++)
 	{
-		enemyNormal->End();
+		m_pEnemyNormal[i]->End();
+		delete m_pEnemyNormal[i];
+		m_pEnemyNormal[i] = nullptr;
 	}
 }
 
@@ -69,7 +70,7 @@ void EnemyManager::Create()
 		}
 	}
 
-	m_pEnemyNormal.push_back(new EnemyNormal());
+	m_pEnemyNormal.push_back(new EnemyMouse());
 	m_pEnemyNormal.back()->Init(pos, forX, forZ);
 }
 
@@ -84,7 +85,7 @@ void EnemyManager::Update()
 	EraseObject();
 }
 
-// “G‚Ì•`‰æ
+// •`‰æ
 void EnemyManager::Draw()
 {
 	for (auto& enemyNormal : m_pEnemyNormal)
@@ -93,6 +94,7 @@ void EnemyManager::Draw()
 	}
 }
 
+// 2D‚Å‚Ì•`‰æ
 void EnemyManager::DrawUI()
 {
 	for (auto& enemyNormal : m_pEnemyNormal)

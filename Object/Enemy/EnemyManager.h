@@ -1,7 +1,6 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
-#include <memory>
 #include "../../Util/CollDatas.h"
 
 class EnemyBase;
@@ -17,6 +16,7 @@ public:
 	virtual void Update();
 	virtual void Draw();
 	virtual void DrawUI();
+
 	// ノーマルエネミーの位置
 	virtual VECTOR SetNormalPos(int num);
 	// ノーマルエネミーの数を返します
@@ -37,7 +37,5 @@ private:
 	std::vector<EnemyBase*>m_pEnemyNormal;
 	// マップチップのデータ
 	std::vector<int>m_mapChip;
-	// 出現数をカウントします
-	int m_countCreate;
 };
 

@@ -1,7 +1,6 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
-#include <memory>
 #include "../../Util/CollDatas.h"
 
 class ObstacleBase;
@@ -31,8 +30,6 @@ public:
 	void SetShotErase(int objNum, int shotNum,bool erase);
 
 private:
-	std::vector<std::shared_ptr<ObstacleBase>>m_pNormalObstacle;
-	// 出現数をカウントします
-	int m_countCreate;
+	std::vector<ObstacleBase*>m_pNormalObstacle;
 };
 

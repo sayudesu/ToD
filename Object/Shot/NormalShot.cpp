@@ -86,8 +86,6 @@ CollData NormalShot::GetCollData()
 	m_collData.pos      = m_pos;
 	m_collData.radius   = kRadius;
 	m_collData.isHit    = m_IsEnabled;
-	m_collData.originNo = m_originNo;
-	m_collData.no       = m_no;
 
 	return m_collData;
 }

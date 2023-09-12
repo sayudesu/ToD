@@ -59,11 +59,6 @@ ObstacleNormalShot::ObstacleNormalShot(VECTOR pos, int no):
 
 ObstacleNormalShot::~ObstacleNormalShot()
 {
-	if (ef)
-	{
-		delete m_pEffect;
-		m_pEffect = nullptr;
-	}
 }
 
 void ObstacleNormalShot::Init()
@@ -95,6 +90,12 @@ void ObstacleNormalShot::End()
 	// モデルのデリート
 	MV1DeleteModel(m_hCannonBaes);
 	MV1DeleteModel(m_hCannon);
+
+	for (int i = 0; i < m_pShot.size(); i++)
+	{
+		delete m_pShot[i];
+		m_pShot[i] = nullptr;
+	}
 }
 
 void ObstacleNormalShot::Update()
@@ -157,7 +158,7 @@ void ObstacleNormalShot::UpdateShot()
 	MV1SetRotationXYZ(m_hCannon, VGet(0.0f, angle2, 0.0f));
 
 
-
+	// 削除処理
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
 		// 適当な範囲外処理
@@ -228,6 +229,7 @@ void ObstacleNormalShot::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
 	m_collEnemyData = collEnemyData;
 }
 
+// 誰を狙うか
 void ObstacleNormalShot::TargetPos()
 {
 	// ここは後できれいにします。
@@ -247,11 +249,13 @@ void ObstacleNormalShot::TargetPos()
 	}
 }
 
+// ショットの発射数を渡す
 int ObstacleNormalShot::GetShotNum()
 {
 	return static_cast<int>(m_pShot.size());
 }
 
+// ターゲット位置を受け取る
 void ObstacleNormalShot::SetTarGetPos(VECTOR pos)
 {
 	for (int i = 0; i < m_pShot.size(); i++)
