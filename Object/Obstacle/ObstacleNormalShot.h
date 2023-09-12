@@ -5,10 +5,11 @@
 
 class ShotBase;
 class EffekseerDrawer;
+
 class ObstacleNormalShot : public ObstacleBase
 {
 public:
-	ObstacleNormalShot(VECTOR pos);
+	ObstacleNormalShot(VECTOR pos,int no);
 	virtual ~ObstacleNormalShot();
 
 	void Init();
@@ -21,15 +22,17 @@ public:
 	void Draw();
 
 	// 判定データ
-	std::vector<CollData> GetCollDatas();
+	CollData GetCollShotDatas(int shotNum);
 	// エネミーの判定用データ
 	void SetCollEnemyDatas(std::vector<CollData> collEnemyData);
 	// 誰を狙うか
 	void TargetPos();
-
-	int SetShotNum();
-
+	// ショットの発射数を渡す
+	int GetShotNum()override;
+	// ターゲット位置を受け取る
 	void SetTarGetPos(VECTOR pos);
+	// 弾の判定をなくすかどうか
+	void SetShotErase(int shotNum, bool erase);
 private:
 	// 大砲モデルハンドル
 	int m_hCannon;
@@ -37,7 +40,7 @@ private:
 	// ショットの数
 	int m_countShotNum;
 	// ショットクラス
-	std::vector<std::shared_ptr<ShotBase>>m_pShot;
+	std::vector<ShotBase*>m_pShot;
 	// ショットを撃つかどうか
 	bool m_isShot;
 	// エフェクア使用クラス
@@ -54,5 +57,9 @@ private:
 	bool m_isTargetChange;
 	// 敵の番号
 	int m_tempTargetNo;
+	// 自身の生成番号
+	int m_myNo;
+	// 消すデータの番号を保存する
+	std::vector<int>m_tempDeleteNo;
 };
 

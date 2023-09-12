@@ -8,10 +8,13 @@
 #include "../Shot/NormalShot.h"
 namespace
 {
-//	constexpr int kSetCost = 200;
-	constexpr int kSetCost = 1;
-	constexpr float kSetPosMoveSpeed = 50.0f;
+	// オブジェクト設置する際のコスト
+	constexpr int kSetCost = 200;
+	// 特殊攻撃する時のカーソル移動速度
 	constexpr float kSpecialAttackPosMoveSpeed = 20.0f;
+	// マップチップサイズ
+	constexpr  int kMapChipMaxZ = 13;// 行
+	constexpr  int kMapChipMaxX = 25;// 列
 }
 
 Player::Player() :
@@ -23,7 +26,8 @@ Player::Player() :
 	m_isShot(false),
 	m_countShotNo(-1),
 	m_deleteFrameCountShot(0),
-	m_isTrackingShot(false)
+	m_isTrackingShot(false),
+	m_checkMapChipNo(VGet(0,0,0))
 {
 	m_posHistory.push_back(VGet(-1.0f, -1.0f, -1.0f));
 }
@@ -32,6 +36,7 @@ Player::~Player()
 {
 }
 
+// 初期化処理
 void Player::Init()
 {
 	// インスタンス生成
@@ -40,6 +45,7 @@ void Player::Init()
 	m_pObjMenu->Init();
 }
 
+// メモリ開放処理
 void Player::End()
 {
 	m_pObjMenu->End();
@@ -48,6 +54,7 @@ void Player::End()
 	m_pObjMenu = nullptr;
 }
 
+// 更新処理
 void Player::Update()
 {	
 	// オブジェクトメニューを開いている場合
@@ -77,6 +84,7 @@ void Player::Update()
 	m_pObjMenu->Update();
 }
 
+// 描画
 void Player::Draw()
 {
 	DrawCapsule3D(
@@ -108,13 +116,15 @@ void Player::Draw()
 
 }
 
+// UI専用描画
 void Player::DrawUI()
 {
 	// 特殊攻撃のメニュー
 	m_pObjMenu->Draw();
 }
 
-bool Player::isGetGameStop()
+// ゲームの進行を止めるかどうか
+bool Player::IsGetGameStop()
 {
 	if (m_pObjMenu->SelectNo()!= -1)
 	{
@@ -130,76 +140,276 @@ bool Player::isSpecialAttack()
 	return m_isSpecialAttack;
 }
 
+// 特殊攻撃の状態をリセットする
 void Player::SpecialAttackReset()
 {
 	m_isSpecialAttack = false;
 }
 
+// ショットを撃つかどうか
 void Player::IsSetShot(bool isShot)
 {
 	m_isShot = isShot;
 }
 
+// カメラクラスに渡す
 Tracking Player::GetTracingData()
 {
 	return m_trackingData;
 }
 
+// 現在のオブジェクトコストを渡す
 int Player::GetObjectCostNum()
 {
 	return m_objectCostNum;
 }
 
+// 操作を制御
 void Player::UpdateControl()
 {
+	// デバッグ用
+	static int pressCount = 0;
+	static int press2Count = 0;
+	static bool isPress = false;
+
+	static const int pressCountMax          = 30 - 10;
+	static const int press2CountMax         = 3;
+	static const int pressDiagonalCountMax  = 30;
+	static const int pressDiagonal2CountMax = 3 * 2;
+
+	static bool isUp    = false;
+	static bool isDown  = false;
+	static bool isLeft  = false;
+	static bool isRight = false;
+
+	static bool isUpRight   = false;
+	static bool isUpLeft    = false;
+	static bool isDownRight = false;
+	static bool isDownLeft  = false;
+
+
+
+	isUp        = false;
+	isDown      = false;
+	isLeft      = false;
+	isRight     = false;
+
+	isUpRight   = false;
+	isUpLeft    = false;
+	isDownRight = false;
+	isDownLeft  = false;
+
+	isPress = false;
 	// 設置場を指定
-	if (Pad::isTrigger(PAD_INPUT_UP))
+	if (Pad::isPress(PAD_INPUT_UP))
 	{
-		m_pos.z += kSetPosMoveSpeed;
+		isUp = true;
 	}
-	if (Pad::isTrigger(PAD_INPUT_DOWN))
+	if (Pad::isPress(PAD_INPUT_DOWN))
 	{
-		m_pos.z -= kSetPosMoveSpeed;
+		isDown = true;
 	}
-	if (Pad::isTrigger(PAD_INPUT_LEFT))
+	if (Pad::isPress(PAD_INPUT_LEFT))
 	{
-		m_pos.x -= kSetPosMoveSpeed;
+		isLeft = true;
 	}
-	if (Pad::isTrigger(PAD_INPUT_RIGHT))
+	if (Pad::isPress(PAD_INPUT_RIGHT))
 	{
-		m_pos.x += kSetPosMoveSpeed;
+		isRight = true;
 	}
 
+	// 右上
+	if (isUp && isRight)
+	{
+		pressCount++;
+		if (pressCount == 1)
+		{
+			m_checkMapChipNo.z += 1;
+			m_checkMapChipNo.x += 1;
+		}
+		if (pressCount > pressDiagonalCountMax)
+		{
+			press2Count++;
+			if (press2Count > pressDiagonal2CountMax)
+			{
+				m_checkMapChipNo.z += 1;
+				m_checkMapChipNo.x += 1;
+				press2Count = 0;
+			}
+		}
+		isUpRight = true;
+	}
+	// 左上
+	if (isUp && isLeft)
+	{
+		pressCount++;
+		if (pressCount == 1)
+		{
+			m_checkMapChipNo.z += 1;
+			m_checkMapChipNo.x -= 1;
+		}
+		if (pressCount > pressDiagonalCountMax)
+		{
+			press2Count++;
+			if (press2Count > pressDiagonal2CountMax)
+			{
+				m_checkMapChipNo.z += 1;
+				m_checkMapChipNo.x -= 1;
+				press2Count = 0;
+			}
+		}
+		isUpLeft = true;
+	}
+	// 右下
+	if (isDown && isRight)
+	{
+		pressCount++;
+		if (pressCount == 1)
+		{
+			m_checkMapChipNo.z -= 1;
+			m_checkMapChipNo.x += 1;
+		}
+		if (pressCount > pressDiagonalCountMax)
+		{
+			press2Count++;
+			if (press2Count > pressDiagonal2CountMax)
+			{
+				m_checkMapChipNo.z -= 1;
+				m_checkMapChipNo.x += 1;
+				press2Count = 0;
+			}
+		}
+		isDownRight = true;
+	}
+	// 左下
+	if (isDown && isLeft)
+	{
+		pressCount++;
+		if (pressCount == 1)
+		{
+			m_checkMapChipNo.z -= 1;
+			m_checkMapChipNo.x -= 1;
+		}
+		if (pressCount > pressDiagonalCountMax)
+		{
+			press2Count++;
+			if (press2Count > pressDiagonal2CountMax)
+			{
+				m_checkMapChipNo.z -= 1;
+				m_checkMapChipNo.x -= 1;
+				press2Count = 0;
+			}
+		}
+		isDownLeft = true;
+	}
+
+
+	if (isUp && !isUpRight && !isUpLeft)
+	{
+		pressCount++;
+		if (pressCount == 1)m_checkMapChipNo.z += 1;
+		if (pressCount > pressCountMax)
+		{
+			press2Count++;
+			if (press2Count > press2CountMax)
+			{
+				m_checkMapChipNo.z += 1;
+				press2Count = 0;
+			}
+		}
+	}
+	if (isDown && !isDownRight && !isDownLeft)
+	{
+		pressCount++;
+		if (pressCount == 1)m_checkMapChipNo.z -= 1;
+		if (pressCount > pressCountMax)
+		{
+			press2Count++;
+			if (press2Count > press2CountMax)
+			{
+				m_checkMapChipNo.z -= 1;
+				press2Count = 0;
+			}
+		}
+	}
+	if (isLeft && !isUpLeft && !isDownLeft)
+	{
+		pressCount++;
+		if (pressCount == 1)m_checkMapChipNo.x -= 1;
+		if (pressCount > pressCountMax)
+		{
+			press2Count++;
+			if (press2Count > press2CountMax)
+			{
+				m_checkMapChipNo.x -= 1;
+				press2Count = 0;
+			}
+		}
+	}
+	if (isRight && !isUpRight && !isDownRight)
+	{
+		pressCount++;
+		if (pressCount == 1)m_checkMapChipNo.x += 1;
+		if (pressCount > pressCountMax)
+		{
+			press2Count++;
+			if (press2Count > press2CountMax)
+			{
+				m_checkMapChipNo.x += 1;
+				press2Count = 0;
+			}
+		}
+	}
+
+	if (!isUp && !isDown && !isLeft && !isRight)
+	{
+		pressCount = 0;
+		press2Count = 0;
+	}
+
+	// 範囲外処理
+	CheckOutSide();
+
+	// 位置に代入
+	m_pos.x = (m_checkMapChipNo.x * 50.0f);
+	m_pos.z = (m_checkMapChipNo.z * 50.0f);
+
+	// 設置用変数初期化
 	m_isResultObject = false;
+	m_isSetObject    = false;
 
 	// 設置します
 	if (Pad::isTrigger(PAD_INPUT_1) && m_objectCostNum > kSetCost)
 	{		
-		// すでにその場所にオブジェクトが存在しないか確認
-		for (int i = 0; i < m_posHistory.size(); i++)
+		// 記録した場所の数
+		for (int i = 0; i < recordChipNo.size(); i++)
 		{
-			if(m_pos.x != m_posHistory[i].x ||
-		       m_pos.z != m_posHistory[i].z)
+			// マップチップデータでおける場所を確認
+			if (m_mapChip[m_checkMapChipNo.x + m_checkMapChipNo.z * kMapChipMaxX] == 1)
 			{
-				m_isSetObject = true;
-			}
-			else
-			{
-				m_isSetObject = false;
+				// 一度置いたことあるかどうか確認
+				if (recordChipNo[i].x != m_checkMapChipNo.x &&
+					recordChipNo[i].z != m_checkMapChipNo.z)
+				{
+					// 設置できる事を確認
+					m_isSetObject = true;
+				}
 			}
 		}
-
+		// 置く場所を決める
 		if (m_isSetObject)
 		{
+			// 設置した事を確認
 			m_isResultObject = true;
-			// オブジェクトを置いた場所を保存
-			m_posHistory.push_back(m_pos);
-			// 設置した分のコスト
+			// 置いた場所を記録
+			recordChipNo.push_back(m_checkMapChipNo);
+			// オブジェクトコストを引く
 			m_objectCostNum -= kSetCost;
 		}
 	}
 }
 
+// 特殊攻撃用
 void Player::UpdateSpecialAttack()
 {
 	m_isSpecialAttack = false;	
@@ -227,6 +437,34 @@ void Player::UpdateSpecialAttack()
 	}
 }
 
+// 範囲外処理
+void Player::CheckOutSide()
+{
+	// マップの端まで移動させると
+	// 反対側まで移動する
+	// 左
+	if (m_checkMapChipNo.x < 0)
+	{
+		m_checkMapChipNo.x = kMapChipMaxX - 1;
+	}
+	// 右
+	if (m_checkMapChipNo.x > kMapChipMaxX - 1)
+	{
+		m_checkMapChipNo.x = 0;
+	}
+	// 下
+	if (m_checkMapChipNo.z < 0)
+	{
+		m_checkMapChipNo.z = kMapChipMaxZ - 1;
+	}
+	// 上
+	if (m_checkMapChipNo.z > kMapChipMaxZ - 1)
+	{
+		m_checkMapChipNo.z =0;
+	}
+}
+
+// ショットを生成
 void Player::UpdateShot()
 {
 	if (m_isShot)
@@ -234,15 +472,15 @@ void Player::UpdateShot()
 		m_countShotNo++;
 		m_isTrackingShot = true;
 		// インスタンス生成
-		m_pShot = new NormalShot(m_countShotNo, VGet(m_pos.x, m_pos.y + 2000.0f, m_pos.z));
-		m_pShot->Init(m_targetPos,VGet(10,10,10), VGet(0.0f, 90.0f, 0.0f), 30.0f);
+		m_pShot = new NormalShot(VGet(m_pos.x, m_pos.y + 2000.0f, m_pos.z),0, m_countShotNo);
+		m_pShot->Init(m_targetPos,VGet(10,10,10), VGet(0.0f, 90.0f, 0.0f), 30.0f,false);
 	}
 
 	if (m_countShotNo == 0)
 	{
 		m_pShot->Update();
 
-		if (m_pShot->IsGetEnd())
+		if (false)
 		{
 			m_deleteFrameCountShot++;
 			if (m_deleteFrameCountShot > 30)
@@ -261,7 +499,14 @@ void Player::UpdateShot()
 	
 }
 
+// オブジェクトのコスト関連
 void Player::ObjectCost()
 {
 	m_objectCostNum++;
+}
+
+// マップチップの情報を受け取ります
+void Player::SetMapChip(std::vector<int> mapChip)
+{
+	m_mapChip = mapChip;
 }

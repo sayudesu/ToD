@@ -4,16 +4,22 @@
 class NormalShot : public ShotBase
 {
 public:
-	NormalShot(int no,VECTOR pos);
+	NormalShot(VECTOR pos, int originNo,int no);
 	~NormalShot();
 
-	void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed);
+	// 初期化
+	void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed, bool isTracking);
+	// メモリ解放処理
 	void End();
+	// 更新処理
 	void Update();
+	// 描画
 	void Draw();
-
+	// オブジェクトを消すかどうか
+	bool IsEnabled()const;
+	// オブジェクトを消すかどうかを受け取る
+	void SetEnabled(bool isEnabled);
+	// 判定用データ
 	CollData GetCollData();
-private:
-	VECTOR m_tagetPos;
 };
 

@@ -12,6 +12,4 @@ struct CollData
 	float datage;
 	// 判定をみるかどうか
 	bool isHit;
-	// オブジェクトに番号を付ける
-	int no;
 };

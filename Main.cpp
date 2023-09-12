@@ -116,7 +116,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	//// ピクセルシェーダーバイナリコードの読み込み
 	int m_shader;
 	m_shader = LoadPixelShader("Shader/SamplePS.pso");
-	assert(m_shader != -1);
+	//assert(m_shader != -1);
 
 	int m_hScreen = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
 

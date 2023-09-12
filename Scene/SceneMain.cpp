@@ -86,9 +86,8 @@ void SceneMain::Init()
 
 	// マップチップをエネミーに渡す
 	// コードの処理の流れのせいでこうなっています治します
-	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
-	m_pEnemy->Create();
-	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
+	m_pEnemy   ->SetMapChip(m_pMap->GetMapChip());
+	m_pPlayer  ->SetMapChip(m_pMap->GetMapChip());
 
 }
 
@@ -126,13 +125,18 @@ SceneBase* SceneMain::Update()
 	// オブジェクトを生成
 	if (m_pPlayer->GetObjCreate())
 	{
-		m_pObstacle->Create(m_pPlayer->SetPos());
+		static int no = -1;
+		no++;
+		m_pObstacle->Create(m_pPlayer->SetPos(),no);
 	}
 
 	// 判定情報	
-	// 設置したオブジェクトのCollDataをエネミーに渡す
-	m_pEnemy->SetObjCollData(m_pObstacle->GetCollDatas());
 	m_pObstacle->SetCollEnemyDatas(m_pEnemy->GetCollData());
+	CheckColl();
+
+	// 軽量化処理
+	m_pObstacle->SetEraseShotData(m_eraseCollShotData);
+	
 
 	// UI関係
 	// オブジェクト設置コストの数を受け取る
@@ -186,7 +190,7 @@ SceneBase* SceneMain::Update()
 
 void SceneMain::Draw()
 {
-
+	// 背景用
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xaaaa888, true);
 	m_pMap->Draw();
 	m_pEnemy->Draw();
@@ -206,5 +210,55 @@ void SceneMain::Draw()
 	// 演出UI
 	m_catIn->Draw();
 
+#if _DEBUG
+	// ショットの数を確認
+	for (int objNum = 0; objNum < m_pObstacle->GetNum(); objNum++)
+	{
+		for (int shotNum = 0; shotNum < m_pObstacle->GetShotNum(objNum); shotNum++)
+		{
+			DrawFormatString(500, 100, 0xff0000, "%d", m_pObstacle->GetShotNum(objNum));
+		}
+	}
+
+	// 枠線
+	float y = 30.0f;
+	// 横線
+	DrawLine3D(VGet(-100, y, -100),   VGet(1300.0f, y, -100),   0xff0000);
+	DrawLine3D(VGet(-100, y,  700),    VGet(1300.0f, y, 700),   0xffff00);
+	// 縦線
+	DrawLine3D(VGet(-100,    y, 0), VGet(-100,    y, 600), 0xff0000);
+	DrawLine3D(VGet(1300.0f, y, 0), VGet(1300.0f, y, 600), 0xffff00);
+#endif
+
 	SceneBase::DrawSliderDoor();
+}
+
+// 判定チェック
+void SceneMain::CheckColl()
+{
+	// 敵がショットに当たったかを判別
+	// 敵の数分
+	for (int enemyNum = 0; enemyNum < m_pEnemy->GetNormalNum(); enemyNum++)
+	{
+		// プレイヤー設置オブジェクトの数分
+		for (int objNum = 0; objNum < m_pObstacle->GetNum(); objNum++)
+		{
+			// オブジェクトが出す弾の数分
+			for (int shotNum = 0; shotNum < m_pObstacle->GetShotNum(objNum); shotNum++)
+			{
+				// 当たり判定処理
+				if (m_pColl->UpdateCheck(
+					m_pEnemy   ->GetCollData     ()[enemyNum]     .pos,
+					m_pObstacle->GetCollShotDatas(objNum, shotNum).pos,
+					m_pEnemy   ->GetCollData     ()[enemyNum]     .radius,
+					m_pObstacle->GetCollShotDatas(objNum, shotNum).radius))
+				{
+					// ショットのメモリ解放用関数
+					m_pObstacle->SetShotErase(objNum, shotNum, true);
+					// ダメージを与える
+					m_pEnemy->SetHitDamage(enemyNum, m_pObstacle->GetCollShotDatas(objNum, shotNum).datage);
+				}
+			}
+		}
+	}
 }

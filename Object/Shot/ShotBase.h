@@ -10,21 +10,22 @@ public:
 	ShotBase(VECTOR pos);
 	virtual~ShotBase() {};
 
-	virtual void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed) {};
-	virtual void End() {};
-	virtual void Update() {};
-	virtual void Draw() {};
+	virtual void Init  (VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed, bool isTracking) {};
+	virtual void End   ()    {};
+	virtual void Update()    {};
+	virtual void Draw  ()    {};
 
 	// ショット判定データ
-	virtual CollData GetCollData() { return m_collData; }
+	virtual CollData GetCollData ()  { return m_collData; }
 	// ショットの位置
-	virtual VECTOR SetPos()const{ return m_pos; }
+	virtual VECTOR   SetPos      ()const      { return m_pos;      }
 	// ターゲット位置
-	virtual void SetTargetPos(VECTOR pos) { m_targetPos = pos; }
-	virtual bool IsGetEnd();
+	virtual void     SetTargetPos(VECTOR pos) { m_targetPos = pos; }
+	virtual bool     IsEnabled()const { return false; }
+	virtual void	 SetEnabled(bool isEnabled) {};
 protected:
 	// 移動の計算をしています
-	void VecCalculation(VECTOR tagetPos, float speed);
+	void VecCalculation(VECTOR tagetPos, float speed, bool isTracking);
 protected:
 	// 3Dモデルハンドル
 	int m_hShot;
@@ -41,16 +42,17 @@ protected:
 	float m_nowPosToNextPosZ;
 	// 判定用データ
 	CollData m_collData;
-
 	// 速度
 	float m_speed;
 	// 半径
 	float m_radius;
-	// 目的地に到達すると処理をしない
-	bool m_isEnd;
-
-
-	// test
-	bool m_isTest = true;
+	// 追跡するかどうか
+	bool m_isTracking;
+	// 何番目のオブジェクトから生成されるか
+	int m_originNo;
+	// 何回生成されたか
+	int m_no;
+	// そのショットを消すかどうか
+	bool m_IsEnabled;
 };
 

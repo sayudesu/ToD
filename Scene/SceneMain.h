@@ -1,5 +1,7 @@
 #pragma once
 #include "SceneBase.h"
+#include <vector>
+#include "../Util/CollDatas.h"
 
 class Camera;
 class EnemyManager;
@@ -22,6 +24,9 @@ public:
 	SceneBase* Update();
 	void Draw();
 private:
+	// 判定をチェックします
+	void CheckColl();
+private:
 	Camera*          m_pCamera;
 	EnemyManager*    m_pEnemy;
 	ObstacleManager* m_pObstacle;
@@ -30,4 +35,7 @@ private:
 	Collision3D*	 m_pColl;
 	CutInDrawer*     m_catIn;
 	UIDrawer*		 m_pUI;
+
+	// 削除用の判定データ
+	std::vector<CollData>m_eraseCollShotData;
 };

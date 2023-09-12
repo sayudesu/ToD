@@ -1,8 +1,7 @@
 #include "EnemyManager.h"
-#include "EnemyNormal.h"
+#include "EnemyMouse.h"
 
-EnemyManager::EnemyManager() :
-	m_count(-1)
+EnemyManager::EnemyManager()
 {
 }
 
@@ -10,18 +9,20 @@ EnemyManager::~EnemyManager()
 {
 }
 
-// 敵の初期化
+// 初期化
 void EnemyManager::Init()
 {
 	
 }
 
-// 敵のエンド処理
+// メモリ解放
 void EnemyManager::End()
 {
-	for (auto& enemyNormal : m_pEnemyNormal)
+	for (int i = 0; i < m_pEnemyNormal.size(); i++)
 	{
-		enemyNormal->End();
+		m_pEnemyNormal[i]->End();
+		delete m_pEnemyNormal[i];
+		m_pEnemyNormal[i] = nullptr;
 	}
 }
 
@@ -69,9 +70,8 @@ void EnemyManager::Create()
 		}
 	}
 
-	m_count++;
-	m_pEnemyNormal.push_back(std::make_shared<EnemyNormal>());
-	m_pEnemyNormal[m_count]->Init(pos, forX, forZ);
+	m_pEnemyNormal.push_back(new EnemyMouse());
+	m_pEnemyNormal.back()->Init(pos, forX, forZ);
 }
 
 // 敵の更新処理
@@ -81,9 +81,11 @@ void EnemyManager::Update()
 	{
 		enemyNormal->Update();
 	}
+
+	EraseObject();
 }
 
-// 敵の描画
+// 描画
 void EnemyManager::Draw()
 {
 	for (auto& enemyNormal : m_pEnemyNormal)
@@ -92,6 +94,7 @@ void EnemyManager::Draw()
 	}
 }
 
+// 2Dでの描画
 void EnemyManager::DrawUI()
 {
 	for (auto& enemyNormal : m_pEnemyNormal)
@@ -100,23 +103,14 @@ void EnemyManager::DrawUI()
 	}
 }
 
-// これは意味が無いので消します
+// 番号を指定してノーマルエネミーの位置を受け取ります
 VECTOR EnemyManager::SetNormalPos(int num)
 {
-	for (int i = 0; i < num; i++)
-	{
-		return m_pEnemyNormal[i]->SetPos();
-	}
-}
-
-// 番号を指定してノーマルエネミーの位置を受け取ります
-VECTOR EnemyManager::SetNormalPos2(int num)
-{
-	return m_pEnemyNormal[num]->SetPos();
+	return m_pEnemyNormal[num]->GetPos();
 }
 
 // ノーマルエネミーの数を返します
-int EnemyManager::SetNormalNum()
+int EnemyManager::GetNormalNum()
 {
 	return static_cast<int>(m_pEnemyNormal.size());
 }
@@ -154,8 +148,26 @@ std::vector<CollData> EnemyManager::GetCollData()
 	return collData;
 }
 
-// ノーマルエネミーの数を返します
-int EnemyManager::GetNormalNum()
+// 受けるダメージを受け取る
+void EnemyManager::SetHitDamage(int enemyNo, int damage)
 {
-	return static_cast<int>(m_pEnemyNormal.size());
+	m_pEnemyNormal[enemyNo]->SetHitDamage(damage);
+}
+
+// 必要のないオブジェクトを削除する
+void EnemyManager::EraseObject()
+{
+	for (int i = 0; i < m_pEnemyNormal.size(); i++)
+	{
+		if (m_pEnemyNormal[i]->GetErase())
+		{
+			// メモリ解放
+			m_pEnemyNormal[i]->End();
+			// デリート処理
+			delete m_pEnemyNormal[i];
+			m_pEnemyNormal[i] = nullptr;
+			// 要素の削除
+			m_pEnemyNormal.erase(m_pEnemyNormal.begin() + i);
+		}
+	}
 }
