@@ -5,7 +5,7 @@
 class SceneGameClear : public SceneBase
 {
 public:
-	SceneGameClear();
+	SceneGameClear(int a);
 	virtual ~SceneGameClear();
 
 	virtual void Init();
@@ -15,7 +15,6 @@ public:
 	virtual void Draw();
 private:
 	int m_handle;
-	int m_shader;
 	int m_handleSizeX;
 	int m_handleSizeY;
 	int m_hScreen;

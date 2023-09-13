@@ -113,10 +113,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	Vert[4] = Vert[2];
 	Vert[5] = Vert[1];
 
-	//// ピクセルシェーダーバイナリコードの読み込み
-	int m_shader;
-	m_shader = LoadPixelShader("Shader/SamplePS.pso");
-	//assert(m_shader != -1);
+	// ピクセルシェーダーバイナリコードの読み込み
+	int m_shader = LoadPixelShader("Shader/SamplePS.pso");
+//	assert(m_shader != -1);
 
 	int m_hScreen = MakeScreen(Game::kScreenWidth, Game::kScreenHeight);
 

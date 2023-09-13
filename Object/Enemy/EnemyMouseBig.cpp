@@ -1,4 +1,4 @@
-#include "EnemyMouse.h"
+#include "EnemyMouseBig.h"
 #include <cmath>
 #include <cassert>
 #include <iostream>
@@ -6,15 +6,15 @@
 namespace
 {
 	// ファイルデータ
-	const char* kFileNameMouse = "Data/Model/Mouse.mv1";
+	const char* kFileNameMouse = "Data/Model/MouseR.mv1";
 	// 速度
-	constexpr float kSpeed = 3.0f;
+	constexpr float kSpeed = 1.0f;
 	// 大きさ
-	constexpr float kSize = 1.0f;
+	constexpr float kSize = 3.0f;
 
 }
 
-EnemyMouse::EnemyMouse()
+EnemyMouseBig::EnemyMouseBig()
 {	
 	// モデルのハンドル
 	m_hModel = -1;
@@ -43,15 +43,15 @@ EnemyMouse::EnemyMouse()
 	m_collData.radius = 16.0f * 2.0f;
 	m_collData.speed = kSpeed;
 	m_collData.size = kSize;
-	m_collData.hp = 100.0f;
+	m_collData.hp = 1000;
 	m_collData.isHit = true;
 	m_collData.isAttack = false;
 }
-EnemyMouse::~EnemyMouse()
+EnemyMouseBig::~EnemyMouseBig()
 {
 }
 
-void EnemyMouse::Attack()
+void EnemyMouseBig::Attack()
 {
 	m_collData.isAttack = false;
 	m_attackCount++;
@@ -64,21 +64,20 @@ void EnemyMouse::Attack()
 	{
 		m_pos.x -= 10.0f;
 		m_attackCount = 0;
-		m_collData.isAttack = false;
+
 	}
 
 	MV1SetPosition(m_hModel, m_pos);
 }
 
 // 当たり判定用データ
-ObjectData EnemyMouse::GetCollDatas()
+ObjectData EnemyMouseBig::GetCollDatas()
 {
-	m_collData.datage   = 10.0f;
+	m_collData.datage   = 30.0f;
 	m_collData.pos      = m_pos;
-	m_collData.radius   = 16.0f * 2.0f;
-	m_collData.speed    = kSpeed;
-	m_collData.size     = 1;
-	m_collData.hp = 100.0f;
+	m_collData.radius   = 16.0f * 5.0f;
+	m_collData.speed	= kSpeed;
+	m_collData.size     = 3;
 	m_collData.isHit    = true;
 
 	return m_collData;

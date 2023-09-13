@@ -4,11 +4,11 @@
 /// <summary>
 /// 基本的な敵クラス(ねずみ)
 /// </summary>
-class EnemyMouse : public EnemyBase
+class EnemyMouseSpeed : public EnemyBase
 {
 public:
-	EnemyMouse();
-	virtual ~EnemyMouse();
+	EnemyMouseSpeed();
+	virtual ~EnemyMouseSpeed();
 
 	void Attack()override;
 

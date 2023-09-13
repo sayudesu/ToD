@@ -30,6 +30,10 @@ Player::Player() :
 	m_checkMapChipNo(VGet(0,0,0))
 {
 	m_posHistory.push_back(VGet(-1.0f, -1.0f, -1.0f));
+
+	// プレイヤーの初期位置
+	m_checkMapChipNo.x = kMapChipMaxX / 2;
+	m_checkMapChipNo.z = kMapChipMaxZ / 2;
 }
 
 Player::~Player()

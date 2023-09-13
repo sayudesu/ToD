@@ -1,5 +1,7 @@
 #include "EnemyManager.h"
 #include "EnemyMouse.h"
+#include "EnemyMouseSpeed.h"
+#include "EnemyMouseBig.h"
 
 EnemyManager::EnemyManager()
 {
@@ -18,11 +20,11 @@ void EnemyManager::Init()
 // メモリ解放
 void EnemyManager::End()
 {
-	for (int i = 0; i < m_pEnemyNormal.size(); i++)
+	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		m_pEnemyNormal[i]->End();
-		delete m_pEnemyNormal[i];
-		m_pEnemyNormal[i] = nullptr;
+		m_pEnemy[i]->End();
+		delete m_pEnemy[i];
+		m_pEnemy[i] = nullptr;
 	}
 }
 
@@ -69,15 +71,32 @@ void EnemyManager::Create()
 			}
 		}
 	}
+	static int count = 0;
+	count++;
+	if (count == 1)
+	{
+		m_pEnemy.push_back(new EnemyMouse());
+		m_pEnemy.back()->Init(pos, forX, forZ);
+	}
 
-	m_pEnemyNormal.push_back(new EnemyMouse());
-	m_pEnemyNormal.back()->Init(pos, forX, forZ);
+	if(count == 2)
+	{
+		m_pEnemy.push_back(new EnemyMouseSpeed());
+		m_pEnemy.back()->Init(pos, forX, forZ);
+	}
+
+	if (count == 3)
+	{
+		m_pEnemy.push_back(new EnemyMouseBig());
+		m_pEnemy.back()->Init(pos, forX, forZ);
+		count = 0;
+	}
 }
 
 // 敵の更新処理
 void EnemyManager::Update()
 {
-	for (auto& enemyNormal : m_pEnemyNormal)
+	for (auto& enemyNormal : m_pEnemy)
 	{
 		enemyNormal->Update();
 	}
@@ -88,7 +107,7 @@ void EnemyManager::Update()
 // 描画
 void EnemyManager::Draw()
 {
-	for (auto& enemyNormal : m_pEnemyNormal)
+	for (auto& enemyNormal : m_pEnemy)
 	{
 		enemyNormal->Draw();
 	}
@@ -97,7 +116,7 @@ void EnemyManager::Draw()
 // 2Dでの描画
 void EnemyManager::DrawUI()
 {
-	for (auto& enemyNormal : m_pEnemyNormal)
+	for (auto& enemyNormal : m_pEnemy)
 	{
 		enemyNormal->DrawUI();
 	}
@@ -106,19 +125,19 @@ void EnemyManager::DrawUI()
 // 番号を指定してノーマルエネミーの位置を受け取ります
 VECTOR EnemyManager::SetNormalPos(int num)
 {
-	return m_pEnemyNormal[num]->GetPos();
+	return m_pEnemy[num]->GetPos();
 }
 
 // ノーマルエネミーの数を返します
 int EnemyManager::GetNormalNum()
 {
-	return static_cast<int>(m_pEnemyNormal.size());
+	return static_cast<int>(m_pEnemy.size());
 }
 
 // マップチップの情報を受け取ります
 void EnemyManager::SetMapChip(std::vector<int> mapChip)
 {
-	for (auto& normalEnemy : m_pEnemyNormal)
+	for (auto& normalEnemy : m_pEnemy)
 	{
 		normalEnemy->SetRoadPos(mapChip);
 	}
@@ -127,20 +146,20 @@ void EnemyManager::SetMapChip(std::vector<int> mapChip)
 }
 
 // プレイヤーが設置したオブジェクトの判定データーを受け取ります
-void EnemyManager::SetObjCollData(std::vector<CollData> collData)
+void EnemyManager::SetObjCollData(std::vector<ObjectData> collData)
 {
-	for (auto& normalEnemy : m_pEnemyNormal)
+	for (auto& normalEnemy : m_pEnemy)
 	{
 		normalEnemy->SetCollData(collData);
 	}
 }
 
 // 自身の判定用データ
-std::vector<CollData> EnemyManager::GetCollData()
+std::vector<ObjectData> EnemyManager::GetCollData()
 {
-	std::vector<CollData> collData;
+	std::vector<ObjectData> collData;
 
-	for (auto& normalEnemy : m_pEnemyNormal)
+	for (auto& normalEnemy : m_pEnemy)
 	{
 		collData.push_back(normalEnemy->GetCollDatas());
 	}
@@ -151,23 +170,25 @@ std::vector<CollData> EnemyManager::GetCollData()
 // 受けるダメージを受け取る
 void EnemyManager::SetHitDamage(int enemyNo, int damage)
 {
-	m_pEnemyNormal[enemyNo]->SetHitDamage(damage);
+	m_pEnemy[enemyNo]->SetHitDamage(damage);
 }
 
 // 必要のないオブジェクトを削除する
 void EnemyManager::EraseObject()
 {
-	for (int i = 0; i < m_pEnemyNormal.size(); i++)
+	for (int i = 0; i < m_pEnemy.size(); i++)
 	{
-		if (m_pEnemyNormal[i]->GetErase())
+		if (m_pEnemy[i]->GetErase())
 		{
 			// メモリ解放
-			m_pEnemyNormal[i]->End();
+			m_pEnemy[i]->End();
 			// デリート処理
-			delete m_pEnemyNormal[i];
-			m_pEnemyNormal[i] = nullptr;
+			delete m_pEnemy[i];
+			m_pEnemy[i] = nullptr;
 			// 要素の削除
-			m_pEnemyNormal.erase(m_pEnemyNormal.begin() + i);
+			m_pEnemy.erase(m_pEnemy.begin() + i);
+			// メモリサイズの解放
+			m_pEnemy.shrink_to_fit();
 		}
 	}
 }

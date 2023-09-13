@@ -1,7 +1,7 @@
 #pragma once
 #include "SceneBase.h"
 #include <vector>
-#include "../Util/CollDatas.h"
+#include "../Util/ObjectData.h"
 
 class Camera;
 class EnemyManager;
@@ -37,5 +37,5 @@ private:
 	UIDrawer*		 m_pUI;
 
 	// 削除用の判定データ
-	std::vector<CollData>m_eraseCollShotData;
+	std::vector<ObjectData>m_eraseCollShotData;
 };

@@ -22,9 +22,9 @@ public:
 	void Draw();
 
 	// 判定データ
-	CollData GetCollShotDatas(int shotNum);
+	ObjectData GetCollShotDatas(int shotNum)override;
 	// エネミーの判定用データ
-	void SetCollEnemyDatas(std::vector<CollData> collEnemyData);
+	void SetCollEnemyDatas(std::vector<ObjectData> collEnemyData);
 	// 誰を狙うか
 	void TargetPos();
 	// ショットの発射数を渡す

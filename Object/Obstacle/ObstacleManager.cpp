@@ -61,13 +61,13 @@ int ObstacleManager::GetShotNum(int objNum)
 }
 
 // ショットのデータを受け取る
-CollData ObstacleManager::GetCollShotDatas(int objNum,int shotNum)
+ObjectData ObstacleManager::GetCollShotDatas(int objNum,int shotNum)
 {
 	return m_pNormalObstacle[objNum]->GetCollShotDatas(shotNum);
 }
 
 // 敵の判定用データを受け取る
-void ObstacleManager::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
+void ObstacleManager::SetCollEnemyDatas(std::vector<ObjectData> collEnemyData)
 {
 	for (auto& normalObstacle : m_pNormalObstacle)
 	{
@@ -75,7 +75,7 @@ void ObstacleManager::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
 	}
 }
 // 必要の無いshotの番号を受け取る
-void ObstacleManager::SetEraseShotData(std::vector<CollData> eraseShotData)
+void ObstacleManager::SetEraseShotData(std::vector<ObjectData> eraseShotData)
 {
 	for (auto& normalObstacle : m_pNormalObstacle)
 	{

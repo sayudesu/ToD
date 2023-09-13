@@ -57,6 +57,8 @@ void UIDrawer::Init()
 	m_hSelectObjectState[0]     = LoadGraph(kFileNameSelectCreate);
 	m_hSelectObjectState[1]     = LoadGraph(kFileNameSelectPowerUp);
 	m_hSelectObjectState[2]     = LoadGraph(kFileNameSelectDelete);
+
+	GetGraphSize(m_hBgHp, &m_hpBarX, &m_hpBarY);
 }
 
 void UIDrawer::End()
@@ -72,6 +74,21 @@ void UIDrawer::Draw()
 	// 体力やコストやウェーブ数の背景
 	DrawGraph(0, 0, m_hBgUtil, true);
 
+	static int time = 10;
+	static int timeCount = 0;
+
+	DrawFormatString(Game::kScreenWidth / 2, 20, 0xffff00, "%d", time);
+
+	timeCount++;
+	if (timeCount > 60)
+	{
+		time--;
+		timeCount = 0;
+	}
+	if (time == 0)
+	{
+		m_isClear = true;
+	}
 	// オブジェクトコスト背景
 	DrawGraph(Game::kScreenWidth - 570, 20, m_hObjectCost, true);
 	DrawGraph(Game::kScreenWidth - 570, 20, m_hMeat, true);
@@ -82,10 +99,20 @@ void UIDrawer::Draw()
 	// 特殊攻撃のボタン説明
 	DrawGraph(1150, Game::kScreenHeight - 150 , m_hTopicSpecialAttack, true);
 	DrawGraph(1150, Game::kScreenHeight - 150 , m_hTopicSpecialAttack, true);
-
 	// 体力関係
 	DrawGraph(120, 20, m_hBgHp, true);
-	DrawGraph(120, 20, m_hHp, true);
+
+	if (hp < -500)
+	{
+		m_isDead = true;
+	}
+
+	DrawModiGraph(
+		120, 20, // 左上
+		m_hpBarX + 120 + hp, 20,// 右上
+		m_hpBarX + 120 + hp, m_hpBarY + 20,//右下
+		120, m_hpBarY + 20,//左下
+		m_hHp,true);
 
 	// オブジェクト選択
 	for (int i = 0; i < 3; i++)

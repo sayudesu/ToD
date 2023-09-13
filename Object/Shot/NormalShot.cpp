@@ -80,7 +80,7 @@ void NormalShot::SetEnabled(bool isEnabled)
 }
 
 // 判定用データ
-CollData NormalShot::GetCollData()
+ObjectData NormalShot::GetCollData()
 {
 	m_collData.datage   = 3.0f;
 	m_collData.pos      = m_pos;

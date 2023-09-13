@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include "SceneMain.h"
 #include "SceneTitle.h"
+#include "SceneGameClear.h"
 #include "../Object/Camera/Camera.h"
 #include "../Object/Enemy/EnemyManager.h"
 #include "../Object/Obstacle/ObstacleManager.h"
@@ -134,6 +135,18 @@ SceneBase* SceneMain::Update()
 	m_pObstacle->SetCollEnemyDatas(m_pEnemy->GetCollData());
 	CheckColl();
 
+
+	for (int i = 0; i < m_pEnemy->GetCollData().size(); i++)
+	{
+		if (m_pEnemy->GetCollData()[i].isAttack)
+		{
+			m_pUI->SetDamage(m_pEnemy->GetCollData()[i].datage);
+		}
+	}
+
+	
+
+
 	// 軽量化処理
 	m_pObstacle->SetEraseShotData(m_eraseCollShotData);
 	
@@ -165,17 +178,49 @@ SceneBase* SceneMain::Update()
 		}
 	}
 
+	static bool isTitle = false;
+	static bool isEnd = false;
+	static bool isC = false;
 	// シーンを切り替えます
 	if (Pad::isTrigger(PAD_INPUT_8))
 	{
-		m_isChangeScene = true;
+		//m_isChangeScene = true;
 		m_isSliderOpen = true;
+		isTitle = true;
 	}
-	if (m_isChangeScene)
+	if (isTitle)
 	{
 		if (SceneBase::UpdateSliderClose())
 		{
 			return new SceneTitle;
+		}
+	}
+
+	if (m_pUI->GetDead())
+	{
+		// m_isChangeScene = true;
+		m_isSliderOpen = true;
+		isEnd = true;
+	}
+	if (isEnd)
+	{
+		if (SceneBase::UpdateSliderClose())
+		{
+			return new  SceneGameClear(1);
+		}
+	}
+
+	if (m_pUI->GetClear())
+	{
+		// m_isChangeScene = true;
+		m_isSliderOpen = true;
+		isC = true;
+	}
+	if (isC)
+	{
+		if (SceneBase::UpdateSliderClose())
+		{
+			return new SceneGameClear(0);
 		}
 	}
 
@@ -258,6 +303,7 @@ void SceneMain::CheckColl()
 					// ダメージを与える
 					m_pEnemy->SetHitDamage(enemyNum, m_pObstacle->GetCollShotDatas(objNum, shotNum).datage);
 				}
+
 			}
 		}
 	}

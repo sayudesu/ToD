@@ -1,7 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
-#include "../../Util/CollDatas.h"
+#include "../../Util/ObjectData.h"
 
 class EnemyBase
 {
@@ -14,13 +14,16 @@ public:
 	virtual void Update();
 	virtual void Draw();
 	virtual void DrawUI();
-
+protected:
+	virtual void Move();
+	virtual void Attack() = 0;
+public:
 	// エネミーの位置
 	virtual VECTOR GetPos() const   { return m_pos; }
 	// 判定データを受け取る
-	virtual void SetCollData(std::vector<CollData>collData) { m_collObstacleShotData = collData; }
+	virtual void SetCollData(std::vector<ObjectData>collData) { m_collObstacleShotData = collData; }
 	// 当たり判定データ
-	virtual CollData GetCollDatas() { return m_collData; }
+	virtual ObjectData GetCollDatas() { return m_collData; }
 	// 通る道
 	virtual void SetRoadPos(std::vector<int> mapChip) { m_mapChip = mapChip; }
 	// 与えられるダメージを受け取る
@@ -37,16 +40,20 @@ protected:
 	const char* m_filePathModel;
 	// 位置
 	VECTOR m_pos = VGet(0.0f, 0.0f, 0.0f);
-	// 体力
-	int m_hp = 0;
+	// 現在の体力
+	float m_hp;
 	// ダメージ
 	int m_damage = 0;
 	// マップチップデータ
 	std::vector<int> m_mapChip{};
 	// プレイヤー設置オブジェクトのデータ
-	std::vector<CollData> m_collObstacleShotData{};
+	std::vector<ObjectData> m_collObstacleShotData{};
 	// 自身のデータ
-	CollData m_collData{};
+	ObjectData m_collData{};
+
+	
+	int m_moveCount = 0;
+	int m_attackCount = 0;
 
 
 	// 向き

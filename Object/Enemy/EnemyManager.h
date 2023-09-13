@@ -1,7 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
-#include "../../Util/CollDatas.h"
+#include "../../Util/ObjectData.h"
 
 class EnemyBase;
 class EnemyManager
@@ -24,9 +24,9 @@ public:
 	// マップチップでデータを受け取ります
 	virtual void SetMapChip(std::vector<int>mapChip);
 	// 判定用データを受け取る
- 	virtual void SetObjCollData(std::vector<CollData> collData);
+ 	virtual void SetObjCollData(std::vector<ObjectData> collData);
 	// 自身の判定用データ
- 	virtual std::vector<CollData> GetCollData();
+ 	virtual std::vector<ObjectData> GetCollData();
 	// 受けるダメージを受け取る
 	virtual void SetHitDamage(int enemyNo,int damage);
 private:
@@ -34,7 +34,7 @@ private:
 	virtual void EraseObject();
 private:
 	// ノーマルエネミー
-	std::vector<EnemyBase*>m_pEnemyNormal;
+	std::vector<EnemyBase*>m_pEnemy;
 	// マップチップのデータ
 	std::vector<int>m_mapChip;
 };

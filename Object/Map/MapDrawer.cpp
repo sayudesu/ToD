@@ -1,11 +1,22 @@
 #include "MapDrawer.h"
 #include <DxLib.h>
 #include <cassert>
+#include "WorldSprite.h"
 
 namespace
 {
 
     const char* kDataPath = "Data/Save/MapData.csv";
+
+    // マップチップサイズ
+    constexpr int kMapChipMaxZ = 13;// 行
+    constexpr int kMapChipMaxX = 25;// 列
+    // マップチップナンバー(敵の道)
+    constexpr int kEnemyRoad = 2;
+    // ブロック1つの大きさ
+    constexpr float kBlockSize = 50.0f;
+    // マップチップ画像サイズ
+    constexpr float kMapCihpSize = 32.0f;
 }
 
 MapDrawer::MapDrawer():
@@ -15,11 +26,12 @@ MapDrawer::MapDrawer():
     m_hEnemyStop(-1),
     m_dataNum(-1)
 {
-
+ 
 }
 
 MapDrawer::~MapDrawer()
 {
+
 }
 
 void MapDrawer::Init()
@@ -99,115 +111,114 @@ void MapDrawer::Init()
     // ファイルを閉じる
     fclose(fp);
 
+    //// モデルロード
+    //m_hBlock        = MV1LoadModel("Data/Model/NormalBlock2.mv1");
+    //m_hEnemyRoad    = MV1LoadModel("Data/Model/EnemyRoad.mv1");
+    //m_hEnemySpawner = MV1LoadModel("Data/Model/EnemySpawner.mv1");
+    //m_hEnemyStop    = MV1LoadModel("Data/Model/EnemyStop.mv1");
 
-    int puls = -1;
-    int z = 250;
-    int x = 0;
 
-    for (int i = 0; i < m_loadData.size(); i++)
+    int gprah = LoadGraph("mapData.png");
+    static int count = -1;
+
+    // WorldSprite実体設定と位置初期化
+    // マップの描画開始位置（左上）
+    // 行
+    VECTOR chipLeftTopPos = VGet(0, 0, kMapChipMaxZ * 50.0f);
+
+    for (int z = 0; z < kMapChipMaxZ; ++z)
     {
-        // カウント
-        puls++;
-        // 右に押し詰める
-        //int x = -600;
-        x = 0;
-        x += (puls * 50) - 600;
-
-        // Z軸変更
-        if (m_loadData[i] == 0)
+        // 列
+        for (int x = 0; x < kMapChipMaxX; ++x)
         {
-            puls = -1;
-            z -= 50;
+            count++;
+            // インスタンス生成
+            m_pSprite.push_back(new WorldSprite());
+            m_pSprite[count]->Init(gprah, kMapCihpSize, m_loadData[count]);
+            // マップチップの半分サイズ左下にずらすオフセット
+           // VECTOR chipHalfOffset = VGet(-kBlockSize * 0.5f, 0, -kBlockSize * 0.5f);
+            // 真ん中ピボットなのでマップチップ半分サイズずらす+地面なので一つ下に
+            VECTOR chipPos = VAdd(VGet(x * kBlockSize, 0, (-z - 1) * kBlockSize), VGet(0,0,0));
+            chipPos = VAdd(chipPos, chipLeftTopPos);
+            // 位置を設定
+            m_pSprite[count]->SetTransform(chipPos, kBlockSize);
         }
-
-        // 保存
-        m_objPosX.push_back(x);
-        m_objPosZ.push_back(z);
     }
-
-    // モデルロード
-    m_hBlock        = MV1LoadModel("Data/Model/NormalBlock2.mv1");
-    m_hEnemyRoad    = MV1LoadModel("Data/Model/EnemyRoad.mv1");
-    m_hEnemySpawner = MV1LoadModel("Data/Model/EnemySpawner.mv1");
-    m_hEnemyStop    = MV1LoadModel("Data/Model/EnemyStop.mv1");
+    count = 0;
 }
 
 void MapDrawer::End()
 {
+    for (int i = 0; i < m_pSprite.size(); i++)
+    {
+        delete m_pSprite[i];
+        m_pSprite[i] = nullptr;
+    }
+    m_pSprite.clear();
 }
 
 void MapDrawer::Update()
 {
+  
 }
 
 void MapDrawer::Draw()
 {
-    // マップチップサイズ
-    const int mapChipMaxZ = 13;// 行
-    const int mapChipMaxX = 25;// 列
-    // マップチップナンバー(敵の道)
-    const int enemyRoad = 2;
-    // ブロック1つの大きさ
-    const float block = 50.0f;
-
-    static int m_count = -1;
-    static VECTOR m_pos{};
-    m_pos.y = -block + 20.0f;
-
+    VECTOR m_pos{};
+    m_pos.y = -kBlockSize + 20.0f;
+#if false   
     // 行
-    for (int z = 0; z < mapChipMaxZ; ++z)
+    for (int z = 0; z < kMapChipMaxZ; ++z)
     {
         // 列
-        for (int x = 0; x < mapChipMaxX; ++x)
+        for (int x = 0; x < kMapChipMaxX; ++x)
         {
             // [現在の列 + 現在の列 * チップ最大列]
-            if (m_loadData[x + z * mapChipMaxX] == 1)
+            if (m_loadData[x + z * kMapChipMaxX] == 1)
             {
-                m_pos.x = (x * block);
-                m_pos.z = (z * block);
+                m_pos.x = (x * kBlockSize);
+                m_pos.z = (z * kBlockSize);
                 MV1SetPosition(m_hBlock, m_pos);
                 MV1DrawModel(m_hBlock);
             }
             // [現在の列 + 現在の列 * チップ最大列]
-            if (m_loadData[x + z * mapChipMaxX] == 2)
+            if (m_loadData[x + z * kMapChipMaxX] == 2)
             {
                 //// 敵の位置に代入
-                m_pos.x = (x * block);
-                m_pos.z = (z * block);
+                m_pos.x = (x * kBlockSize);
+                m_pos.z = (z * kBlockSize);
                 MV1SetPosition(m_hEnemyRoad, m_pos);
                 MV1DrawModel(m_hEnemyRoad);
             }
             // [現在の列 + 現在の列 * チップ最大列]
-            if (m_loadData[x + z * mapChipMaxX] == 3)
+            if (m_loadData[x + z * kMapChipMaxX] == 3)
             {
-                m_pos.x = (x * block);
-                m_pos.z = (z * block);
+                m_pos.x = (x * kBlockSize);
+                m_pos.z = (z * kBlockSize);
                 MV1SetPosition(m_hEnemySpawner, m_pos);
                 MV1DrawModel(m_hEnemySpawner);
             }
             // [現在の列 + 現在の列 * チップ最大列]
-            if (m_loadData[x + z * mapChipMaxX] == 4)
+            if (m_loadData[x + z * kMapChipMaxX] == 4)
             {
-                m_pos.x = (x * block);
-                m_pos.z = (z * block);
+                m_pos.x = (x * kBlockSize);
+                m_pos.z = (z * kBlockSize);
                 MV1SetPosition(m_hEnemyStop, m_pos);
                 MV1DrawModel(m_hEnemyStop);
             }
+
         }
+    }
+#endif
+
+    for(auto& sprite : m_pSprite)
+    {
+       sprite->Draw();
     }
 }
 
+// データ保管
 std::vector<int> MapDrawer::GetMapChip()
 {
     return m_loadData;
-}
-
-std::vector<int> MapDrawer::GetMapChipX()
-{
-    return m_objPosX;
-}
-
-std::vector<int> MapDrawer::GetMapChipZ()
-{
-    return m_objPosZ;
 }

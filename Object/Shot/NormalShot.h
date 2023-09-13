@@ -20,6 +20,6 @@ public:
 	// オブジェクトを消すかどうかを受け取る
 	void SetEnabled(bool isEnabled);
 	// 判定用データ
-	CollData GetCollData();
+	ObjectData GetCollData();
 };
 

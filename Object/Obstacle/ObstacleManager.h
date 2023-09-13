@@ -1,7 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
-#include "../../Util/CollDatas.h"
+#include "../../Util/ObjectData.h"
 
 class ObstacleBase;
 class ObstacleManager
@@ -21,11 +21,11 @@ public:
 	// ショットの数を返します
 	int GetShotNum(int objNum);
 	// 二次元配列を一次元配列にしてを返す
-	CollData GetCollShotDatas(int objNum, int shotNum);
+	ObjectData GetCollShotDatas(int objNum, int shotNum);
 	// 敵の判定用データを受け取る
-	void SetCollEnemyDatas(std::vector<CollData> collEnemyData);
+	void SetCollEnemyDatas(std::vector<ObjectData> collEnemyData);
 	// 必要の無いshotの番号を受け取る
-	void SetEraseShotData(std::vector<CollData> eraseShotData);
+	void SetEraseShotData(std::vector<ObjectData> eraseShotData);
 	// 必要のないショット番号を受け取る
 	void SetShotErase(int objNum, int shotNum,bool erase);
 

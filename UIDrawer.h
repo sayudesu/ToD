@@ -17,6 +17,11 @@ public:
 	// プレイヤーの位置を受け取り3D座標から2D座標に変換
 	void SetPlayerPos(VECTOR pos);
 
+	// デバッグ用
+	bool GetDead() { return m_isDead; }
+	bool GetClear() { return m_isClear; }
+	void SetDamage(int damage) { hp -= damage; }
+
 private:
 	// 画像ハンドル
 	// 自身の体力や設置コスト数の背景
@@ -45,5 +50,15 @@ private:
 
 	// 選択画像用位置
 	VECTOR m_selectPos[3];
+
+
+	// デバッグ用
+	int m_hpBarX;
+	int m_hpBarY;
+
+	int hp = 0;
+
+	bool m_isDead = false;
+	bool m_isClear = false;
 };
 

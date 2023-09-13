@@ -179,11 +179,17 @@ void ObstacleNormalShot::UpdateShot()
 			m_pShot[i]->SetEnabled(true);
 		}
 
-
 		if (m_pShot[i]->IsEnabled())
 		{
+			// メモリ解放
 			m_pShot[i]->End();
+			// デリート処理
+			delete m_pShot[i];
+			m_pShot[i] = nullptr;
+			// 要素の削除
 			m_pShot.erase(m_pShot.begin() + i);
+			// メモリサイズの解放
+			m_pShot.shrink_to_fit();
 		}
 	}
 }
@@ -218,13 +224,13 @@ void ObstacleNormalShot::Draw()
 }
 
 // 判定データを渡す
-CollData ObstacleNormalShot::GetCollShotDatas(int shotNum)
+ObjectData ObstacleNormalShot::GetCollShotDatas(int shotNum)
 {
 	return m_pShot[shotNum]->GetCollData();
 }
 
 // エネミーの判定用データ
-void ObstacleNormalShot::SetCollEnemyDatas(std::vector<CollData> collEnemyData)
+void ObstacleNormalShot::SetCollEnemyDatas(std::vector<ObjectData> collEnemyData)
 {
 	m_collEnemyData = collEnemyData;
 }

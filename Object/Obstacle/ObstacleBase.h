@@ -1,7 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
-#include "../../Util/CollDatas.h"
+#include "../../Util/ObjectData.h"
 
 // 障害物クラスベース
 class ObstacleBase
@@ -18,13 +18,13 @@ public:
 	// 障害物の位置
 	virtual VECTOR GetPos() const { return m_pos; }
 	// 当たり判定データ
-	virtual CollData GetCollShotDatas(int shotNum) { return CollData(); }
+	virtual ObjectData GetCollShotDatas(int shotNum) { return ObjectData(); }
 	// エネミーの判定用データ
-	virtual void SetCollEnemyDatas(std::vector<CollData> collEnemyData) { m_collEnemyData = collEnemyData; }
+	virtual void SetCollEnemyDatas(std::vector<ObjectData> collEnemyData) { m_collEnemyData = collEnemyData; }
 	// ショットの数
 	virtual int GetShotNum() { return 0; }
 	// いらないショットの番号を受け取る
-	virtual void SetEraseShotData(std::vector<CollData> eraseShotData) {};
+	virtual void SetEraseShotData(std::vector<ObjectData> eraseShotData) {};
 	// 必要のないショット番号を受け取る
 	virtual void SetShotErase(int shotNum, bool erase){};
 
@@ -34,6 +34,6 @@ protected:
 	// ターゲット位置
 	VECTOR m_targetPos = VGet(0.0f, 0.0f, 0.0f);
 	// 当たり判定データ
-	std::vector<CollData> m_collShotData {};
-	std::vector<CollData> m_collEnemyData{};
+	std::vector<ObjectData> m_collShotData {};
+	std::vector<ObjectData> m_collEnemyData{};
 };
