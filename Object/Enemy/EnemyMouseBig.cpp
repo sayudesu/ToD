@@ -78,7 +78,7 @@ ObjectData EnemyMouseBig::GetCollDatas()
 	m_collData.radius   = 16.0f * 5.0f;
 	m_collData.speed	= kSpeed;
 	m_collData.size     = 3;
-	m_collData.isHit    = true;
+	m_collData.isHit    = GetErase();
 
 	return m_collData;
 }

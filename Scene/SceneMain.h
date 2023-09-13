@@ -11,6 +11,7 @@ class MapDrawer;
 class Collision3D;
 class CutInDrawer;
 class UIDrawer;
+class ParticleDrawer;
 
 class SceneMain : public SceneBase
 {
@@ -36,6 +37,15 @@ private:
 	CutInDrawer*     m_catIn;
 	UIDrawer*		 m_pUI;
 
+
+	std::vector<ParticleDrawer*>  m_pParticle;
+
 	// 削除用の判定データ
 	std::vector<ObjectData>m_eraseCollShotData;
+
+
+	// デバッグ
+	bool isTitle = false;
+	bool isEnd = false;
+	bool isC = false;
 };

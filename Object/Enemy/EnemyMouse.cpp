@@ -79,7 +79,7 @@ ObjectData EnemyMouse::GetCollDatas()
 	m_collData.speed    = kSpeed;
 	m_collData.size     = 1;
 	m_collData.hp = 100.0f;
-	m_collData.isHit    = true;
+	m_collData.isHit    = GetErase();
 
 	return m_collData;
 }

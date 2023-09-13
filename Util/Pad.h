@@ -1,6 +1,6 @@
 #pragma once
 
-// テトリス専用パッド処理
+// パッド処理
 namespace Pad
 {
 	// パッドの入力状態取得

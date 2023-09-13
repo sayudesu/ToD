@@ -24,7 +24,6 @@ private:
 	std::vector<int>m_loadData;
 	// データ数カウント
 	int m_dataNum;
-
 	// 2D画像用
 	std::vector<WorldSprite*> m_pSprite;
 };

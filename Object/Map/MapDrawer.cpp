@@ -119,8 +119,7 @@ void MapDrawer::Init()
 
 
     int gprah = LoadGraph("mapData.png");
-    static int count = -1;
-
+    m_dataNum = -1;
     // WorldSprite実体設定と位置初期化
     // マップの描画開始位置（左上）
     // 行
@@ -131,20 +130,19 @@ void MapDrawer::Init()
         // 列
         for (int x = 0; x < kMapChipMaxX; ++x)
         {
-            count++;
+            m_dataNum++;
             // インスタンス生成
             m_pSprite.push_back(new WorldSprite());
-            m_pSprite[count]->Init(gprah, kMapCihpSize, m_loadData[count]);
+            m_pSprite[m_dataNum]->Init(gprah, kMapCihpSize, m_loadData[m_dataNum]);
             // マップチップの半分サイズ左下にずらすオフセット
            // VECTOR chipHalfOffset = VGet(-kBlockSize * 0.5f, 0, -kBlockSize * 0.5f);
             // 真ん中ピボットなのでマップチップ半分サイズずらす+地面なので一つ下に
             VECTOR chipPos = VAdd(VGet(x * kBlockSize, 0, (-z - 1) * kBlockSize), VGet(0,0,0));
             chipPos = VAdd(chipPos, chipLeftTopPos);
             // 位置を設定
-            m_pSprite[count]->SetTransform(chipPos, kBlockSize);
+            m_pSprite[m_dataNum]->SetTransform(chipPos, kBlockSize);
         }
     }
-    count = 0;
 }
 
 void MapDrawer::End()

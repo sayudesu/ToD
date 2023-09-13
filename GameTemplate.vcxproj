@@ -147,6 +147,8 @@
     <ClCompile Include="Object\Enemy\EnemyMouseBig.cpp" />
     <ClCompile Include="Object\Enemy\EnemyMouseSpeed.cpp" />
     <ClCompile Include="Object\Map\WorldSprite.cpp" />
+    <ClCompile Include="Object\Obstacle\ObstacleHeavyShot.cpp" />
+    <ClCompile Include="ParticleDrawer.cpp" />
     <ClCompile Include="UIDrawer.cpp" />
     <ClCompile Include="Util\CutInDrawer.cpp" />
     <ClCompile Include="Object\Shot\NormalShot.cpp" />
@@ -185,11 +187,14 @@
     <ClInclude Include="Object\Enemy\EnemyMouseBig.h" />
     <ClInclude Include="Object\Enemy\EnemyMouseSpeed.h" />
     <ClInclude Include="Object\Map\WorldSprite.h" />
+    <ClInclude Include="Object\Obstacle\ObstacleHeavyShot.h" />
+    <ClInclude Include="ParticleDrawer.h" />
     <ClInclude Include="UIDrawer.h" />
     <ClInclude Include="Util\ObjectData.h" />
     <ClInclude Include="Util\CutInDrawer.h" />
     <ClInclude Include="Object\Shot\NormalShot.h" />
     <ClInclude Include="Object\Player\ObjectMenuDrawer.h" />
+    <ClInclude Include="Util\ObstructSelectNo.h" />
     <ClInclude Include="Util\Tracking.h" />
     <ClInclude Include="Save\SaveDataFunctions.h" />
     <ClInclude Include="Util\Collision3D.h" />

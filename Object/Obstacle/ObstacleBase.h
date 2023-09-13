@@ -26,7 +26,7 @@ public:
 	// いらないショットの番号を受け取る
 	virtual void SetEraseShotData(std::vector<ObjectData> eraseShotData) {};
 	// 必要のないショット番号を受け取る
-	virtual void SetShotErase(int shotNum, bool erase){};
+	virtual void SetShotErase(int shotNum, bool erase) {};
 
 protected:
 	// 位置

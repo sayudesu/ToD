@@ -10,7 +10,7 @@ public:
 	ShotBase(VECTOR pos);
 	virtual~ShotBase() {};
 
-	virtual void Init  (VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed, bool isTracking) {};
+	virtual void Init  (VECTOR taegetPos, VECTOR scale, VECTOR rotation, float radius, float damage, float speed, bool isTracking) {};
 	virtual void End   ()    {};
 	virtual void Update()    {};
 	virtual void Draw  ()    {};
@@ -35,6 +35,11 @@ protected:
 	VECTOR m_dir;
 	// ターゲット位置
 	VECTOR m_targetPos;
+	// 大きさ
+	VECTOR m_scale;
+	VECTOR m_scale2;
+	// 攻撃力
+	float m_damage;
 	// 画面外処理
 	bool m_isScreenOut;
 	// 目的地と今の距離
@@ -54,5 +59,7 @@ protected:
 	int m_no;
 	// そのショットを消すかどうか
 	bool m_IsEnabled;
+	// 
+	bool m_isTrackingNow;
 };
 

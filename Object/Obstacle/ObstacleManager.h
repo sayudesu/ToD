@@ -12,7 +12,7 @@ public:
 
 	void Init();
 	void End();
-	void Create(VECTOR pos, int no);
+	void Create(VECTOR pos, int obsNo, int no);
 	void Update();
 	void Draw();
 

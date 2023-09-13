@@ -13,19 +13,21 @@
 #include "../Util/Collision3D.h"
 #include "../Util/CutInDrawer.h"
 #include "../UIDrawer.h"
+#include "../Util/ObstructSelectNo.h"
+#include "../ParticleDrawer.h"
 
 // あとで消す
 #include "../Util/Pad.h"
 
 SceneMain::SceneMain():
 	m_pCamera(nullptr),
-	m_pEnemy(nullptr),
-	m_pObstacle(nullptr),
-	m_pPlayer(nullptr),
-	m_pMap(nullptr),
-	m_pColl(nullptr),
-	m_catIn(nullptr),
-	m_pUI(nullptr)
+		m_pEnemy(nullptr),
+		m_pObstacle(nullptr),
+		m_pPlayer(nullptr),
+		m_pMap(nullptr),
+		m_pColl(nullptr),
+		m_catIn(nullptr),
+		m_pUI(nullptr)
 {
 	// カメラクラスのインスタンス作成
 	m_pCamera = new Camera();
@@ -48,26 +50,6 @@ SceneMain::SceneMain():
 SceneMain::~SceneMain()
 {
 
-	// BGM停止
-	SoundFunctions::StopBgm(SoundFunctions::SoundIdBattle);
-
-	// メモリの解放
-	delete m_pCamera;
-	m_pCamera = nullptr;
-	delete m_pEnemy;
-	m_pEnemy = nullptr;
-	delete m_pObstacle;
-	m_pObstacle = nullptr;
-	delete m_pPlayer;
-	m_pPlayer = nullptr;
-	delete m_pMap;
-	m_pMap = nullptr;
-	delete m_pColl;
-	m_pColl = nullptr;
-	delete m_catIn;
-	m_catIn = nullptr;
-	delete m_pUI;
-	m_pUI = nullptr;
 }
 
 void SceneMain::Init()
@@ -87,24 +69,63 @@ void SceneMain::Init()
 
 	// マップチップをエネミーに渡す
 	// コードの処理の流れのせいでこうなっています治します
-	m_pEnemy   ->SetMapChip(m_pMap->GetMapChip());
-	m_pPlayer  ->SetMapChip(m_pMap->GetMapChip());
+	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
+	m_pPlayer->SetMapChip(m_pMap->GetMapChip());
 
 }
 
-void SceneMain::End()
-{
-	m_pCamera->End();
-	m_pEnemy->End();
-	m_pObstacle->End();
-	m_pPlayer->End();
-	m_pMap->End();
-	m_catIn->End();
-	m_pUI->End();
-}
+	void SceneMain::End()
+	{
+		m_pCamera->End();
+		m_pEnemy->End();
+		m_pObstacle->End();
+		m_pPlayer->End();
+		m_pMap->End();
+		m_catIn->End();
+		m_pUI->End();
+
+
+		// BGM停止
+		SoundFunctions::StopBgm(SoundFunctions::SoundIdBattle);
+
+		// メモリの解放
+		delete m_pCamera;
+		m_pCamera = nullptr;
+		delete m_pEnemy;
+		m_pEnemy = nullptr;
+		delete m_pObstacle;
+		m_pObstacle = nullptr;
+		delete m_pPlayer;
+		m_pPlayer = nullptr;
+		delete m_pMap;
+		m_pMap = nullptr;
+		delete m_pColl;
+		m_pColl = nullptr;
+		delete m_catIn;
+		m_catIn = nullptr;
+		delete m_pUI;
+		m_pUI = nullptr;
+
+
+		for (int i = 0; i < m_pParticle.size(); i++)
+		{
+			m_pParticle[i]->End();
+			delete m_pParticle[i];
+			m_pParticle[i] = nullptr;
+		}
+	}
 
 SceneBase* SceneMain::Update()
 {
+	for (int enemyNum = 0; enemyNum < m_pEnemy->GetNormalNum(); enemyNum++)
+	{
+		if (m_pEnemy->GetCollData()[enemyNum].isHit)
+		{
+			m_pParticle.push_back(new ParticleDrawer(m_pEnemy->GetCollData()[enemyNum].pos));
+			m_pParticle.back()->Init();
+		}
+	}
+
 	// プレイヤー操作
 	m_pPlayer->Update();
 	// プレイヤーの設置するオブジェクト
@@ -119,17 +140,23 @@ SceneBase* SceneMain::Update()
 	// 敵を生成(デバッグ用)
 	if (Pad::isTrigger(PAD_INPUT_2))
 	{
-		m_pEnemy->Create();
-		m_pEnemy->SetMapChip(m_pMap->GetMapChip());
 	}
+	m_pEnemy->Create();
+	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
+
+	bool isOn = m_pPlayer->GetObjCreate();
 
 	// オブジェクトを生成
-	if (m_pPlayer->GetObjCreate())
+	if (isOn)
 	{
-		static int no = -1;
-		no++;
-		m_pObstacle->Create(m_pPlayer->SetPos(),no);
+		//static int no = -1;
+		//no++;
 	}
+
+	ObstructSelect data = m_pPlayer->GetObstructData();
+	m_pUI->SetObstructData(data);
+	m_pObstacle->Create(m_pPlayer->SetPos(), data.obstructNo, 0);
+	m_pUI->SetObstructSelect(isOn);
 
 	// 判定情報	
 	m_pObstacle->SetCollEnemyDatas(m_pEnemy->GetCollData());
@@ -144,7 +171,10 @@ SceneBase* SceneMain::Update()
 		}
 	}
 
-	
+	for (auto& par : m_pParticle)
+	{
+		par->Update();
+	}
 
 
 	// 軽量化処理
@@ -178,9 +208,7 @@ SceneBase* SceneMain::Update()
 		}
 	}
 
-	static bool isTitle = false;
-	static bool isEnd = false;
-	static bool isC = false;
+
 	// シーンを切り替えます
 	if (Pad::isTrigger(PAD_INPUT_8))
 	{
@@ -254,6 +282,11 @@ void SceneMain::Draw()
 	m_pUI->Draw();
 	// 演出UI
 	m_catIn->Draw();
+
+	for (auto& par : m_pParticle)
+	{
+		par->Draw();
+	}
 
 #if _DEBUG
 	// ショットの数を確認

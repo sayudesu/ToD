@@ -8,7 +8,7 @@ public:
 	~NormalShot();
 
 	// ‰Šú‰»
-	void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float speed, bool isTracking);
+	void Init(VECTOR taegetPos, VECTOR scale, VECTOR rotation, float radius, float damage, float speed, bool isTracking)override;
 	// ƒƒ‚ƒŠ‰ğ•úˆ—
 	void End();
 	// XVˆ—

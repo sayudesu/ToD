@@ -71,25 +71,31 @@ void EnemyManager::Create()
 			}
 		}
 	}
-	static int count = 0;
-	count++;
-	if (count == 1)
+	static int countN = 0;
+	static int countS = 0;
+	static int countB = 0;
+	countN++;
+	countS++;
+	countB++;
+	if (countN == 60 * 2)
 	{
 		m_pEnemy.push_back(new EnemyMouse());
 		m_pEnemy.back()->Init(pos, forX, forZ);
+		countN = 0;
 	}
 
-	if(count == 2)
+	if(countS == 60 * 5)
 	{
 		m_pEnemy.push_back(new EnemyMouseSpeed());
 		m_pEnemy.back()->Init(pos, forX, forZ);
+		countS = 0;
 	}
 
-	if (count == 3)
+	if (countB == 60 * 10)
 	{
 		m_pEnemy.push_back(new EnemyMouseBig());
 		m_pEnemy.back()->Init(pos, forX, forZ);
-		count = 0;
+		countB = 0;
 	}
 }
 

@@ -1,5 +1,6 @@
 #include "ObstacleManager.h"
 #include "../../Object/Obstacle/ObstacleNormalShot.h"
+#include "../../Object/Obstacle/ObstacleHeavyShot.h"
 
 ObstacleManager::ObstacleManager()
 {
@@ -24,12 +25,23 @@ void ObstacleManager::End()
 	} 
 }
 
-void ObstacleManager::Create(VECTOR pos,int no)
+void ObstacleManager::Create(VECTOR pos,int obsNo,int no)
 {
-	// インスタンスの作成
-	m_pNormalObstacle.push_back(new ObstacleNormalShot(pos, no));
-	// 初期化
-	m_pNormalObstacle.back()->Init();
+	if (obsNo == 1)
+	{
+		// インスタンスの作成
+		m_pNormalObstacle.push_back(new ObstacleNormalShot(pos, no));
+		// 初期化
+		m_pNormalObstacle.back()->Init();
+	}
+	if (obsNo == 2)
+	{
+		// インスタンスの作成
+		m_pNormalObstacle.push_back(new ObstacleHeavyShot(pos, no));
+		// 初期化
+		m_pNormalObstacle.back()->Init();
+	}
+
 }
 
 void ObstacleManager::Update()

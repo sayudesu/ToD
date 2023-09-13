@@ -1,5 +1,6 @@
 #pragma once
 #include <DxLib.h>
+#include "Util/ObstructSelectNo.h"
 
 class UIDrawer
 {
@@ -22,6 +23,14 @@ public:
 	bool GetClear() { return m_isClear; }
 	void SetDamage(int damage) { hp -= damage; }
 
+	void SetObstructSelect(bool select);
+	void SetObstructData(ObstructSelect data);
+
+private:
+	// デバッグ用
+	void Time();
+	void meat();
+
 private:
 	// 画像ハンドル
 	// 自身の体力や設置コスト数の背景
@@ -39,7 +48,7 @@ private:
 	int m_hHp;
 	// オブジェクト設置用
 	int m_hSelectObject;
-	int m_hSelectObjectState[3];
+	int m_hSelectObjectState[5];
 
 
 	// 現在のコスト数
@@ -49,8 +58,12 @@ private:
 	VECTOR m_playerPos;
 
 	// 選択画像用位置
-	VECTOR m_selectPos[3];
+	VECTOR m_selectPos[5];
 
+
+	ObstructSelect m_obstructData;
+	bool m_isSelect;
+	bool m_isSelectNo[5];
 
 	// デバッグ用
 	int m_hpBarX;
@@ -60,5 +73,37 @@ private:
 
 	bool m_isDead = false;
 	bool m_isClear = false;
+
+
+	int time = 01;
+	int time2 = 30;
+	int time3 = 59;
+	int timeSecond = 9;
+
+	int timeCount1 = 0;
+	int timeCount2 = 0;
+	int timeCountS2 = 0;
+
+	bool notloop = true;
+	bool notloop2 = false;
+	bool notloopS2 = false;
+
+	int timerPosChange = 0;
+
+
+	int costPos = 0;
+	bool is1 = true;
+	bool is2 = true;
+	bool is3 = true;
+	bool is4 = true;
+	bool is5 = true;
+	bool is6 = true;
+
+	bool is1_ = true;
+	bool is2_ = true;
+	bool is3_ = true;
+	bool is4_ = true;
+	bool is5_ = true;
+	bool is6_ = true;
 };
 

@@ -23,6 +23,9 @@ namespace
 	const char* kFileNameSelectCreate     = "Data/Image/UI_SelectObjB.png";
 	const char* kFileNameSelectDelete     = "Data/Image/UI_SelectObjA.png";
 	const char* kFileNameSelectPowerUp    = "Data/Image/UI_SelectObjY.png";
+
+	const char* kFileNameSelectObstructHevy    = "Data/Image/UI_SelectObstrctY.png";
+	const char* kFileNameSelectObstructNormal  = "Data/Image/UI_SelectObstrctB.png";
 }
 
 UIDrawer::UIDrawer() :
@@ -58,6 +61,9 @@ void UIDrawer::Init()
 	m_hSelectObjectState[1]     = LoadGraph(kFileNameSelectPowerUp);
 	m_hSelectObjectState[2]     = LoadGraph(kFileNameSelectDelete);
 
+	m_hSelectObjectState[3]     = LoadGraph(kFileNameSelectObstructHevy);
+	m_hSelectObjectState[4]     = LoadGraph(kFileNameSelectObstructNormal);
+
 	GetGraphSize(m_hBgHp, &m_hpBarX, &m_hpBarY);
 }
 
@@ -74,27 +80,13 @@ void UIDrawer::Draw()
 	// 体力やコストやウェーブ数の背景
 	DrawGraph(0, 0, m_hBgUtil, true);
 
-	static int time = 10;
-	static int timeCount = 0;
+	Time();
 
-	DrawFormatString(Game::kScreenWidth / 2, 20, 0xffff00, "%d", time);
-
-	timeCount++;
-	if (timeCount > 60)
-	{
-		time--;
-		timeCount = 0;
-	}
-	if (time == 0)
-	{
-		m_isClear = true;
-	}
 	// オブジェクトコスト背景
 	DrawGraph(Game::kScreenWidth - 570, 20, m_hObjectCost, true);
 	DrawGraph(Game::kScreenWidth - 570, 20, m_hMeat, true);
 
-	// コスト数
-	DrawFormatString(Game::kScreenWidth - 570, 20, 0x000000, "%d", m_costNum);
+	meat();
 
 	// 特殊攻撃のボタン説明
 	DrawGraph(1150, Game::kScreenHeight - 150 , m_hTopicSpecialAttack, true);
@@ -115,10 +107,13 @@ void UIDrawer::Draw()
 		m_hHp,true);
 
 	// オブジェクト選択
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 	{
-		DrawGraph(m_selectPos[i].x, m_selectPos[i].y, m_hSelectObject, true);
-		DrawGraph(m_selectPos[i].x + 10.0f, m_selectPos[i].y + 10.0f, m_hSelectObjectState[i], true);
+		if (m_isSelectNo[i])
+		{
+			DrawGraph(m_selectPos[i].x, m_selectPos[i].y, m_hSelectObject, true);
+			DrawGraph(m_selectPos[i].x + 10.0f, m_selectPos[i].y + 10.0f, m_hSelectObjectState[i], true);
+		}
 	}
 
 	// あとで修正
@@ -143,6 +138,20 @@ void UIDrawer::Draw()
 		true);
 
 
+	if (m_obstructData.obstructNo == ObstructNo::NONE)
+	{
+		DrawString(300, 300, "EMPTY", 0x000000);
+	}
+	if (m_obstructData.obstructNo == ObstructNo::HRAVY)
+	{
+		DrawString(300, 300, "HRAVY", 0x000000);
+	}
+	if (m_obstructData.obstructNo == ObstructNo::NORMAL)
+	{
+		DrawString(300, 300, "NORMAL", 0x000000);
+	}
+
+
 #if false	
 	static int UI = LoadGraph("Data/Image/UI_ToDUI.png");
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -161,14 +170,303 @@ void UIDrawer::SetCostSetObject(int cost)
 void UIDrawer::SetPlayerPos(VECTOR pos)
 {
 	// 3D座標から2D座標に変換
-	m_playerPos = ConvWorldPosToScreenPos(pos);
+	if (!m_isSelect)
+	{
+		m_playerPos = ConvWorldPosToScreenPos(pos);
+		for (int i = 0; i < 5; i++)
+		{
+			m_selectPos[i].x= m_playerPos.x - 80;
+			m_selectPos[i].y= m_playerPos.y - 50;
 
-	m_selectPos[0].x = m_playerPos.x + 20.0f;
-	m_selectPos[0].y = m_playerPos.y - 30.0f;
+			m_isSelectNo[i] = false;
+		}
+		printfDx("初期\n");
+	}
+	else
+	{
+		printfDx("起動中\n");
+		m_isSelectNo[0] = true;
+		m_isSelectNo[1] = true;
+		m_isSelectNo[2] = true;
+		m_isSelectNo[3] = false;
+		m_isSelectNo[4] = false;
 
-	m_selectPos[1].x = m_playerPos.x;
-	m_selectPos[1].y = m_selectPos[0].y - 60.0f;
+	}
+	float speed = 4.0f;
 
-	m_selectPos[2].x = m_playerPos.x;
-	m_selectPos[2].y = m_selectPos[0].y + 60.0f;
+	if (m_obstructData.no == ObstructSelectNo::OBSTRUCT)
+	{
+		m_isSelectNo[3] = true;
+		m_isSelectNo[4] = true;
+		if (m_selectPos[3].x > m_playerPos.x)
+		{
+			m_selectPos[3].x -= speed;
+		}
+		if (m_selectPos[3].x < m_playerPos.x)
+		{
+			m_selectPos[3].x += speed;
+		}
+		if (m_selectPos[3].y > m_selectPos[0].y - 60.0f)
+		{
+			m_selectPos[3].y -= speed;
+		}
+		if (m_selectPos[3].y < m_selectPos[0].y - 60.0f)
+		{
+			m_selectPos[3].y += speed;
+		}
+
+		if (m_selectPos[4].x > m_playerPos.x + 20.0f)
+		{
+			m_selectPos[4].x -= speed;
+		}
+		if (m_selectPos[4].x < m_playerPos.x + 20.0f)
+		{
+			m_selectPos[4].x += speed;
+		}
+		if (m_selectPos[4].y > m_playerPos.y - 30.0f)
+		{
+			m_selectPos[4].y -= speed;
+		}
+		if (m_selectPos[4].y < m_playerPos.y - 30.0f)
+		{
+			m_selectPos[4].y += speed;
+		}
+	}
+
+
+	if (m_selectPos[0].x > m_playerPos.x + 20.0f)
+	{
+		m_selectPos[0].x -= speed;
+	}
+	if (m_selectPos[0].x < m_playerPos.x + 20.0f)
+	{
+		m_selectPos[0].x += speed;
+	}
+	if (m_selectPos[0].y > m_playerPos.y - 30.0f)
+	{
+		m_selectPos[0].y -= speed;
+	}
+	if (m_selectPos[0].y < m_playerPos.y - 30.0f)
+	{
+		m_selectPos[0].y++;
+	}
+	//m_selectPos[0].x = m_playerPos.x + 20.0f;
+	//m_selectPos[0].y = m_playerPos.y - 30.0f;
+	if (m_selectPos[1].x > m_playerPos.x)
+	{
+		m_selectPos[1].x -= speed;
+	}
+	if (m_selectPos[1].x < m_playerPos.x)
+	{
+		m_selectPos[1].x += speed;
+	}
+	if (m_selectPos[1].y > m_selectPos[0].y - 60.0f)
+	{
+		m_selectPos[1].y -= speed;
+	}
+	if (m_selectPos[1].y < m_selectPos[0].y - 60.0f)
+	{
+		m_selectPos[1].y += speed;
+	}
+	//m_selectPos[1].x = m_playerPos.x;
+	//m_selectPos[1].y = m_selectPos[0].y - 60.0f;
+	if (m_selectPos[2].x > m_playerPos.x)
+	{
+		m_selectPos[2].x -= speed;
+	}
+	if (m_selectPos[2].x < m_playerPos.x)
+	{
+		m_selectPos[2].x += speed;
+	}
+	if (m_selectPos[2].y > m_selectPos[0].y + 60.0f)
+	{
+		m_selectPos[2].y -= speed;
+	} 
+	if (m_selectPos[2].y < m_selectPos[0].y + 60.0f)
+	{
+		m_selectPos[2].y += speed;
+	}
+	//m_selectPos[2].x = m_playerPos.x;
+	//m_selectPos[2].y = m_selectPos[0].y + 60.0f;
+}
+
+void UIDrawer::SetObstructSelect(bool select)
+{
+	m_isSelect = select;
+}
+
+void UIDrawer::SetObstructData(ObstructSelect data)
+{
+	m_obstructData = data;
+}
+
+void UIDrawer::Time()
+{
+	//static int time  = 01;
+	//static int time2 = 30;
+	//static int time3  = 59;
+	//static int timeSecond = 9;
+
+	//static int timeCount1 = 0;
+	//static int timeCount2 = 0;
+	//static int timeCountS2 = 0;
+
+	//static bool notloop   = true;
+	//static bool notloop2  = false;
+	//static bool notloopS2 = false;
+
+	//static int timerPosChange = 0;
+
+	SetFontSize(128);
+	if (notloop) DrawFormatString(Game::kScreenWidth / 2 - 170, 12, 0x000000,   "0%d:%d", time, time2);
+	if (notloopS2) DrawFormatString(Game::kScreenWidth / 2 - 170, 12, 0x000000, "0%d:0%d", time, timeSecond);
+	if (!notloop && !notloopS2)DrawFormatString(Game::kScreenWidth / 2 - 70 + timerPosChange, 20, 0x000000, "%d", time3);
+	SetFontSize(16);
+
+	if (notloop)
+	{
+		timeCount1++;
+		if (timeCount1 > 60)
+		{
+			time2--;
+			timeCount1 = 0;
+			if (time2 == 9)
+			{
+				notloop = false;
+				notloopS2 = true;
+			}
+		}
+	}
+
+	if (notloopS2)
+	{
+		timeCountS2++;
+		if (timeCountS2 > 60)
+		{
+			timeSecond--;
+			timeCountS2 = 0;
+			if (timeSecond == -1)
+			{
+				notloop2 = true;
+				notloopS2 = false;
+			}
+		}
+	}
+
+	if (notloop2)
+	{
+		timeCount2++;
+		if (timeCount2 > 60)
+		{
+			time3--;
+			timeCount2 = 0;
+			if (time3 == -1)
+			{
+				notloop2 = false;
+			}
+
+			if (time3 == 9)
+			{
+				timerPosChange = 15 + 10;
+			}
+		}
+	}
+
+	if (time3 == 0)
+	{
+		m_isClear = true;
+	}
+}
+
+void UIDrawer::meat()
+{
+	//static int costPos = 0;
+	//static bool is1 = true;
+	//static bool is2 = true;
+	//static bool is3 = true;
+	//static bool is4 = true;
+	//static bool is5 = true;
+	//static bool is6 = true;
+
+	//static bool is1_ = true;
+	//static bool is2_ = true;
+	//static bool is3_ = true;
+	//static bool is4_ = true;
+	//static bool is5_ = true;
+	//static bool is6_ = true;
+
+	m_costNum += 0;
+	SetFontSize(48);
+	// コスト数
+	DrawFormatString(Game::kScreenWidth - 330 + costPos, 35, 0x000000, "%d", m_costNum);
+	SetFontSize(16);
+
+	if(m_costNum > 10 && is1)
+	{
+		costPos -= 5;
+		is1 = false;
+	}
+	if (m_costNum > 100 && is2)
+	{
+		costPos -= 5;
+		is2 = false;
+	}
+	if (m_costNum > 100 && is3)
+	{
+		costPos -= 5;
+		is3 = false;
+	}
+	if (m_costNum > 1000 && is4)
+	{
+		costPos -= 5;
+		is4 = false;
+	}
+	if (m_costNum > 1000 && is5)
+	{
+		costPos -= 5;
+		is5 = false;
+	}
+	if (m_costNum > 1000 && is6)
+	{
+		costPos -= 5;
+		is6 = false;
+	}
+
+
+	if (m_costNum < 10 && is1_ && !is1)
+	{
+		costPos += 5;
+		is1_ = false;
+		is1 = true;
+	}
+	if (m_costNum < 100 && is2_ && !is2)
+	{
+		costPos += 5;
+		is2_ = false;
+		is2 = true;
+	}
+	if (m_costNum < 100 && is3_ && !is3)
+	{
+		costPos += 5;
+		is3_ = false;
+		is3 = true;
+	}
+	if (m_costNum < 1000 && is4_ && !is4)
+	{
+		costPos += 5;
+		is4_ = false;
+		is4 = true;
+	}
+	if (m_costNum < 1000 && is5_ && !is5)
+	{
+		costPos += 5;
+		is5_ = false;
+		is5 = true;
+	}
+	if (m_costNum < 1000 && is6_ && !is6)
+	{
+		costPos += 5;
+		is6_ = false;
+		is6 = true;
+	}
 }

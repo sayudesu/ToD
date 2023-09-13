@@ -6,6 +6,7 @@
 #include "../../Util/SoundFunctions.h"
 #include "ObjectMenuDrawer.h"
 #include "../Shot/NormalShot.h"
+
 namespace
 {
 	// オブジェクト設置する際のコスト
@@ -178,7 +179,7 @@ void Player::UpdateControl()
 
 	static const int pressCountMax          = 30 - 10;
 	static const int press2CountMax         = 3;
-	static const int pressDiagonalCountMax  = 30;
+	static const int pressDiagonalCountMax  = 20;
 	static const int pressDiagonal2CountMax = 3 * 2;
 
 	static bool isUp    = false;
@@ -204,22 +205,25 @@ void Player::UpdateControl()
 	isDownLeft  = false;
 
 	isPress = false;
-	// 設置場を指定
-	if (Pad::isPress(PAD_INPUT_UP))
+	if (!m_isResultObject)
 	{
-		isUp = true;
-	}
-	if (Pad::isPress(PAD_INPUT_DOWN))
-	{
-		isDown = true;
-	}
-	if (Pad::isPress(PAD_INPUT_LEFT))
-	{
-		isLeft = true;
-	}
-	if (Pad::isPress(PAD_INPUT_RIGHT))
-	{
-		isRight = true;
+		// 設置場を指定
+		if (Pad::isPress(PAD_INPUT_UP))
+		{
+			isUp = true;
+		}
+		if (Pad::isPress(PAD_INPUT_DOWN))
+		{
+			isDown = true;
+		}
+		if (Pad::isPress(PAD_INPUT_LEFT))
+		{
+			isLeft = true;
+		}
+		if (Pad::isPress(PAD_INPUT_RIGHT))
+		{
+			isRight = true;
+		}
 	}
 
 	// 右上
@@ -379,37 +383,102 @@ void Player::UpdateControl()
 	m_pos.z = (m_checkMapChipNo.z * 50.0f);
 
 	// 設置用変数初期化
-	m_isResultObject = false;
 	m_isSetObject    = false;
 
-	// 設置します
-	if (Pad::isTrigger(PAD_INPUT_1) && m_objectCostNum > kSetCost)
-	{		
-		// 記録した場所の数
-		for (int i = 0; i < recordChipNo.size(); i++)
+	//// 設置します
+	//if (Pad::isTrigger(PAD_INPUT_1) && m_objectCostNum > kSetCost && !m_isResultObject)
+	//{		
+	//	// 記録した場所の数
+	//	for (int i = 0; i < recordChipNo.size(); i++)
+	//	{
+	//		// マップチップデータでおける場所を確認
+	//		if (m_mapChip[m_checkMapChipNo.x + m_checkMapChipNo.z * kMapChipMaxX] == 1)
+	//		{
+	//			// 一度置いたことあるかどうか確認
+	//			if (recordChipNo[i].x != m_checkMapChipNo.x &&
+	//				recordChipNo[i].z != m_checkMapChipNo.z)
+	//			{
+	//				// 設置できる事を確認
+	//				m_isSetObject = true;
+	//			}
+	//		}
+	//	}
+	//	// 置く場所を決める
+	//	if (m_isSetObject)
+	//	{
+	//		// 設置した事を確認
+	//		m_isResultObject = true;
+	//		//// 置いた場所を記録
+	//		//recordChipNo.push_back(m_checkMapChipNo);
+	//		//// オブジェクトコストを引く
+	//		//m_objectCostNum -= kSetCost;
+	//	}
+	//}
+	static bool isSelect1 = false;
+	if (!m_isResultObject)
+	{
+		m_selectObstructData.obstructNo = ObstructNo::NONE;
+		m_selectObstructData.no = ObstructSelectNo::EMPTY;
+	}
+	if (isSelect1)
+	{
+
+		if (Pad::isTrigger(PAD_INPUT_4) && m_objectCostNum > kSetCost)
 		{
-			// マップチップデータでおける場所を確認
-			if (m_mapChip[m_checkMapChipNo.x + m_checkMapChipNo.z * kMapChipMaxX] == 1)
-			{
-				// 一度置いたことあるかどうか確認
-				if (recordChipNo[i].x != m_checkMapChipNo.x &&
-					recordChipNo[i].z != m_checkMapChipNo.z)
-				{
-					// 設置できる事を確認
-					m_isSetObject = true;
-				}
-			}
-		}
-		// 置く場所を決める
-		if (m_isSetObject)
-		{
-			// 設置した事を確認
-			m_isResultObject = true;
-			// 置いた場所を記録
-			recordChipNo.push_back(m_checkMapChipNo);
+			m_selectObstructData.obstructNo = ObstructNo::HRAVY;
+			isSelect1 = false;
+			m_isResultObject = false;
 			// オブジェクトコストを引く
 			m_objectCostNum -= kSetCost;
 		}
+		if (Pad::isTrigger(PAD_INPUT_2) && m_objectCostNum > kSetCost)
+		{
+			m_selectObstructData.obstructNo = ObstructNo::NORMAL;
+			isSelect1 = false;
+			m_isResultObject = false;
+			// オブジェクトコストを引く
+			m_objectCostNum -= kSetCost;
+		}
+
+	}
+	if (Pad::isTrigger(PAD_INPUT_1))
+	{
+		// 設置できる事を確認
+		m_isResultObject = true;
+	}
+
+
+
+	if (m_isResultObject)
+	{	
+		//// 破壊
+		//if (DxLib::CheckHitKey(PAD_INPUT_1) && !isSelect1 && !isSelect2)
+		//{
+		////	m_selectObstructData.no = ObstructSelectNo::ERASE;
+		//}
+
+		// 設置
+		if (Pad::isTrigger(PAD_INPUT_2) && !isSelect1)
+		{
+			isSelect1 = true;
+			m_selectObstructData.no = ObstructSelectNo::OBSTRUCT;
+		}
+
+		//// 強化
+		//if (DxLib::CheckHitKey(PAD_INPUT_4) && !isSelect1)
+		//{
+		////	isSelect2 = true;
+		////	m_selectObstructData.no = ObstructSelectNo::POWER_UP;
+		//}
+	}
+
+	// 閉じる
+	if (Pad::isTrigger(PAD_INPUT_3))
+	{
+		m_selectObstructData.obstructNo = ObstructNo::NONE;
+		m_selectObstructData.no = ObstructSelectNo::EMPTY;
+		m_isResultObject = false;	
+		isSelect1 = false;	
 	}
 }
 
@@ -477,7 +546,7 @@ void Player::UpdateShot()
 		m_isTrackingShot = true;
 		// インスタンス生成
 		m_pShot = new NormalShot(VGet(m_pos.x, m_pos.y + 2000.0f, m_pos.z),0, m_countShotNo);
-		m_pShot->Init(m_targetPos,VGet(10,10,10), VGet(0.0f, 90.0f, 0.0f), 30.0f,false);
+		m_pShot->Init(m_targetPos,VGet(10,10,10), VGet(0.0f, 90.0f, 0.0f),16.0f*5,10000, 30.0f,true);
 	}
 
 	if (m_countShotNo == 0)
@@ -506,11 +575,16 @@ void Player::UpdateShot()
 // オブジェクトのコスト関連
 void Player::ObjectCost()
 {
-	m_objectCostNum++;
+	m_objectCostNum += 2;
 }
 
 // マップチップの情報を受け取ります
 void Player::SetMapChip(std::vector<int> mapChip)
 {
 	m_mapChip = mapChip;
+}
+
+ObstructSelect Player::GetObstructData()
+{
+	return m_selectObstructData;
 }

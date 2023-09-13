@@ -54,7 +54,9 @@ void EnemyBase::Update()
 void EnemyBase::Draw()
 {
 	// “G‚ð•`‰æ
+#if _DEGUB
 	DrawSphere3D(m_pos, m_collData.radius, 6, 0xff0000, 0xff0000, false);
+#endif
 	MV1DrawModel(m_hModel);
 }
 

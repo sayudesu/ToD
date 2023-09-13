@@ -1,4 +1,4 @@
-#include "ObstacleNormalShot.h"
+#include "ObstacleHeavyShot.h"
 #include "../../Object/Shot/ShotBase.h"
 #include "../../Object/Shot/NormalShot.h"
 #include "../../Effeck/EffekseerDrawer.h"
@@ -12,9 +12,9 @@ namespace
 	// ショット最初打ち出すまでのフレームむカウント
 	constexpr int kShotFirstFrameMax = 30;
 	// ショット再放出するまでのフレーム
-	constexpr int kShootFrameMax = 3;
+	constexpr int kShootFrameMax = 60;
 	// ショットの速度
-	constexpr float kShootSpeed = 20.0f;
+	constexpr float kShootSpeed = 10.0f;
 
 	// オブジェクトカラー(緑)
 	constexpr int kObjColor1 = 0x00ff00;
@@ -23,17 +23,17 @@ namespace
 
 	// 大砲モデルのパスの位置
 	const char* kCannonBasePathName = "Data/Model/CannonBase.mv1";
-	const char* kCannonPathName     = "Data/Model/Cannon0.mv1";
+	const char* kCannonPathName     = "Data/Model/Cannon0B.mv1";
 	
 	// 大砲の大きさ
 	const VECTOR kConnonScale  = VGet(1.0f, 1.0f, 1.0f);
 	// ショットの大きさ
-	const VECTOR kShotScale    = VGet(1.0f, 1.0f, 1.0f);
+	const VECTOR kShotScale    = VGet(3.0f, 3.0f, 3.0f);
 	// ショットの初期角度
 	const VECTOR kShotRotation = VGet(0.0f, 180.0f, 0.0f);
 }
 
-ObstacleNormalShot::ObstacleNormalShot(VECTOR pos, int no):
+ObstacleHeavyShot::ObstacleHeavyShot(VECTOR pos, int no):
 	m_hCannon(-1),
 	m_hCannonBaes(-1),
 	m_shotFirstDelayFrameCount(0),
@@ -52,16 +52,16 @@ ObstacleNormalShot::ObstacleNormalShot(VECTOR pos, int no):
 	m_targetPos = VGet(1000, 0, 300);
 
 	// 設置用関数に移動
-	m_updateFunc = &ObstacleNormalShot::UpdateSetting;
+	m_updateFunc = &ObstacleHeavyShot::UpdateSetting;
 
 	if(ef)m_pEffect = new EffekseerDrawer;
 }
 
-ObstacleNormalShot::~ObstacleNormalShot()
+ObstacleHeavyShot::~ObstacleHeavyShot()
 {
 }
 
-void ObstacleNormalShot::Init()
+void ObstacleHeavyShot::Init()
 {
 	if (ef)m_pEffect->Init();
 	// 設置音
@@ -78,7 +78,7 @@ void ObstacleNormalShot::Init()
 	MV1SetScale(m_hCannon, kConnonScale);
 }
 
-void ObstacleNormalShot::End()
+void ObstacleHeavyShot::End()
 {
 	if (ef)
 	{
@@ -98,12 +98,12 @@ void ObstacleNormalShot::End()
 	}
 }
 
-void ObstacleNormalShot::Update()
+void ObstacleHeavyShot::Update()
 {
 	(this->*m_updateFunc)();
 }
 
-void ObstacleNormalShot::UpdateSetting()
+void ObstacleHeavyShot::UpdateSetting()
 {
 
 	if (ef)
@@ -117,7 +117,7 @@ void ObstacleNormalShot::UpdateSetting()
 	if (m_shotFirstDelayFrameCount > kShotFirstFrameMax)
 	{
 		// ショット用関数に移動
-		m_updateFunc = &ObstacleNormalShot::UpdateShot;
+		m_updateFunc = &ObstacleHeavyShot::UpdateShot;
 		// オブジェクトの色変更
 		m_objColor = kObjColor2;
 		// カウントリセット
@@ -133,7 +133,7 @@ void ObstacleNormalShot::UpdateSetting()
 	}
 }
 
-void ObstacleNormalShot::UpdateShot()
+void ObstacleHeavyShot::UpdateShot()
 {
 	for (auto& shot : m_pShot)
 	{
@@ -147,8 +147,8 @@ void ObstacleNormalShot::UpdateShot()
 	if (m_shootFrameCount > kShootFrameMax && (m_isShot))
 	{
 		m_countShotNum++;
-		m_pShot.push_back(new NormalShot(VGet(m_pos.x, m_pos.y + 15.0f, m_pos.z), m_myNo, m_countShotNum));
-		m_pShot.back()->Init(m_targetPos, kShotScale, kShotRotation, 16.0f,3.0f,kShootSpeed, false);
+		m_pShot.push_back(new NormalShot(VGet(m_pos.x, m_pos.y + 10.0f, m_pos.z), m_myNo, m_countShotNum));
+		m_pShot.back()->Init(m_targetPos, kShotScale, kShotRotation,16.0f*2.0f,50, kShootSpeed, false);
 		m_shootFrameCount = 0;
 	}
 
@@ -162,23 +162,19 @@ void ObstacleNormalShot::UpdateShot()
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
 		// 適当な範囲外処理
-		if (m_pShot[i]->GetCollData().pos.x < -1000.0f)
+		if (m_pShot[i]->GetCollData().pos.x < -100.0f)
 		{
 			m_pShot[i]->SetEnabled(true);
 		}
-		if (m_pShot[i]->GetCollData().pos.x > 13000.0f)
+		if (m_pShot[i]->GetCollData().pos.x > 1300.0f)
 		{
 			m_pShot[i]->SetEnabled(true);
 		}
-		if (m_pShot[i]->GetCollData().pos.z < -1000.0f)
+		if (m_pShot[i]->GetCollData().pos.z < 0.0f)
 		{
 			m_pShot[i]->SetEnabled(true);
 		}
-		if (m_pShot[i]->GetCollData().pos.z > 7000.0f)
-		{
-			m_pShot[i]->SetEnabled(true);
-		}
-		if (m_pShot[i]->GetCollData().pos.y < 0.0f)
+		if (m_pShot[i]->GetCollData().pos.z > 700.0f)
 		{
 			m_pShot[i]->SetEnabled(true);
 		}
@@ -198,7 +194,7 @@ void ObstacleNormalShot::UpdateShot()
 	}
 }
 
-void ObstacleNormalShot::Draw()
+void ObstacleHeavyShot::Draw()
 {
 	// 攻撃範囲
 #if false
@@ -213,7 +209,7 @@ void ObstacleNormalShot::Draw()
 	if (ef)
 	{
 		// エフェクト描画
-		if (m_updateFunc == &ObstacleNormalShot::UpdateSetting)
+		if (m_updateFunc == &ObstacleHeavyShot::UpdateSetting)
 		{
 			m_pEffect->Draw();
 		}
@@ -225,19 +221,19 @@ void ObstacleNormalShot::Draw()
 }
 
 // 判定データを渡す
-ObjectData ObstacleNormalShot::GetCollShotDatas(int shotNum)
+ObjectData ObstacleHeavyShot::GetCollShotDatas(int shotNum)
 {
 	return m_pShot[shotNum]->GetCollData();
 }
 
 // エネミーの判定用データ
-void ObstacleNormalShot::SetCollEnemyDatas(std::vector<ObjectData> collEnemyData)
+void ObstacleHeavyShot::SetCollEnemyDatas(std::vector<ObjectData> collEnemyData)
 {
 	m_collEnemyData = collEnemyData;
 }
 
 // 誰を狙うか
-void ObstacleNormalShot::TargetPos()
+void ObstacleHeavyShot::TargetPos()
 {
 	// ここは後できれいにします。
 	// 敵の数分
@@ -257,13 +253,13 @@ void ObstacleNormalShot::TargetPos()
 }
 
 // ショットの発射数を渡す
-int ObstacleNormalShot::GetShotNum()
+int ObstacleHeavyShot::GetShotNum()
 {
 	return static_cast<int>(m_pShot.size());
 }
 
 // ターゲット位置を受け取る
-void ObstacleNormalShot::SetTarGetPos(VECTOR pos)
+void ObstacleHeavyShot::SetTarGetPos(VECTOR pos)
 {
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
@@ -272,7 +268,7 @@ void ObstacleNormalShot::SetTarGetPos(VECTOR pos)
 }
 
 // 弾の判定をなくすかどうか
-void ObstacleNormalShot::SetShotErase(int shotNum,bool erase)
+void ObstacleHeavyShot::SetShotErase(int shotNum,bool erase)
 {
 	m_pShot[shotNum]->SetEnabled(erase);
 }

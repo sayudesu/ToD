@@ -4,7 +4,7 @@
 #include "../../Util/Tracking.h"
 #include <vector>
 
-
+#include "../../Util/ObstructSelectNo.h"
 
 class ObjectMenuDrawer;
 class NormalShot;
@@ -44,6 +44,8 @@ public:
 	int GetObjectCostNum();
 	// マップチップデータを受けとる
 	void SetMapChip(std::vector<int> mapChip);
+
+	ObstructSelect GetObstructData();
 private:
 	// 操作を制御
 	void UpdateControl();
@@ -93,5 +95,7 @@ private:
 	VECTOR m_checkMapChipNo;
 
 	std::vector<VECTOR> recordChipNo{ VGet(-1, -1, -1) };
+
+	ObstructSelect m_selectObstructData;
 };
 
