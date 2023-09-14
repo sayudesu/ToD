@@ -48,7 +48,7 @@ void Camera::Update()
 
 	// 入力状態を取得
 	GetJoypadDirectInputState(DX_INPUT_PAD1, &input);
-
+	
 	// スティックの位置からカメラ位置に変換
 	int x = (input.Rx - 0) * (500  - 0) / (1000 - 0);
 	int z = (input.Ry - 0) * (500 - 0) / (1000 - 0);

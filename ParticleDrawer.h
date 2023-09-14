@@ -12,6 +12,8 @@ public:
 	virtual void End();
 	virtual void Update();
 	virtual void Draw();
+
+	virtual bool IsGetErase();
 private:
 	void First();
 	void Jet();
@@ -28,6 +30,8 @@ private:
 
 	// メンバ関数ポインタ
 	void(ParticleDrawer::* m_pFunc)();
+
+	bool m_isErase;
 
 };
 

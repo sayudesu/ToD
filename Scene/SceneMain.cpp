@@ -126,6 +126,22 @@ SceneBase* SceneMain::Update()
 		}
 	}
 
+	for (int i = 0; i < m_pParticle.size(); i++)
+	{
+		if (m_pParticle[i]->IsGetErase())
+		{
+			// メモリ解放
+			m_pParticle[i]->End();
+			// デリート処理
+			delete m_pParticle[i];
+			m_pParticle[i] = nullptr;
+			// 要素の削除
+			m_pParticle.erase(m_pParticle.begin() + i);
+			// メモリサイズの解放
+			m_pParticle.shrink_to_fit();
+		}
+	}
+
 	// プレイヤー操作
 	m_pPlayer->Update();
 	// プレイヤーの設置するオブジェクト

@@ -19,6 +19,8 @@ ParticleDrawer::ParticleDrawer(VECTOR pos)
 	m_speed = kSpeed;
 
 	m_count = 0;
+
+	m_isErase = false;
 }
 
 ParticleDrawer::~ParticleDrawer()
@@ -38,7 +40,7 @@ void ParticleDrawer::Init()
 		
 		// 移動量
 		m_vec[i].x = static_cast<float>(GetRand(6) - 3);
-		m_vec[i].y = static_cast<float>(GetRand(2) - 1);
+		m_vec[i].y = static_cast<float>(-GetRand(6) - 1);
 	}
 }
 
@@ -63,6 +65,11 @@ void ParticleDrawer::Draw()
 	}
 }
 
+bool ParticleDrawer::IsGetErase()
+{
+	return m_isErase;
+}
+
 void ParticleDrawer::First()
 {
 	for (int i = 0; i < m_hGraph.size(); i++)
@@ -74,7 +81,7 @@ void ParticleDrawer::First()
 	}
 
 	m_count++;
-	if (m_count > 30)
+	if (m_count > 40)
 	{
 		m_count = 0;
 		m_pFunc = &ParticleDrawer::Jet;
@@ -87,31 +94,29 @@ void ParticleDrawer::Jet()
 	{
 		// 移動
 		// 向きを算出
-		VECTOR m_dir = VSub(VGet(Game::kScreenWidth, Game::kScreenHeight, 0), m_pos[i]);
+		VECTOR dir = VSub(VGet(1500, Game::kScreenHeight - 110, 0),VGet(m_pos[i].x, m_pos[i].y,0));
 		// プレイヤーからエネミーまでの角度を求める
-		const float angle = atan2(m_dir.y, m_dir.x);
-		// 現在向いている方向のベクトルを生成する
-		const MATRIX enemyRotMtx = MGetRotY(angle);
-		const VECTOR dir = VTransform(VGet(0, 0, 0), enemyRotMtx);
+		const float angle = atan2(dir.y, dir.x);
 		// 斜めになったとき((1, 1, 0)など)にいったん長さ１に戻す(正規化)
-		if (VSquareSize(m_dir) > 0)
+		if (VSquareSize(dir) > 0)
 		{
-			m_dir = VNorm(m_dir);
+			dir = VNorm(dir);
 		}
 		// 速度を求める
-		const VECTOR velecity = VScale(m_dir, kSpeed);
+		const VECTOR velecity = VScale(dir, kSpeed);
 		// 位置を変える
-		m_pos[i] = VAdd(m_pos[i], velecity);
+		m_pos[i] = VAdd(m_pos[i], velecity);		
 
-		//// 距離を測る
-		//const float nowPosToNextPosX = static_cast<int>(sqrt(pow(m_pos[i].x - Game::kScreenWidth, 2) + pow(m_pos[i].x - Game::kScreenWidth, 2)));
-		//const float nowPosToNextPosZ = static_cast<int>(sqrt(pow(m_pos[i].y - Game::kScreenHeight, 2) + pow(m_pos[i].y - Game::kScreenHeight, 2)));
+		// 判定処理
+		const VECTOR vec = VSub(m_pos[i], VGet(1500, Game::kScreenHeight - 110, 0));
+		const float  del = VSize(vec);
 
-		//// 移動までの距離が短いと
-		//if (nowPosToNextPosX < 3.0f &&
-		//	nowPosToNextPosZ < 3.0f)
-		//{
-		//	m_pFunc = &ParticleDrawer::Jet;
-		//}
+		if (del < 4.0f + 1.0f)
+		{
+			m_isErase = true;
+		}
+
+		// 重力を与える
+		m_vec[i].y += kGravity;
 	}
 }

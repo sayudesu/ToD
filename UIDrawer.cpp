@@ -13,6 +13,7 @@ namespace
 	const char* kFileNameBgCost           = "Data/Image/UI_Cost.png";
 	// 肉画像
 	const char* kFileNameMeat             = "Data/Image/UI_Meat.png";
+	const char* kFileNameCatFood            = "Data/Image/CatFood.png";
 	// 特殊攻撃のボタン説明
 	const char* kFileNameSpecialAttack    = "Data/Image/UI_SpecialAttack.png";
 	const char* kFileNameBarSpecialAttack = "Data/Image/m_hBarTopicSpecialAttack.png";
@@ -52,6 +53,7 @@ void UIDrawer::Init()
 	m_hBgUtil	                = LoadGraph(kFileNameBgUtil);
 	m_hObjectCost	            = LoadGraph(kFileNameBgCost);
 	m_hMeat                     = LoadGraph(kFileNameMeat);
+	m_hCatFood                  = LoadGraph(kFileNameCatFood);
 	m_hTopicSpecialAttack       = LoadGraph(kFileNameSpecialAttack);
 	m_hBarTopicSpecialAttack    = LoadGraph(kFileNameBarSpecialAttack);
 	m_hBgHp		                = LoadGraph(kFileNameBgHp);
@@ -84,7 +86,7 @@ void UIDrawer::Draw()
 
 	// オブジェクトコスト背景
 	DrawGraph(Game::kScreenWidth - 570, 20, m_hObjectCost, true);
-	DrawGraph(Game::kScreenWidth - 570, 20, m_hMeat, true);
+	DrawRotaGraph(Game::kScreenWidth - 570 + 40, 20+ 38,0.13f,DX_PI_F * 180.0f, m_hCatFood, true);
 
 	meat();
 
@@ -138,20 +140,6 @@ void UIDrawer::Draw()
 		true);
 
 
-	if (m_obstructData.obstructNo == ObstructNo::NONE)
-	{
-		DrawString(300, 300, "EMPTY", 0x000000);
-	}
-	if (m_obstructData.obstructNo == ObstructNo::HRAVY)
-	{
-		DrawString(300, 300, "HRAVY", 0x000000);
-	}
-	if (m_obstructData.obstructNo == ObstructNo::NORMAL)
-	{
-		DrawString(300, 300, "NORMAL", 0x000000);
-	}
-
-
 #if false	
 	static int UI = LoadGraph("Data/Image/UI_ToDUI.png");
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -180,11 +168,9 @@ void UIDrawer::SetPlayerPos(VECTOR pos)
 
 			m_isSelectNo[i] = false;
 		}
-		printfDx("初期\n");
 	}
 	else
 	{
-		printfDx("起動中\n");
 		m_isSelectNo[0] = true;
 		m_isSelectNo[1] = true;
 		m_isSelectNo[2] = true;

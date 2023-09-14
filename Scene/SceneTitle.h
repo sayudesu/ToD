@@ -32,11 +32,7 @@ private:
 	SettingDrawer* m_pGameSetting;
 
 	// ‚ ‚Æ‚Å‚¯‚·
-	int m_hCatAnim = -1;
 	int m_count = 0;
 	int m_imagePosX = 0;
-
-	int x = 0;
-	int y = 0;
 };
 

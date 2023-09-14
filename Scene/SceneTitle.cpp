@@ -56,9 +56,6 @@ SceneTitle::SceneTitle():
 	m_pSelect = new SelectDrawer;
 	// 設定用クラス
 	m_pGameSetting = new SettingDrawer;
-
-
-	m_hCatAnim = LoadGraph("Data/Image/CatAnim.png");
 }
 
 SceneTitle::~SceneTitle()
@@ -180,19 +177,6 @@ SceneBase* SceneTitle::Update()
 
 	isMove = false;	
 
-	
-	if (Pad::isPress(PAD_INPUT_LEFT))
-	{
-		x -= 3;
-		isMove = true;
-
-	}
-	if (Pad::isPress(PAD_INPUT_RIGHT))
-	{
-		x += 3;
-		isMove = true;
-	}
-
 	if (isMove)
 	{
 		m_count++;
@@ -234,18 +218,6 @@ void SceneTitle::Draw()
 
 	// セレクト関連描画
 	m_pSelect->Draw();
-
-	DrawRectRotaGraph(
-		Game::kScreenWidth/2,
-		Game::kScreenHeight/2,//プレイヤーの位置
-		m_imagePosX + 4, 0,// 画像の左上
-		322, 192,    // 画像の右下
-		0.8,	   // サイズ
-		DX_PI_F * 180.0f,			   // 回転角度
-		m_hCatAnim,		   // ハンドル
-		true,		       // 画像透過
-		false      // 画像反転
-	);
 
 	if (m_isSlectSetting)
 	{
