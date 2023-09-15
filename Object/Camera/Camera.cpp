@@ -57,7 +57,7 @@ void Camera::Update()
 
 	VECTOR targetPos{};
 
-	if (trackingData.tracking)
+	if (trackingData.isTracking)
 	{
 		targetPos = trackingData.pos;
 	}
@@ -78,5 +78,5 @@ VECTOR Camera::SetPos() const
 void Camera::SeTrackingData(Tracking data)
 {
 	trackingData.pos = data.pos;
-	trackingData.tracking = data.tracking;
+	trackingData.isTracking = data.isTracking;
 }

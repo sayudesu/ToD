@@ -3,10 +3,15 @@
 // 起動時の基本設定
 namespace Game
 {
+#if _DEBUG
 	// ウインドウモード設定
-	constexpr bool kWindowMode = false;
+	constexpr bool kWindowMode = true;
 	// ウインドウ名
-	const char* const kTitleText = "タワーオブディフェンス";
+	const char* const kTitleText = "ヴァイタルフォートレス_デバッグ版";
+#else
+	constexpr bool kWindowMode = false;
+	const char* const kTitleText = "ヴァイタルフォートレス";
+#endif
 	// ウインドウサイズ
 	constexpr int kScreenWidth = 1920;
 	constexpr int kScreenHeight = 1080;

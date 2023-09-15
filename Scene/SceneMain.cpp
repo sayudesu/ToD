@@ -121,11 +121,13 @@ SceneBase* SceneMain::Update()
 	{
 		if (m_pEnemy->GetCollData()[enemyNum].isHit)
 		{
-			m_pParticle.push_back(new ParticleDrawer(m_pEnemy->GetCollData()[enemyNum].pos));
-			m_pParticle.back()->Init();
+			for (int i = 0; i < 10; i++)
+			{
+				m_pParticle.push_back(new ParticleDrawer(m_pEnemy->GetCollData()[enemyNum].pos));
+				m_pParticle.back()->Init();
+			}
 		}
 	}
-
 	for (int i = 0; i < m_pParticle.size(); i++)
 	{
 		if (m_pParticle[i]->IsGetErase())
@@ -137,7 +139,7 @@ SceneBase* SceneMain::Update()
 			m_pParticle[i] = nullptr;
 			// 要素の削除
 			m_pParticle.erase(m_pParticle.begin() + i);
-			// メモリサイズの解放
+			//// メモリサイズの解放
 			m_pParticle.shrink_to_fit();
 		}
 	}
@@ -163,12 +165,6 @@ SceneBase* SceneMain::Update()
 	bool isOn = m_pPlayer->GetObjCreate();
 
 	// オブジェクトを生成
-	if (isOn)
-	{
-		//static int no = -1;
-		//no++;
-	}
-
 	ObstructSelect data = m_pPlayer->GetObstructData();
 	m_pUI->SetObstructData(data);
 	m_pObstacle->Create(m_pPlayer->SetPos(), data.obstructNo, 0);

@@ -135,7 +135,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		ClearDrawScreen();
 
 		pScene->Update();
-		//SetDrawScreen(m_hScreen);
+		// SetDrawScreen(m_hScreen);
 		pScene->Draw();
 		if (DxLib::CheckHitKey(KEY_INPUT_1))
 		{

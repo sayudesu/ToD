@@ -18,11 +18,11 @@ private:
 	void First();
 	void Jet();
 private:
-	std::array<int, 10> m_hGraph;
-	std::array<VECTOR, 10> m_pos;
-	std::array<VECTOR, 10> m_posTarget;
+	int m_hGraph;
+	VECTOR m_pos;
+	int m_posTarget;
 	VECTOR m_posMain;
-	VECTOR m_vec[10];
+	VECTOR m_vec;
 
 	int m_count;
 

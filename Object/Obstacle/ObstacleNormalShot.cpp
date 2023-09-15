@@ -196,6 +196,7 @@ void ObstacleNormalShot::UpdateShot()
 			m_pShot.shrink_to_fit();
 		}
 	}
+
 }
 
 void ObstacleNormalShot::Draw()

@@ -567,7 +567,7 @@ void Player::UpdateShot()
 
 		// トラッキングデータの保存
 		m_trackingData.pos = m_pShot->SetPos();
-		m_trackingData.tracking = m_isTrackingShot;
+		m_trackingData.isTracking = m_isTrackingShot;
 	}
 	
 }
