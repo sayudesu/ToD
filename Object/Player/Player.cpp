@@ -417,23 +417,31 @@ void Player::UpdateControl()
 	static bool isSelect1 = false;
 	if (!m_isResultObject)
 	{
-		m_selectObstructData.obstructNo = ObstructNo::NONE;
-		m_selectObstructData.no = ObstructSelectNo::EMPTY;
+		m_selectObstructData.obstructNo = ObstructNo::NONE_RESULT;
+		m_selectObstructData.no = ObstructSelectNo::EMPTY_RESULT;
 	}
-	if (isSelect1)
-	{
 
-		if (Pad::isTrigger(PAD_INPUT_4) && m_objectCostNum > kSetCost)
+	if (isSelect1 && m_objectCostNum > kSetCost)
+	{	
+		if (Pad::isTrigger(PAD_INPUT_4))
 		{
-			m_selectObstructData.obstructNo = ObstructNo::HRAVY;
+			m_selectObstructData.obstructNo = ObstructNo::HRAVY_PRESS;
+		}
+		if (Pad::isRelase(PAD_INPUT_4))
+		{
+			m_selectObstructData.obstructNo = ObstructNo::HRAVY_RESULT;
 			isSelect1 = false;
 			m_isResultObject = false;
 			// オブジェクトコストを引く
 			m_objectCostNum -= kSetCost;
 		}
-		if (Pad::isTrigger(PAD_INPUT_2) && m_objectCostNum > kSetCost)
+		if (Pad::isTrigger(PAD_INPUT_2))
 		{
-			m_selectObstructData.obstructNo = ObstructNo::NORMAL;
+			m_selectObstructData.obstructNo = ObstructNo::NORMAL_PRESS;
+		}
+		if (Pad::isRelase(PAD_INPUT_2))
+		{
+			m_selectObstructData.obstructNo = ObstructNo::NORMAL_RESULT;
 			isSelect1 = false;
 			m_isResultObject = false;
 			// オブジェクトコストを引く
@@ -447,9 +455,7 @@ void Player::UpdateControl()
 		m_isResultObject = true;
 	}
 
-
-
-	if (m_isResultObject)
+	if (m_isResultObject && !isSelect1)
 	{	
 		//// 破壊
 		//if (DxLib::CheckHitKey(PAD_INPUT_1) && !isSelect1 && !isSelect2)
@@ -458,11 +464,16 @@ void Player::UpdateControl()
 		//}
 
 		// 設置
-		if (Pad::isTrigger(PAD_INPUT_2) && !isSelect1)
+		if (Pad::isPress(PAD_INPUT_2))
+		{
+			m_selectObstructData.no = ObstructSelectNo::OBSTRUCT_PRESS;
+		}
+		if (Pad::isRelase(PAD_INPUT_2))
 		{
 			isSelect1 = true;
-			m_selectObstructData.no = ObstructSelectNo::OBSTRUCT;
+			m_selectObstructData.no = ObstructSelectNo::OBSTRUCT_RESULT;
 		}
+
 
 		//// 強化
 		//if (DxLib::CheckHitKey(PAD_INPUT_4) && !isSelect1)
@@ -475,8 +486,8 @@ void Player::UpdateControl()
 	// 閉じる
 	if (Pad::isTrigger(PAD_INPUT_3))
 	{
-		m_selectObstructData.obstructNo = ObstructNo::NONE;
-		m_selectObstructData.no = ObstructSelectNo::EMPTY;
+		m_selectObstructData.obstructNo = ObstructNo::NONE_RESULT;
+		m_selectObstructData.no = ObstructSelectNo::EMPTY_RESULT;
 		m_isResultObject = false;	
 		isSelect1 = false;	
 	}

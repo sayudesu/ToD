@@ -156,11 +156,11 @@ SceneBase* SceneMain::Update()
 	m_pMap->Update();	
 
 	// 敵を生成(デバッグ用)
-	if (Pad::isTrigger(PAD_INPUT_2))
+	if (Pad::isPress(PAD_INPUT_2))
 	{
+		m_pEnemy->Create();
+		m_pEnemy->SetMapChip(m_pMap->GetMapChip());
 	}
-	m_pEnemy->Create();
-	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
 
 	bool isOn = m_pPlayer->GetObjCreate();
 

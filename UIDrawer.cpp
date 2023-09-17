@@ -20,10 +20,11 @@ namespace
 	const char* kFileNameBgHp             = "Data/Image/UI_BgHP.png";
 	const char* kFileNameHp               = "Data/Image/UI_HP.png";
 	// オブジェクト設置時
-	const char* kFileNameSelectObject     = "Data/Image/UI_SelectObj.png";
-	const char* kFileNameSelectCreate     = "Data/Image/UI_SelectObjB.png";
-	const char* kFileNameSelectDelete     = "Data/Image/UI_SelectObjA.png";
-	const char* kFileNameSelectPowerUp    = "Data/Image/UI_SelectObjY.png";
+	const char* kFileNameSelectObjectBg     = "Data/Image/UI_SelectObj1.png";
+	const char* kFileNameSelectObject       = "Data/Image/UI_SelectObj2.png";
+	const char* kFileNameSelectCreate       = "Data/Image/UI_SelectObjB.png";
+	const char* kFileNameSelectDelete       = "Data/Image/UI_SelectObjA.png";
+	const char* kFileNameSelectPowerUp      = "Data/Image/UI_SelectObjY.png";
 
 	const char* kFileNameSelectObstructHevy    = "Data/Image/UI_SelectObstrctY.png";
 	const char* kFileNameSelectObstructNormal  = "Data/Image/UI_SelectObstrctB.png";
@@ -49,6 +50,14 @@ UIDrawer::~UIDrawer()
 
 void UIDrawer::Init()
 {
+
+	for (int i = 0; i < 5; i++)
+	{
+		m_selectPressPos[i].x = 10;
+		m_selectPressPos[i].y = 10;
+		m_selectPressPos[i].z = 0;
+	}
+
 	// 画像をロード
 	m_hBgUtil	                = LoadGraph(kFileNameBgUtil);
 	m_hObjectCost	            = LoadGraph(kFileNameBgCost);
@@ -58,11 +67,11 @@ void UIDrawer::Init()
 	m_hBarTopicSpecialAttack    = LoadGraph(kFileNameBarSpecialAttack);
 	m_hBgHp		                = LoadGraph(kFileNameBgHp);
 	m_hHp	                    = LoadGraph(kFileNameHp);
+	m_hSelectObjectBg             = LoadGraph(kFileNameSelectObjectBg);
 	m_hSelectObject             = LoadGraph(kFileNameSelectObject);
 	m_hSelectObjectState[0]     = LoadGraph(kFileNameSelectCreate);
 	m_hSelectObjectState[1]     = LoadGraph(kFileNameSelectPowerUp);
 	m_hSelectObjectState[2]     = LoadGraph(kFileNameSelectDelete);
-
 	m_hSelectObjectState[3]     = LoadGraph(kFileNameSelectObstructHevy);
 	m_hSelectObjectState[4]     = LoadGraph(kFileNameSelectObstructNormal);
 
@@ -113,10 +122,14 @@ void UIDrawer::Draw()
 	{
 		if (m_isSelectNo[i])
 		{
-			DrawGraph(m_selectPos[i].x, m_selectPos[i].y, m_hSelectObject, true);
-			DrawGraph(m_selectPos[i].x + 10.0f, m_selectPos[i].y + 10.0f, m_hSelectObjectState[i], true);
+
+			DrawGraph(m_selectPos[i].x, m_selectPos[i].y, m_hSelectObjectBg, true);
+			DrawGraph(m_selectPos[i].x - m_selectPressPos[i].x, m_selectPos[i].y - m_selectPressPos[i].y, m_hSelectObject, true);
+			DrawGraph(m_selectPos[i].x - m_selectPressPos[i].x + 10, m_selectPos[i].y - m_selectPressPos[i].y + 10, m_hSelectObjectState[i], true);
 		}
 	}
+
+	DrawGraph(100, 100, m_hSelectObjectBg, true);
 
 	// あとで修正
 	// アイコンロード
@@ -166,6 +179,10 @@ void UIDrawer::SetPlayerPos(VECTOR pos)
 			m_selectPos[i].x= m_playerPos.x - 80;
 			m_selectPos[i].y= m_playerPos.y - 50;
 
+			m_selectPressPos[i].x = 10;
+			m_selectPressPos[i].y = 10;
+			m_selectPressPos[i].z = 0;
+
 			m_isSelectNo[i] = false;
 		}
 	}
@@ -180,7 +197,18 @@ void UIDrawer::SetPlayerPos(VECTOR pos)
 	}
 	float speed = 4.0f;
 
-	if (m_obstructData.no == ObstructSelectNo::OBSTRUCT)
+	// 押していたら画像を動かす
+	if (m_obstructData.no == ObstructSelectNo::OBSTRUCT_PRESS)
+	{
+		if (m_selectPressPos[0].x >= 0 && 
+			m_selectPressPos[0].y >= 0)
+		{
+			m_selectPressPos[0].x -= 1;
+			m_selectPressPos[0].y -= 1;
+		}
+	}
+
+	if (m_obstructData.no == ObstructSelectNo::OBSTRUCT_RESULT)
 	{
 		m_isSelectNo[3] = true;
 		m_isSelectNo[4] = true;
@@ -234,10 +262,9 @@ void UIDrawer::SetPlayerPos(VECTOR pos)
 	}
 	if (m_selectPos[0].y < m_playerPos.y - 30.0f)
 	{
-		m_selectPos[0].y++;
+		m_selectPos[0].y += speed;
 	}
-	//m_selectPos[0].x = m_playerPos.x + 20.0f;
-	//m_selectPos[0].y = m_playerPos.y - 30.0f;
+
 	if (m_selectPos[1].x > m_playerPos.x)
 	{
 		m_selectPos[1].x -= speed;
@@ -254,8 +281,7 @@ void UIDrawer::SetPlayerPos(VECTOR pos)
 	{
 		m_selectPos[1].y += speed;
 	}
-	//m_selectPos[1].x = m_playerPos.x;
-	//m_selectPos[1].y = m_selectPos[0].y - 60.0f;
+
 	if (m_selectPos[2].x > m_playerPos.x)
 	{
 		m_selectPos[2].x -= speed;
@@ -272,8 +298,7 @@ void UIDrawer::SetPlayerPos(VECTOR pos)
 	{
 		m_selectPos[2].y += speed;
 	}
-	//m_selectPos[2].x = m_playerPos.x;
-	//m_selectPos[2].y = m_selectPos[0].y + 60.0f;
+
 }
 
 void UIDrawer::SetObstructSelect(bool select)
@@ -288,21 +313,6 @@ void UIDrawer::SetObstructData(ObstructSelect data)
 
 void UIDrawer::Time()
 {
-	//static int time  = 01;
-	//static int time2 = 30;
-	//static int time3  = 59;
-	//static int timeSecond = 9;
-
-	//static int timeCount1 = 0;
-	//static int timeCount2 = 0;
-	//static int timeCountS2 = 0;
-
-	//static bool notloop   = true;
-	//static bool notloop2  = false;
-	//static bool notloopS2 = false;
-
-	//static int timerPosChange = 0;
-
 	SetFontSize(128);
 	if (notloop) DrawFormatString(Game::kScreenWidth / 2 - 170, 12, 0x000000,   "0%d:%d", time, time2);
 	if (notloopS2) DrawFormatString(Game::kScreenWidth / 2 - 170, 12, 0x000000, "0%d:0%d", time, timeSecond);
@@ -366,21 +376,6 @@ void UIDrawer::Time()
 
 void UIDrawer::meat()
 {
-	//static int costPos = 0;
-	//static bool is1 = true;
-	//static bool is2 = true;
-	//static bool is3 = true;
-	//static bool is4 = true;
-	//static bool is5 = true;
-	//static bool is6 = true;
-
-	//static bool is1_ = true;
-	//static bool is2_ = true;
-	//static bool is3_ = true;
-	//static bool is4_ = true;
-	//static bool is5_ = true;
-	//static bool is6_ = true;
-
 	m_costNum += 0;
 	SetFontSize(48);
 	// コスト数

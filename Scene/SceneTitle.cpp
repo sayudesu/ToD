@@ -12,7 +12,7 @@ namespace
 {
 	// タイトル関連
 	// パス
-	const char* kTitlePath = "Data/Image/VitalFortress2.png";
+	const char* kTitlePath = "Data/Image/VitalFortress0.png";
 	// 位置
 	constexpr int kTitlePosX = Game::kScreenWidth / 2;
 	constexpr int kTitlePosY = Game::kScreenHeight / 2 - 150;

@@ -48,6 +48,7 @@ private:
 	// HPバー
 	int m_hHp;
 	// オブジェクト設置用
+	int m_hSelectObjectBg;
 	int m_hSelectObject;
 	int m_hSelectObjectState[5];
 
@@ -60,6 +61,7 @@ private:
 
 	// 選択画像用位置
 	VECTOR m_selectPos[5];
+	VECTOR m_selectPressPos[5];
 
 
 	ObstructSelect m_obstructData;
