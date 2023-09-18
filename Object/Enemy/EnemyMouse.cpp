@@ -13,7 +13,6 @@ namespace
 	constexpr float kSize = 1.0f;
 	// 体力
 	constexpr float kHp = 500.0f;
-
 }
 
 EnemyMouse::EnemyMouse()
