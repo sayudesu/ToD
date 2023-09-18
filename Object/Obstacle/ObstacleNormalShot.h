@@ -36,7 +36,6 @@ public:
 private:
 	// 大砲モデルハンドル
 	int m_hCannon;
-	int m_hCannonBaes;
 	// ショットの数
 	int m_countShotNum;
 	// ショットクラス

@@ -12,9 +12,11 @@ namespace
 	// ショット最初打ち出すまでのフレームむカウント
 	constexpr int kShotFirstFrameMax = 30;
 	// ショット再放出するまでのフレーム
-	constexpr int kShootFrameMax = 3;
+	constexpr int kShootFrameMax = 60 * 3;
 	// ショットの速度
 	constexpr float kShootSpeed = 20.0f;
+	// ダメージ量
+	constexpr float kShootDamage = 30.0f;
 
 	// オブジェクトカラー(緑)
 	constexpr int kObjColor1 = 0x00ff00;
@@ -22,8 +24,7 @@ namespace
 	constexpr int kObjColor2 = 0xffff00;
 
 	// 大砲モデルのパスの位置
-	const char* kCannonBasePathName = "Data/Model/CannonBase.mv1";
-	const char* kCannonPathName     = "Data/Model/Cannon0.mv1";
+	const char* kCannonPathName     = "Data/Model/Cannon1.mv1";
 	
 	// 大砲の大きさ
 	const VECTOR kConnonScale  = VGet(1.0f, 1.0f, 1.0f);
@@ -35,7 +36,6 @@ namespace
 
 ObstacleNormalShot::ObstacleNormalShot(VECTOR pos, int no):
 	m_hCannon(-1),
-	m_hCannonBaes(-1),
 	m_shotFirstDelayFrameCount(0),
 	m_countShotNum(-1),
 	m_isShot(false),
@@ -68,13 +68,10 @@ void ObstacleNormalShot::Init()
 	SoundFunctions::Play(SoundFunctions::SoundIdSet);
 
 	// 大砲モデルのロード
-	m_hCannonBaes = MV1LoadModel(kCannonBasePathName);
 	m_hCannon = MV1LoadModel(kCannonPathName);
 	// 大砲モデルの位置
-	MV1SetPosition(m_hCannonBaes, VGet(m_pos.x, m_pos.y + 12.0f, m_pos.z));
-	MV1SetPosition(m_hCannon, VGet(m_pos.x, m_pos.y + 20.0f, m_pos.z));
+	MV1SetPosition(m_hCannon, VGet(m_pos.x, m_pos.y, m_pos.z));
 	// 大砲モデルのサイズ変更
-	MV1SetScale(m_hCannonBaes, kConnonScale);
 	MV1SetScale(m_hCannon, kConnonScale);
 }
 
@@ -88,7 +85,6 @@ void ObstacleNormalShot::End()
 	}
 
 	// モデルのデリート
-	MV1DeleteModel(m_hCannonBaes);
 	MV1DeleteModel(m_hCannon);
 
 	for (int i = 0; i < m_pShot.size(); i++)
@@ -148,7 +144,7 @@ void ObstacleNormalShot::UpdateShot()
 	{
 		m_countShotNum++;
 		m_pShot.push_back(new NormalShot(VGet(m_pos.x, m_pos.y + 15.0f, m_pos.z), m_myNo, m_countShotNum));
-		m_pShot.back()->Init(m_targetPos, kShotScale, kShotRotation, 16.0f,3.0f,kShootSpeed, false);
+		m_pShot.back()->Init(m_targetPos, kShotScale, kShotRotation, 16.0f, kShootDamage,kShootSpeed, false);
 		m_shootFrameCount = 0;
 	}
 
@@ -185,7 +181,7 @@ void ObstacleNormalShot::UpdateShot()
 
 		if (m_pShot[i]->IsEnabled())
 		{
-			// メモリ解放
+			// エンド処理
 			m_pShot[i]->End();
 			// デリート処理
 			delete m_pShot[i];
@@ -201,16 +197,16 @@ void ObstacleNormalShot::UpdateShot()
 
 void ObstacleNormalShot::Draw()
 {
+#if _DEBUG
 	// 攻撃範囲
-#if false
-	DrawSphere3D(m_pos, 300, 4, m_objColor, m_objColor, false);
+//	DrawSphere3D(m_pos, 300, 4, m_objColor, m_objColor, false);
 #endif
-
+#if true
 	for (auto& shot : m_pShot)
 	{
 		shot->Draw();
 	}
-
+#endif
 	if (ef)
 	{
 		// エフェクト描画
@@ -221,7 +217,6 @@ void ObstacleNormalShot::Draw()
 	}
 
 	// 3D描画モデル
-	MV1DrawModel(m_hCannonBaes);
 	MV1DrawModel(m_hCannon);
 }
 

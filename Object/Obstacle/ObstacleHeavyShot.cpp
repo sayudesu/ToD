@@ -15,6 +15,8 @@ namespace
 	constexpr int kShootFrameMax = 60;
 	// ショットの速度
 	constexpr float kShootSpeed = 10.0f;
+	// ダメージ量
+	constexpr float kShootDamage = 100.0f;
 
 	// オブジェクトカラー(緑)
 	constexpr int kObjColor1 = 0x00ff00;
@@ -148,7 +150,7 @@ void ObstacleHeavyShot::UpdateShot()
 	{
 		m_countShotNum++;
 		m_pShot.push_back(new NormalShot(VGet(m_pos.x, m_pos.y + 10.0f, m_pos.z), m_myNo, m_countShotNum));
-		m_pShot.back()->Init(m_targetPos, kShotScale, kShotRotation,16.0f*2.0f,50, kShootSpeed, false);
+		m_pShot.back()->Init(m_targetPos, kShotScale, kShotRotation,16.0f*2.0f, kShootDamage, kShootSpeed, false);
 		m_shootFrameCount = 0;
 	}
 

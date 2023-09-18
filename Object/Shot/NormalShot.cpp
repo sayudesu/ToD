@@ -77,8 +77,8 @@ void NormalShot::Update()
 // 描画
 void NormalShot::Draw()
 {
-	MV1DrawModel(m_hShot);
-//	DrawSphere3D(m_pos, kRadius, 4.0f, 0xffff00, 0xffff00, false);
+//	MV1DrawModel(m_hShot);
+	DrawSphere3D(m_pos, kRadius, 4.0f, 0xffff00, 0xffff00, false);
 }
 
 // オブジェクトを消すかどうか
