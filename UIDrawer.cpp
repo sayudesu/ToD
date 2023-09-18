@@ -122,9 +122,11 @@ void UIDrawer::Draw()
 	{
 		if (m_isSelectNo[i])
 		{
-
+			// 背景
 			DrawGraph(m_selectPos[i].x, m_selectPos[i].y, m_hSelectObjectBg, true);
+			// 文字の背景
 			DrawGraph(m_selectPos[i].x - m_selectPressPos[i].x, m_selectPos[i].y - m_selectPressPos[i].y, m_hSelectObject, true);
+			// 文字
 			DrawGraph(m_selectPos[i].x - m_selectPressPos[i].x + 10, m_selectPos[i].y - m_selectPressPos[i].y + 10, m_hSelectObjectState[i], true);
 		}
 	}
@@ -191,20 +193,39 @@ void UIDrawer::SetPlayerPos(VECTOR pos)
 		m_isSelectNo[0] = true;
 		m_isSelectNo[1] = true;
 		m_isSelectNo[2] = true;
-		m_isSelectNo[3] = false;
-		m_isSelectNo[4] = false;
+		//m_isSelectNo[3] = false;
+		//m_isSelectNo[4] = false;
 
 	}
 	float speed = 4.0f;
 
-	// 押していたら画像を動かす
-	if (m_obstructData.no == ObstructSelectNo::OBSTRUCT_PRESS)
+	int select[5]{};
+	select[0] = ObstructSelectNo::OBSTRUCT_PRESS;
+	select[1] = ObstructSelectNo::POWER_UP_PRESS;
+	select[2] = ObstructSelectNo::ERASE_PRESS;
+	select[3] = ObstructSelectNo::HRAVY_PRESS;
+	select[4] = ObstructSelectNo::NORMAL_PRESS;
+	// 選択した場合に分かるようにする
+	for (int i = 0; i < 5; i++)
 	{
-		if (m_selectPressPos[0].x >= 0 && 
-			m_selectPressPos[0].y >= 0)
+		// 選択された番号
+		if (m_obstructData.no == select[i])
 		{
-			m_selectPressPos[0].x -= 1;
-			m_selectPressPos[0].y -= 1;
+			// すこし画像位置を移動する
+			if (m_selectPressPos[i].x >= 0 &&
+				m_selectPressPos[i].y >= 0)
+			{
+				m_selectPressPos[i].x -= 5;
+				m_selectPressPos[i].y -= 5;
+
+				// 目的の位置を超えたら戻す
+				if (m_selectPressPos[i].x < 0 &&
+					m_selectPressPos[i].y < 0)
+				{
+					m_selectPressPos[i].x = 0;
+					m_selectPressPos[i].y = 0;
+				}
+			}
 		}
 	}
 
@@ -298,7 +319,6 @@ void UIDrawer::SetPlayerPos(VECTOR pos)
 	{
 		m_selectPos[2].y += speed;
 	}
-
 }
 
 void UIDrawer::SetObstructSelect(bool select)

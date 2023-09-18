@@ -167,7 +167,7 @@ SceneBase* SceneMain::Update()
 	// オブジェクトを生成
 	ObstructSelect data = m_pPlayer->GetObstructData();
 	m_pUI->SetObstructData(data);
-	m_pObstacle->Create(m_pPlayer->SetPos(), data.obstructNo, 0);
+	m_pObstacle->Create(m_pPlayer->SetPos(), data.no, 0);
 	m_pUI->SetObstructSelect(isOn);
 
 	// 判定情報	

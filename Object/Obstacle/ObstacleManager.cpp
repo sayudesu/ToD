@@ -28,14 +28,14 @@ void ObstacleManager::End()
 
 void ObstacleManager::Create(VECTOR pos,int obsNo,int no)
 {
-	if (obsNo == ObstructNo::NORMAL_RESULT)
+	if (obsNo == ObstructSelectNo::NORMAL_RESULT)
 	{
 		// インスタンスの作成
 		m_pNormalObstacle.push_back(new ObstacleNormalShot(pos, no));
 		// 初期化
 		m_pNormalObstacle.back()->Init();
 	}
-	if (obsNo == ObstructNo::HRAVY_RESULT)
+	if (obsNo == ObstructSelectNo::HRAVY_RESULT)
 	{
 		// インスタンスの作成
 		m_pNormalObstacle.push_back(new ObstacleHeavyShot(pos, no));
