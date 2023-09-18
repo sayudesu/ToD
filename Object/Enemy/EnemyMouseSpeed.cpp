@@ -8,9 +8,11 @@ namespace
 	// ファイルデータ
 	const char* kFileNameMouse = "Data/Model/MouseB.mv1";
 	// 速度
-	constexpr float kSpeed = 6.0f;
+	constexpr float kSpeed = 3.0f;
 	// 大きさ
 	constexpr float kSize = 0.6f;
+	// 体力
+	constexpr float kHp = 100.0f;
 
 }
 
@@ -43,7 +45,7 @@ EnemyMouseSpeed::EnemyMouseSpeed()
 	m_collData.radius = 16.0f * 2.0f;
 	m_collData.speed = kSpeed;
 	m_collData.size = kSize;
-	m_collData.hp = 50.0f;
+	m_collData.hp    = kHp;
 	m_collData.isHit = true;
 	m_collData.isAttack = false;
 }
@@ -78,7 +80,7 @@ ObjectData EnemyMouseSpeed::GetCollDatas()
 	m_collData.radius   = 20.0f;
 	m_collData.speed	= kSpeed;
 	m_collData.size   	= 1;
-	m_collData.hp = 50.0f;
+	m_collData.hp       = kHp;
 	m_collData.isHit    = GetErase();
 
 	return m_collData;
