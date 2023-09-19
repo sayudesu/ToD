@@ -3,7 +3,6 @@
 #include "../../Object/Shot/NormalShot.h"
 #include "../../Effeck/EffekseerDrawer.h"
 #include "../../Util/SoundFunctions.h"
-#include <math.h>
 
 namespace
 {
@@ -50,7 +49,7 @@ void ObstacleHeavyShot::Init()
 	// 大砲モデルの位置
 	MV1SetPosition(m_handle, m_pos);
 	// 大砲モデルのサイズ変更
-	MV1SetScale(m_handle, VGet(1,1,1));
+	MV1SetScale(m_handle, kScale);
 	// 設置用関数に移動
 	m_updateFunc = &ObstacleBase::UpdateSetting;
 }
