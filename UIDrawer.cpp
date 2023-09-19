@@ -131,8 +131,6 @@ void UIDrawer::Draw()
 		}
 	}
 
-	DrawGraph(100, 100, m_hSelectObjectBg, true);
-
 	// あとで修正
 	// アイコンロード
 	static int m_hIcon[8];
@@ -172,10 +170,10 @@ void UIDrawer::SetCostSetObject(int cost)
 // プレイヤーの位置を受け取る
 void UIDrawer::SetPlayerPos(VECTOR pos)
 {
+	m_playerPos = ConvWorldPosToScreenPos(pos);
 	// 3D座標から2D座標に変換
 	if (!m_isSelect)
 	{
-		m_playerPos = ConvWorldPosToScreenPos(pos);
 		for (int i = 0; i < 5; i++)
 		{
 			m_selectPos[i].x= m_playerPos.x - 80;

@@ -12,6 +12,7 @@ class Collision3D;
 class CutInDrawer;
 class UIDrawer;
 class ParticleDrawer;
+class BloodDrawer;
 
 class SceneMain : public SceneBase
 {
@@ -39,6 +40,7 @@ private:
 
 
 	std::vector<ParticleDrawer*>  m_pParticle;
+	std::vector<BloodDrawer*>     m_pBlood;
 
 	// 削除用の判定データ
 	std::vector<ObjectData>m_eraseCollShotData;

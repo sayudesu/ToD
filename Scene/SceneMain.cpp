@@ -15,6 +15,7 @@
 #include "../UIDrawer.h"
 #include "../Util/ObstructSelectNo.h"
 #include "../ParticleDrawer.h"
+#include "../BloodDrawer.h"
 
 // あとで消す
 #include "../Util/Pad.h"
@@ -74,46 +75,52 @@ void SceneMain::Init()
 
 }
 
-	void SceneMain::End()
+void SceneMain::End()
+{
+	m_pCamera->End();
+	m_pEnemy->End();
+	m_pObstacle->End();
+	m_pPlayer->End();
+	m_pMap->End();
+	m_catIn->End();
+	m_pUI->End();
+
+
+	// BGM停止
+	SoundFunctions::StopBgm(SoundFunctions::SoundIdBattle);
+
+	// メモリの解放
+	delete m_pCamera;
+	m_pCamera = nullptr;
+	delete m_pEnemy;
+	m_pEnemy = nullptr;
+	delete m_pObstacle;
+	m_pObstacle = nullptr;
+	delete m_pPlayer;
+	m_pPlayer = nullptr;
+	delete m_pMap;
+	m_pMap = nullptr;
+	delete m_pColl;
+	m_pColl = nullptr;
+	delete m_catIn;
+	m_catIn = nullptr;
+	delete m_pUI;
+	m_pUI = nullptr;
+
+
+	for (int i = 0; i < m_pParticle.size(); i++)
 	{
-		m_pCamera->End();
-		m_pEnemy->End();
-		m_pObstacle->End();
-		m_pPlayer->End();
-		m_pMap->End();
-		m_catIn->End();
-		m_pUI->End();
-
-
-		// BGM停止
-		SoundFunctions::StopBgm(SoundFunctions::SoundIdBattle);
-
-		// メモリの解放
-		delete m_pCamera;
-		m_pCamera = nullptr;
-		delete m_pEnemy;
-		m_pEnemy = nullptr;
-		delete m_pObstacle;
-		m_pObstacle = nullptr;
-		delete m_pPlayer;
-		m_pPlayer = nullptr;
-		delete m_pMap;
-		m_pMap = nullptr;
-		delete m_pColl;
-		m_pColl = nullptr;
-		delete m_catIn;
-		m_catIn = nullptr;
-		delete m_pUI;
-		m_pUI = nullptr;
-
-
-		for (int i = 0; i < m_pParticle.size(); i++)
-		{
-			m_pParticle[i]->End();
-			delete m_pParticle[i];
-			m_pParticle[i] = nullptr;
-		}
+		m_pParticle[i]->End();
+		delete m_pParticle[i];
+		m_pParticle[i] = nullptr;
 	}
+	for (int i = 0; i < m_pBlood.size(); i++)
+	{
+		m_pBlood[i]->End();
+		delete m_pBlood[i];
+		m_pBlood[i] = nullptr;
+	}
+}
 
 SceneBase* SceneMain::Update()
 {
@@ -141,6 +148,21 @@ SceneBase* SceneMain::Update()
 			m_pParticle.erase(m_pParticle.begin() + i);
 			//// メモリサイズの解放
 			m_pParticle.shrink_to_fit();
+		}
+	}
+	for (int i = 0; i < m_pBlood.size(); i++)
+	{
+		if (m_pBlood[i]->IsGetErase())
+		{
+			// メモリ解放
+			m_pBlood[i]->End();
+			// デリート処理
+			delete m_pBlood[i];
+			m_pBlood[i] = nullptr;
+			// 要素の削除
+			m_pBlood.erase(m_pBlood.begin() + i);
+			//// メモリサイズの解放
+			m_pBlood.shrink_to_fit();
 		}
 	}
 
@@ -188,6 +210,10 @@ SceneBase* SceneMain::Update()
 		par->Update();
 	}
 
+	for (auto& blood : m_pBlood)
+	{
+		blood->Update();
+	}
 
 	// 軽量化処理
 	m_pObstacle->SetEraseShotData(m_eraseCollShotData);
@@ -278,6 +304,10 @@ void SceneMain::Draw()
 	// 背景用
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xaaaa888, true);
 	m_pMap->Draw();
+	for (auto& blood : m_pBlood)
+	{
+		blood->Draw();
+	}
 	m_pEnemy->Draw();
 	m_pObstacle->Draw();
 	
@@ -299,6 +329,7 @@ void SceneMain::Draw()
 	{
 		par->Draw();
 	}
+
 
 #if _DEBUG
 	// ショットの数を確認
@@ -347,8 +378,13 @@ void SceneMain::CheckColl()
 					m_pObstacle->SetShotErase(objNum, shotNum, true);
 					// ダメージを与える
 					m_pEnemy->SetHitDamage(enemyNum, m_pObstacle->GetCollShotDatas(objNum, shotNum).datage);
+						
+					for (int i = 0; i < 10; i++)
+					{
+						m_pBlood.push_back(new BloodDrawer(m_pEnemy->GetCollData()[enemyNum].pos));
+						m_pBlood.back()->Init();
+					}
 				}
-
 			}
 		}
 	}

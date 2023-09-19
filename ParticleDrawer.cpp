@@ -3,10 +3,11 @@
 
 namespace
 {
+	// 画像パス
 	const char* kFileNameMeat = "Data/Image/UI_Meat.png";
-
+	// 吸い込み速度
 	constexpr float kSpeed =10.0f;
-
+	// 重力
 	constexpr float kGravity = 0.2f;
 }
 
@@ -103,8 +104,6 @@ void ParticleDrawer::Jet()
 	{
 		m_isErase = true;
 	}
-
-	1 > 2 ? 3 : 4;
 
 	// 重力を与える
 	m_vec.y += kGravity;

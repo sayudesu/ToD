@@ -2,24 +2,74 @@
 #include <cmath>
 #include "../../Util/SoundFunctions.h"
 
-namespace
+ShotBase::ShotBase(VECTOR pos):
+	m_dir(VGet(0,0,0)),
+	m_targetPos(VGet(0, 0, 0)),
+	m_scale(VGet(0,0,0)),
+	m_damage(0),
+	m_isScreenOut(false),
+	m_nowPosToNextPosX(0),
+	m_nowPosToNextPosZ(0),
+	m_speed(0.0f),
+	m_radius(0.0f),
+	m_isTracking(false),
+	m_isTrackingNow(false)
 {
-	constexpr float kSpeed = 30.0f;
-}
-
-ShotBase::ShotBase(VECTOR pos)
-{
+	// 3Dモデルハンドル
+	m_hShot = -1;
+	// 位置
 	m_pos = pos;
 	m_isTracking = true;
 	m_originNo = 0;
 	m_no = 0;
-	m_IsEnabled = false;
-
+	m_isEnabled = false;
+	m_collData = {};
 //	SoundFunctions::Play(SoundFunctions::SoundIdShot);
 	m_collData.datage = 0;
 	m_collData.pos = pos;
 	m_collData.radius = 0;
+}
 
+// メモリ解放処理
+void ShotBase::End()
+{
+	// メモリ解放
+	MV1DeleteModel(m_hShot);
+}
+
+// 更新処理
+void ShotBase::Update()
+{
+	// 弾の移動
+	VecCalculation(m_targetPos, m_speed, m_isTrackingNow);
+	MV1SetPosition(m_hShot, VGet(m_pos.x, m_pos.y + 30.0f, m_pos.z));
+
+	// モデルの回転行列を計算して設定
+	VECTOR dir2 = VSub(m_targetPos, m_pos);
+	const float angle2 = atan2f(dir2.x, dir2.z) + -90.0f * DX_PI_F / 180.0f;
+	MV1SetRotationXYZ(m_hShot, VGet(0.0f, angle2, 0.0f));
+	// サイズ
+	MV1SetScale(m_hShot, VGet(3,3,3));
+
+}
+
+// 描画
+void ShotBase::Draw()
+{
+	MV1DrawModel(m_hShot);
+	//	DrawSphere3D(m_pos, kRadius, 4.0f, 0xffff00, 0xffff00, false);
+}
+
+// オブジェクトを消すかどうか
+bool ShotBase::IsEnabled()const
+{
+	return m_isEnabled;
+}
+
+// オブジェクトを消すかどうかを受け取る
+void ShotBase::SetEnabled(bool isEnabled)
+{
+	m_isEnabled = isEnabled;
 }
 
 // 移動の計算をしています

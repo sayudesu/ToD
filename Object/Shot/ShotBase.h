@@ -11,9 +11,9 @@ public:
 	virtual~ShotBase() {};
 
 	virtual void Init  (VECTOR taegetPos, VECTOR scale, VECTOR rotation, float radius, float damage, float speed, bool isTracking) {};
-	virtual void End   ()    {};
-	virtual void Update()    {};
-	virtual void Draw  ()    {};
+	virtual void End   ();
+	virtual void Update();
+	virtual void Draw  ();
 
 	// ショット判定データ
 	virtual ObjectData GetCollData ()  { return m_collData; }
@@ -21,8 +21,8 @@ public:
 	virtual VECTOR   SetPos      ()const      { return m_pos;      }
 	// ターゲット位置
 	virtual void     SetTargetPos(VECTOR pos) { m_targetPos = pos; }
-	virtual bool     IsEnabled()const { return false; }
-	virtual void	 SetEnabled(bool isEnabled) {};
+	virtual bool     IsEnabled()const;
+	virtual void	 SetEnabled(bool isEnabled);
 protected:
 	// 移動の計算をしています
 	void VecCalculation(VECTOR tagetPos, float speed, bool isTracking);
@@ -37,7 +37,6 @@ protected:
 	VECTOR m_targetPos;
 	// 大きさ
 	VECTOR m_scale;
-	VECTOR m_scale2;
 	// 攻撃力
 	float m_damage;
 	// 画面外処理
@@ -58,7 +57,7 @@ protected:
 	// 何回生成されたか
 	int m_no;
 	// そのショットを消すかどうか
-	bool m_IsEnabled;
+	bool m_isEnabled;
 	// 
 	bool m_isTrackingNow;
 };
