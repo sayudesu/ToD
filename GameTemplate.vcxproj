@@ -187,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BloodDrawer.h" />
+    <ClInclude Include="MapDatas.h" />
     <ClInclude Include="Object\Enemy\EnemyMouseBig.h" />
     <ClInclude Include="Object\Enemy\EnemyMouseSpeed.h" />
     <ClInclude Include="Object\Map\WorldSprite.h" />

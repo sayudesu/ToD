@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include <vector>
 #include "../../Util/ObjectData.h"
+#include "../../MapDatas.h"
 
 class EnemyBase;
 class EnemyManager
@@ -22,7 +23,7 @@ public:
 	// ノーマルエネミーの数を返します
 	virtual int GetNormalNum();
 	// マップチップでデータを受け取ります
-	virtual void SetMapChip(std::vector<int>mapChip);
+	virtual void SetMapChip(MapDatas mapChip);
 	// 判定用データを受け取る
  	virtual void SetObjCollData(std::vector<ObjectData> collData);
 	// 自身の判定用データ
@@ -36,6 +37,6 @@ private:
 	// ノーマルエネミー
 	std::vector<EnemyBase*>m_pEnemy;
 	// マップチップのデータ
-	std::vector<int>m_mapChip;
+	MapDatas m_mapChip;
 };
 

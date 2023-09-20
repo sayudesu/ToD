@@ -70,8 +70,8 @@ void SceneMain::Init()
 
 	// マップチップをエネミーに渡す
 	// コードの処理の流れのせいでこうなっています治します
-	m_pEnemy->SetMapChip(m_pMap->GetMapChip());
-	m_pPlayer->SetMapChip(m_pMap->GetMapChip());
+	m_pEnemy->SetMapChip(m_pMap->GetChip());
+	m_pPlayer->SetMapChip(m_pMap->GetChip());
 
 }
 
@@ -172,18 +172,20 @@ SceneBase* SceneMain::Update()
 	m_pObstacle->Update();
 	// カメラ
 	m_pCamera->Update();
+	m_pCamera->SetPosPlayer(m_pPlayer->SetPos());
 	// 敵
 	m_pEnemy->Update();
-	// マップ
-	m_pMap->Update();	
-
+#if _DEBUG
 	// 敵を生成(デバッグ用)
 	if (Pad::isPress(PAD_INPUT_2))
 	{
 		m_pEnemy->Create();
-		m_pEnemy->SetMapChip(m_pMap->GetMapChip());
+		m_pEnemy->SetMapChip(m_pMap->GetChip());
 	}
-
+#else
+	m_pEnemy->Create();
+	m_pEnemy->SetMapChip(m_pMap->GetChip());
+#endif
 	bool isOn = m_pPlayer->GetObjCreate();
 
 	// オブジェクトを生成

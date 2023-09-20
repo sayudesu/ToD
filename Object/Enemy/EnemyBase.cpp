@@ -3,14 +3,6 @@
 
 namespace
 {
-	// マップチップサイズ
-	constexpr int kMapChipMaxZ = 13;// 行
-	constexpr int kMapChipMaxX = 25;// 列
-	// マップチップナンバー(敵の道)
-	constexpr int kEnemyRoad = 2;
-	constexpr int kEnemyStop = 4;
-	// ブロック1つの大きさ
-	const float kMapChipSize = 50.0f;
 	// 距離
 	constexpr float kRange = 50.0f;
 	// 半径
@@ -106,9 +98,9 @@ bool EnemyBase::GetErase()
 void EnemyBase::ChangeNextPos(bool& isMoveing)
 {
 	// 配列が無かったら...
-	assert(m_mapChip.size() != 0);
+	assert(m_mapChip.data.size() != 0);
 
-	m_pos.y = -kMapChipSize + 50.0f;
+	m_pos.y = -m_mapChip.blockSizeY + 50.0f;
 
 	int tempZ = 0;
 	int tempX = 0;
@@ -137,7 +129,7 @@ void EnemyBase::ChangeNextPos(bool& isMoveing)
 			}
 			// 配列の制御
 			tempZ = z;
-			if (z >= kMapChipMaxZ) { tempZ = kMapChipMaxZ - 1; }
+			if (z >= m_mapChip.chipMaxZ) { tempZ = m_mapChip.chipMaxZ - 1; }
 			if (z <= 0) { tempZ = 0; }
 			// 列
 			for (int x = m_chipPosX - 1; x <= m_chipPosX + 1; x++)
@@ -145,7 +137,7 @@ void EnemyBase::ChangeNextPos(bool& isMoveing)
 				// 配列の制御
 				tempX = x;
 
-				if (x >= kMapChipMaxX) { tempX = kMapChipMaxX - 1; }
+				if (x >= m_mapChip.chipMaxX) { tempX = m_mapChip.chipMaxX - 1; }
 				if (x <= 0) { tempX = 0; }
 
 				// ここで移動処理を
@@ -168,7 +160,7 @@ void EnemyBase::ChangeNextPos(bool& isMoveing)
 				}
 
 				// [現在の列 + 現在の列 * チップ最大列]
-				if ((m_mapChip[tempX + tempZ * kMapChipMaxX] == kEnemyStop))
+				if ((m_mapChip.data[tempX + tempZ * m_mapChip.chipMaxX] == m_mapChip.enemyStop))
 				{
 					// 止まることを知らせる
 					isStop = true;
@@ -182,7 +174,7 @@ void EnemyBase::ChangeNextPos(bool& isMoveing)
 					break;
 				}
 				// [現在の列 + 現在の列 * チップ最大列]
-				else if ((m_mapChip[tempX + tempZ * kMapChipMaxX] == kEnemyRoad))
+				else if ((m_mapChip.data[tempX + tempZ * m_mapChip.chipMaxX] == m_mapChip.enemyRoad))
 				{
 					// 動くことを知らせる
 					isMove = true;
@@ -252,8 +244,8 @@ void EnemyBase::ChangeNextPos(bool& isMoveing)
 			m_recordX.push_back(m_chipPosX);
 			m_recordZ.push_back(m_chipPosZ);
 			// 位置を変更
-			m_targetPos.x = (m_chipPosX * kMapChipSize);
-			m_targetPos.z = (m_chipPosZ * kMapChipSize);
+			m_targetPos.x = (m_chipPosX * m_mapChip.blockSizeY);
+			m_targetPos.z = (m_chipPosZ * m_mapChip.blockSizeZ);
 			isMoveing = false;
 
 			// 要素を消す

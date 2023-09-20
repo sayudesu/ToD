@@ -27,7 +27,6 @@ void NormalShot::Init(int handle, int shotFrameCount,VECTOR taegetPos,VECTOR sca
 	assert(m_hShot != -1);
 	// 初期位置
 	MV1SetPosition(m_hShot, m_pos);
-
 	// ターゲット
 	m_targetPos = taegetPos;
 	// 大きさ

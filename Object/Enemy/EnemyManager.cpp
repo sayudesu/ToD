@@ -31,42 +31,33 @@ void EnemyManager::End()
 // 敵の初期設定
 void EnemyManager::Create()
 {
-	// マップチップサイズ
-	const int mapChipMaxZ = 13;// 行
-	const int mapChipMaxX = 25;// 列
-	// マップチップナンバー(敵の道)
-	
-	// ブロック1つの大きさ
-	const float block = 50.0f;
 	VECTOR pos{};
-	pos.y = 50.0f;
-
 	int forX = 0;
 	int forZ = 0;
 	int tempZ = 0;
 	int tempX = 0;
 	// 行
-	for (int z = 0; z < mapChipMaxZ; ++z)
+	for (int z = 0; z < m_mapChip.chipMaxZ; ++z)
 	{
 		// 配列の制御
 		tempZ = z;
-		if (z >= mapChipMaxZ) { tempZ = mapChipMaxZ; }
+		if (z >= m_mapChip.chipMaxZ) { tempZ = m_mapChip.chipMaxZ; }
 		if (z <= 0) { tempZ = 0; }
 		// 列
-		for (int x = 0; x < mapChipMaxX; ++x)
+		for (int x = 0; x < m_mapChip.chipMaxX; ++x)
 		{
 			// 配列の制御
 			tempX = x;
-			if (x >= mapChipMaxX) { tempX = mapChipMaxX; }
+			if (x >= m_mapChip.chipMaxX) { tempX = m_mapChip.chipMaxX; }
 			if (x <= 0) { tempX = 0; }
 			// [現在の列 + 現在の列 * チップ最大列]
-			if (m_mapChip[x + z * mapChipMaxX] == 3)
+			if (m_mapChip.data[x + z * m_mapChip.chipMaxX] == m_mapChip.enemySpawner)
 			{
 				forX = tempX;
 				forZ = tempZ;
 				//// 敵の位置に代入
-				pos.x = (forX * block);
-				pos.z = (forZ * block);
+				pos.x = (forX * m_mapChip.blockSizeY);
+				pos.z = (forZ * m_mapChip.blockSizeZ);
 				break;
 			}
 		}
@@ -141,7 +132,7 @@ int EnemyManager::GetNormalNum()
 }
 
 // マップチップの情報を受け取ります
-void EnemyManager::SetMapChip(std::vector<int> mapChip)
+void EnemyManager::SetMapChip(MapDatas mapChip)
 {
 	for (auto& normalEnemy : m_pEnemy)
 	{

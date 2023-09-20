@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "../../Util/Pad.h"
+#include <corecrt_math.h>
 
 namespace
 {
@@ -28,7 +29,7 @@ Camera::~Camera()
 void Camera::Init()
 {
 	// どこから、どこまで見えるか
-	SetCameraNearFar(100.0f, 2000.0f);
+	SetCameraNearFar(100.0f, 4000.0f);
 	// どこを居てどこをみるか
 	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetPos);
 	// 遠近法のセットアップ( ラジアン値に変換しています )
@@ -53,21 +54,19 @@ void Camera::Update()
 	int x = (input.Rx - 0) * (500  - 0) / (1000 - 0);
 	int z = (input.Ry - 0) * (500 - 0) / (1000 - 0);
 	m_pos.x = x + kCameraPos.x;
-	m_pos.z = z + kCameraPos.z;
-
-	VECTOR targetPos{};
+//	m_pos.z = z + kCameraPos.z;
 
 	if (trackingData.isTracking)
 	{
-		targetPos = trackingData.pos;
+		m_targetNowPos = trackingData.pos;
 	}
 	else
 	{
-		targetPos = m_targetPos;
+		m_targetNowPos = m_targetPos;
 	}
 
 	// どこを居てどこをみるか
-	SetCameraPositionAndTarget_UpVecY(m_pos, targetPos);
+	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetNowPos);
 }
 
 VECTOR Camera::SetPos() const
@@ -79,4 +78,13 @@ void Camera::SeTrackingData(Tracking data)
 {
 	trackingData.pos = data.pos;
 	trackingData.isTracking = data.isTracking;
+}
+
+void Camera::SetPosPlayer(VECTOR pos)
+{
+	m_pos.y = pos.y + 500.0f;
+	m_pos.z = pos.z - 500.0f;
+
+	m_targetPos.z = pos.z;
+	m_targetPos.y = pos.y;
 }

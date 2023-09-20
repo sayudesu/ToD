@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include <vector>
 #include "../../Util/ObjectData.h"
+#include "../../MapDatas.h"
 
 class EnemyBase
 {
@@ -25,7 +26,7 @@ public:
 	// 当たり判定データ
 	virtual ObjectData GetCollDatas() { return m_collData; }
 	// 通る道
-	virtual void SetRoadPos(std::vector<int> mapChip) { m_mapChip = mapChip; }
+	virtual void SetRoadPos(MapDatas mapChip) { m_mapChip = mapChip; }
 	// 与えられるダメージを受け取る
 	virtual void SetHitDamage(int damage);
 	// そのデータが必要なのかどうか
@@ -45,7 +46,7 @@ protected:
 	// ダメージ
 	int m_damage = 0;
 	// マップチップデータ
-	std::vector<int> m_mapChip{};
+	MapDatas m_mapChip;
 	// プレイヤー設置オブジェクトのデータ
 	std::vector<ObjectData> m_collObstacleShotData{};
 	// 自身のデータ

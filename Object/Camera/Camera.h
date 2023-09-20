@@ -19,6 +19,8 @@ public:
 
 	// トラッキングデータを受け取る
 	void SeTrackingData(Tracking data);
+	// プレイヤーの位置を受け取る
+	void SetPosPlayer(VECTOR pos);
 
 private:
 	// カメラの位置
@@ -28,6 +30,8 @@ private:
 	VECTOR m_mouseWorldPos;
 	// ターゲット
 	VECTOR m_targetPos;
+	VECTOR m_targetNowPos;
+	
 	// トラッキングをおこなうかどうか
 	Tracking trackingData;
 };

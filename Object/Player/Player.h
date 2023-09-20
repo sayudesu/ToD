@@ -3,11 +3,12 @@
 #include "../../Util/Vec2.h"
 #include "../../Util/Tracking.h"
 #include <vector>
-
 #include "../../Util/ObstructSelectNo.h"
+#include "../../MapDatas.h"
 
 class ObjectMenuDrawer;
 class NormalShot;
+
 
 // プレイヤークラス
 class Player
@@ -43,7 +44,7 @@ public:
 	// 現在のオブジェクトコストを渡す
 	int GetObjectCostNum();
 	// マップチップデータを受けとる
-	void SetMapChip(std::vector<int> mapChip);
+	void SetMapChip(MapDatas mapChip);
 
 	ObstructSelect GetObstructData();
 private:
@@ -89,13 +90,13 @@ private:
 	ObjectMenuDrawer* m_pObjMenu;
 	// 必殺技(ショット)
 	NormalShot* m_pShot;
-	// マップチップのデータ
-	std::vector<int>m_mapChip;
 	// 移動位置を確認
 	VECTOR m_checkMapChipNo;
 
 	std::vector<VECTOR> recordChipNo{ VGet(-1, -1, -1) };
 
 	ObstructSelect m_selectObstructData;
+
+	MapDatas m_mapData;
 };
 

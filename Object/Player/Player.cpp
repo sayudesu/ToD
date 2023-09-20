@@ -539,20 +539,20 @@ void Player::CheckOutSide()
 	// 左
 	if (m_checkMapChipNo.x < 0)
 	{
-		m_checkMapChipNo.x = kMapChipMaxX - 1;
+		m_checkMapChipNo.x = m_mapData.chipMaxX - 1;
 	}
 	// 右
-	if (m_checkMapChipNo.x > kMapChipMaxX - 1)
+	if (m_checkMapChipNo.x > m_mapData.chipMaxX - 1)
 	{
 		m_checkMapChipNo.x = 0;
 	}
 	// 下
 	if (m_checkMapChipNo.z < 0)
 	{
-		m_checkMapChipNo.z = kMapChipMaxZ - 1;
+		m_checkMapChipNo.z = m_mapData.chipMaxZ - 1;
 	}
 	// 上
-	if (m_checkMapChipNo.z > kMapChipMaxZ - 1)
+	if (m_checkMapChipNo.z > m_mapData.chipMaxZ - 1)
 	{
 		m_checkMapChipNo.z =0;
 	}
@@ -600,9 +600,9 @@ void Player::ObjectCost()
 }
 
 // マップチップの情報を受け取ります
-void Player::SetMapChip(std::vector<int> mapChip)
+void Player::SetMapChip(MapDatas mapChip)
 {
-	m_mapChip = mapChip;
+	m_mapData = mapChip;
 }
 
 ObstructSelect Player::GetObstructData()

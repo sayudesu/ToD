@@ -5,11 +5,13 @@
 
 namespace
 {
-
+#if false
+    const char* kDataPath = "Data/Save/T_MapData.csv";
+#else
     const char* kDataPath = "Data/Save/MapData.csv";
-
+#endif
     // マップチップサイズ
-    constexpr int kMapChipMaxZ = 13;// 行
+    constexpr int kMapChipMaxZ = 50;// 行
     constexpr int kMapChipMaxX = 25;// 列
     // マップチップナンバー(敵の道)
     constexpr int kEnemyRoad = 2;
@@ -143,6 +145,17 @@ void MapDrawer::Init()
             m_pSprite[m_dataNum]->SetTransform(chipPos, kBlockSize);
         }
     }
+    m_data.chipMaxX = kMapChipMaxX;
+    m_data.chipMaxZ = kMapChipMaxZ;
+    m_data.chipSizeX = kMapCihpSize;
+    m_data.chipSizeZ = kMapCihpSize;
+    m_data.road         = 1;
+    m_data.enemyRoad    = 2;
+    m_data.enemySpawner = 3;
+    m_data.enemyStop    = 4;
+    m_data.blockSizeY = kBlockSize;
+    m_data.blockSizeZ = kBlockSize;
+    m_data.data = m_loadData;
 }
 
 void MapDrawer::End()
@@ -155,60 +168,8 @@ void MapDrawer::End()
     m_pSprite.clear();
 }
 
-void MapDrawer::Update()
-{
-  
-}
-
 void MapDrawer::Draw()
 {
-    VECTOR m_pos{};
-    m_pos.y = -kBlockSize + 20.0f;
-#if false   
-    // 行
-    for (int z = 0; z < kMapChipMaxZ; ++z)
-    {
-        // 列
-        for (int x = 0; x < kMapChipMaxX; ++x)
-        {
-            // [現在の列 + 現在の列 * チップ最大列]
-            if (m_loadData[x + z * kMapChipMaxX] == 1)
-            {
-                m_pos.x = (x * kBlockSize);
-                m_pos.z = (z * kBlockSize);
-                MV1SetPosition(m_hBlock, m_pos);
-                MV1DrawModel(m_hBlock);
-            }
-            // [現在の列 + 現在の列 * チップ最大列]
-            if (m_loadData[x + z * kMapChipMaxX] == 2)
-            {
-                //// 敵の位置に代入
-                m_pos.x = (x * kBlockSize);
-                m_pos.z = (z * kBlockSize);
-                MV1SetPosition(m_hEnemyRoad, m_pos);
-                MV1DrawModel(m_hEnemyRoad);
-            }
-            // [現在の列 + 現在の列 * チップ最大列]
-            if (m_loadData[x + z * kMapChipMaxX] == 3)
-            {
-                m_pos.x = (x * kBlockSize);
-                m_pos.z = (z * kBlockSize);
-                MV1SetPosition(m_hEnemySpawner, m_pos);
-                MV1DrawModel(m_hEnemySpawner);
-            }
-            // [現在の列 + 現在の列 * チップ最大列]
-            if (m_loadData[x + z * kMapChipMaxX] == 4)
-            {
-                m_pos.x = (x * kBlockSize);
-                m_pos.z = (z * kBlockSize);
-                MV1SetPosition(m_hEnemyStop, m_pos);
-                MV1DrawModel(m_hEnemyStop);
-            }
-
-        }
-    }
-#endif
-
     for(auto& sprite : m_pSprite)
     {
        sprite->Draw();
@@ -216,7 +177,7 @@ void MapDrawer::Draw()
 }
 
 // データ保管
-std::vector<int> MapDrawer::GetMapChip()
+MapDatas MapDrawer::GetChip()
 {
-    return m_loadData;
+    return m_data;
 }
