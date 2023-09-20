@@ -79,7 +79,7 @@ ObjectData EnemyMouseBig::GetCollDatas()
 	m_collData.pos      = m_pos;
 	m_collData.radius   = 16.0f * 5.0f;
 	m_collData.speed	= kSpeed;
-	m_collData.size     = 3;
+	m_collData.size     = kSize;
 	m_collData.hp       = kHp;
 	m_collData.isHit    = GetErase();
 

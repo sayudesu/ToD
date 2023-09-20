@@ -9,22 +9,23 @@ namespace
 
 ObstacleBase::ObstacleBase(VECTOR pos, int no)
 {
-	m_pos = pos;
+	m_pos  = pos;
 	m_myNo = no;
 	m_shotData.shotFrameCount = 0;
-	m_shotData.targetPos = VGet(0,0,0);
-	m_shotData.scale = VGet(0, 0, 0);
-	m_shotData.rotation = VGet(0,0,0);
-	m_shotData.radius = 16.0f;
-	m_shotData.damage = 0.0f;
-	m_shotData.speed = 0.0f;
-	m_shotData.isTracking = false;
+	m_shotData.targetPos      = VGet(0,0,0);
+	m_shotData.scale          = VGet(0, 0, 0);
+	m_shotData.rotation       = VGet(0,0,0);
+	m_shotData.radius         = 0.0f;
+	m_shotData.damage         = 0.0f;
+	m_shotData.speed          = 0.0f;
+	m_shotData.isTracking     = false;
 }
 
 void ObstacleBase::End()
 {
 	// モデルのデリート
 	MV1DeleteModel(m_handle);
+	MV1DeleteModel(m_shotData.handle);
 
 	for (int i = 0; i < m_pShot.size(); i++)
 	{
@@ -67,6 +68,8 @@ void ObstacleBase::UpdateShot()
 		m_countShotNum++;
 		m_pShot.push_back(new NormalShot(VGet(m_pos.x, m_pos.y + 15.0f, m_pos.z), m_myNo, m_countShotNum));
 		m_pShot.back()->Init(
+			m_shotData.handle,
+			m_shotData.shotFrameCount,
 			m_shotData.targetPos,
 			m_shotData.scale,
 			m_shotData.rotation,
@@ -74,6 +77,7 @@ void ObstacleBase::UpdateShot()
 			m_shotData.damage,
 			m_shotData.speed,
 			m_shotData.isTracking);
+
 		m_shootFrameCount = 0;
 	}
 
@@ -134,12 +138,29 @@ void ObstacleBase::TargetPos()
 		// 近い敵を見る
 		const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[i].pos);
 		const float length = sqrtf((toPlayer.x * toPlayer.x) + (toPlayer.y * toPlayer.y) + (toPlayer.z * toPlayer.z));
-		if (length < 300)
+		if (length < 300 && isDead)
 		{
-			// ターゲット指定
-			m_shotData.targetPos = m_collEnemyData[i].pos;
-			m_isShot = true;
+			no = i;
 		}
+
+		if (i == no)
+		{
+			if (!m_collEnemyData[no].isHit)
+			{
+				if (length < 300)
+				{
+					// ターゲット指定
+					m_shotData.targetPos = m_collEnemyData[no].pos;
+					m_isShot = true;
+					isDead = false;
+					break;
+				}
+			}
+			no = -1;
+			isDead = true;
+
+		}
+
 	}
 }
 

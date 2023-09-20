@@ -148,7 +148,7 @@
     <ClCompile Include="Object\Enemy\EnemyMouseBig.cpp" />
     <ClCompile Include="Object\Enemy\EnemyMouseSpeed.cpp" />
     <ClCompile Include="Object\Map\WorldSprite.cpp" />
-    <ClCompile Include="Object\Obstacle\ObstacleHeavyShot.cpp" />
+    <ClCompile Include="Object\Obstacle\ObstacleCrossbow.cpp" />
     <ClCompile Include="ParticleDrawer.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="UIDrawer.cpp" />
@@ -171,7 +171,7 @@
     <ClCompile Include="Object\Enemy\EnemyMouse.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Object\Obstacle\ObstacleBase.cpp" />
-    <ClCompile Include="Object\Obstacle\ObstacleNormalShot.cpp" />
+    <ClCompile Include="Object\Obstacle\ObstacleCannon.cpp" />
     <ClCompile Include="Object\Obstacle\ObstacleManager.cpp" />
     <ClCompile Include="Object\Player\Player.cpp" />
     <ClCompile Include="Menus\PauseBase.cpp" />
@@ -190,7 +190,7 @@
     <ClInclude Include="Object\Enemy\EnemyMouseBig.h" />
     <ClInclude Include="Object\Enemy\EnemyMouseSpeed.h" />
     <ClInclude Include="Object\Map\WorldSprite.h" />
-    <ClInclude Include="Object\Obstacle\ObstacleHeavyShot.h" />
+    <ClInclude Include="Object\Obstacle\ObstacleCrossbow.h" />
     <ClInclude Include="ParticleDrawer.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="UIDrawer.h" />
@@ -215,7 +215,7 @@
     <ClInclude Include="Object\Enemy\EnemyManager.h" />
     <ClInclude Include="Object\Enemy\EnemyMouse.h" />
     <ClInclude Include="Object\Obstacle\ObstacleBase.h" />
-    <ClInclude Include="Object\Obstacle\ObstacleNormalShot.h" />
+    <ClInclude Include="Object\Obstacle\ObstacleCannon.h" />
     <ClInclude Include="Object\Obstacle\ObstacleManager.h" />
     <ClInclude Include="Object\Player\Player.h" />
     <ClInclude Include="Menus\PauseBase.h" />

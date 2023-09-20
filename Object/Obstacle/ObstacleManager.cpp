@@ -1,6 +1,6 @@
 #include "ObstacleManager.h"
-#include "../../Object/Obstacle/ObstacleNormalShot.h"
-#include "../../Object/Obstacle/ObstacleHeavyShot.h"
+#include "../../Object/Obstacle/ObstacleCannon.h"
+#include "../../Object/Obstacle/ObstacleCrossbow.h"
 #include "../../Util/ObstructSelectNo.h"
 
 ObstacleManager::ObstacleManager()
@@ -31,14 +31,14 @@ void ObstacleManager::Create(VECTOR pos,int obsNo,int no)
 	if (obsNo == ObstructSelectNo::NORMAL_RESULT)
 	{
 		// インスタンスの作成
-		m_pNormalObstacle.push_back(new ObstacleNormalShot(pos, no));
+		m_pNormalObstacle.push_back(new ObstacleCannon(pos, no));
 		// 初期化
 		m_pNormalObstacle.back()->Init();
 	}
 	if (obsNo == ObstructSelectNo::HRAVY_RESULT)
 	{
 		// インスタンスの作成
-		m_pNormalObstacle.push_back(new ObstacleHeavyShot(pos, no));
+		m_pNormalObstacle.push_back(new ObstacleCrossbow(pos, no));
 		// 初期化
 		m_pNormalObstacle.back()->Init();
 	}

@@ -1,4 +1,4 @@
-#include "ObstacleHeavyShot.h"
+#include "ObstacleCrossbow.h"
 #include "../../Object/Shot/ShotBase.h"
 #include "../../Object/Shot/NormalShot.h"
 #include "../../Effeck/EffekseerDrawer.h"
@@ -8,8 +8,8 @@ namespace
 {
 	// ショット打ち出しまでのフレーム
 	constexpr int kShotFrameCount = 10;
-	// モデルの大きさ
-	const VECTOR kScale = VGet(1, 1, 1);
+	// ショットモデルの大きさ
+	const VECTOR kShotScale = VGet(3, 3, 3);
 	// 角度
 	const VECTOR kRotation = VGet(0, 0, 0);
 	// 半径
@@ -22,26 +22,31 @@ namespace
 	constexpr bool kIsTracking = false;
 	// ファイルパス
 	const char* kFilePath = "Data/Model/Crossbow.mv1";
+	const char* kFilePathShot = "Data/Model/Arrow.mv1";
+
+	// モデルの大きさ
+	const VECTOR kScale = VGet(1, 1, 1);
 }
 
-ObstacleHeavyShot::ObstacleHeavyShot(VECTOR pos, int no):
+ObstacleCrossbow::ObstacleCrossbow(VECTOR pos, int no):
 	ObstacleBase::ObstacleBase(pos,no)
 {
-	m_pos = pos;
+	m_pos  = pos;
 	m_myNo = no;
 }
 
-void ObstacleHeavyShot::Init()
+void ObstacleCrossbow::Init()
 {
 	// ショットデータ
+	m_shotData.handle = MV1LoadModel(kFilePathShot);
 	m_shotData.shotFrameCount = kShotFrameCount;
-	m_shotData.targetPos = VGet(1000, 0, 300);
-	m_shotData.rotation = kRotation;
-	m_shotData.scale = kScale;
-	m_shotData.radius = kRadius;
-	m_shotData.damage = kDamage;
-	m_shotData.speed = kSpeed;
-	m_shotData.isTracking = kIsTracking;
+	m_shotData.targetPos      = VGet(1000, 0, 300);
+	m_shotData.rotation       = kRotation;
+	m_shotData.scale          = kShotScale;
+	m_shotData.radius         = kRadius;
+	m_shotData.damage         = kDamage;
+	m_shotData.speed          = kSpeed;
+	m_shotData.isTracking     = kIsTracking;
 	// 設置音
 	SoundFunctions::Play(SoundFunctions::SoundIdSet);
 	// 大砲モデルのロード

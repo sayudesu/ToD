@@ -54,7 +54,7 @@ void EnemyBase::Update()
 void EnemyBase::Draw()
 {
 	// ìGÇï`âÊ
-#if _DEGUB
+#if _DEBUG
 	DrawSphere3D(m_pos, m_collData.radius, 6, 0xff0000, 0xff0000, false);
 #endif
 	MV1DrawModel(m_hModel);
@@ -96,7 +96,7 @@ void EnemyBase::SetHitDamage(int damage)
 bool EnemyBase::GetErase()
 {
 	// Ç†Ç∆Ç≈èCê≥
-	if (m_hp < 0)
+	if (m_hp <= 0)
 	{
 		return true;
 	}

@@ -151,14 +151,6 @@ void UIDrawer::Draw()
 		DX_PI_F * 180.0f,
 		m_hIcon[SaveDataFunctions::GetIconData().Icon],
 		true);
-
-
-#if false	
-	static int UI = LoadGraph("Data/Image/UI_ToDUI.png");
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
-	DrawGraph(0, 0, UI, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-#endif
 }
 
 // オブジェクトを設置するためのコストを受け取る

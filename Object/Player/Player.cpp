@@ -16,6 +16,12 @@ namespace
 	// マップチップサイズ
 	constexpr  int kMapChipMaxZ = 13;// 行
 	constexpr  int kMapChipMaxX = 25;// 列
+
+#if _DEBUG
+	constexpr  int kCostPuls = 200;// 列
+#else
+	constexpr  int kCostPuls = 1;// 列
+#endif
 }
 
 Player::Player() :
@@ -83,8 +89,15 @@ void Player::Update()
 	// ショット
 	UpdateShot();
 
-	// オブジェクトの設置コスト
-	ObjectCost();
+
+	static int count = 0;
+	count++;
+	if (count > 3)
+	{
+		// オブジェクトの設置コスト
+		ObjectCost();
+		count = 0;
+	}
 
 	m_pObjMenu->Update();
 }
@@ -554,7 +567,7 @@ void Player::UpdateShot()
 		m_isTrackingShot = true;
 		// インスタンス生成
 		m_pShot = new NormalShot(VGet(m_pos.x, m_pos.y + 2000.0f, m_pos.z),0, m_countShotNo);
-		m_pShot->Init(m_targetPos,VGet(10,10,10), VGet(0.0f, 90.0f, 0.0f),16.0f*5,10000, 30.0f,true);
+		m_pShot->Init(0xffffff,0,m_targetPos, VGet(10, 10, 10), VGet(0.0f, 90.0f, 0.0f), 16.0f * 5, 10000, 30.0f, true);
 	}
 
 	if (m_countShotNo == 0)
@@ -583,7 +596,7 @@ void Player::UpdateShot()
 // オブジェクトのコスト関連
 void Player::ObjectCost()
 {
-	m_objectCostNum += 2;
+	m_objectCostNum += kCostPuls;
 }
 
 // マップチップの情報を受け取ります

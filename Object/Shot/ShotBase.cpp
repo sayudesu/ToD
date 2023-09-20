@@ -33,7 +33,6 @@ ShotBase::ShotBase(VECTOR pos):
 // ƒƒ‚ƒŠ‰ğ•úˆ—
 void ShotBase::End()
 {
-	// ƒƒ‚ƒŠ‰ğ•ú
 	MV1DeleteModel(m_hShot);
 }
 
@@ -48,9 +47,6 @@ void ShotBase::Update()
 	VECTOR dir2 = VSub(m_targetPos, m_pos);
 	const float angle2 = atan2f(dir2.x, dir2.z) + -90.0f * DX_PI_F / 180.0f;
 	MV1SetRotationXYZ(m_hShot, VGet(0.0f, angle2, 0.0f));
-	// ƒTƒCƒY
-	MV1SetScale(m_hShot, VGet(3,3,3));
-
 }
 
 // •`‰æ

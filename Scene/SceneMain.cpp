@@ -303,14 +303,17 @@ void SceneMain::Draw()
 {
 	// 背景用
 	DrawBox(0, 0, Game::kScreenWidth, Game::kScreenHeight, 0xaaaa888, true);
+	// マップの描画
 	m_pMap->Draw();
+	// 血の描画
 	for (auto& blood : m_pBlood)
 	{
 		blood->Draw();
 	}
+	// 敵の描画
 	m_pEnemy->Draw();
+	// 障害物の描画
 	m_pObstacle->Draw();
-	
 	// プレイヤー用
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA,180);
 	m_pPlayer->Draw();
@@ -319,28 +322,18 @@ void SceneMain::Draw()
 	// オブジェクトのUI
 	m_pEnemy->DrawUI();
 	m_pPlayer->DrawUI();
-
 	// UI
 	m_pUI->Draw();
 	// 演出UI
 	m_catIn->Draw();
 
+	// 肉の描画
 	for (auto& par : m_pParticle)
 	{
 		par->Draw();
 	}
 
-
 #if _DEBUG
-	// ショットの数を確認
-	for (int objNum = 0; objNum < m_pObstacle->GetNum(); objNum++)
-	{
-		for (int shotNum = 0; shotNum < m_pObstacle->GetShotNum(objNum); shotNum++)
-		{
-			DrawFormatString(500, 100, 0xff0000, "%d", m_pObstacle->GetShotNum(objNum));
-		}
-	}
-
 	// 枠線
 	float y = 30.0f;
 	// 横線
@@ -350,7 +343,6 @@ void SceneMain::Draw()
 	DrawLine3D(VGet(-100,    y, 0), VGet(-100,    y, 600), 0xff0000);
 	DrawLine3D(VGet(1300.0f, y, 0), VGet(1300.0f, y, 600), 0xffff00);
 #endif
-
 	SceneBase::DrawSliderDoor();
 }
 

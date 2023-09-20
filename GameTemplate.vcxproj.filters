@@ -60,7 +60,7 @@
     <ClCompile Include="Object\Obstacle\ObstacleBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Obstacle\ObstacleNormalShot.cpp">
+    <ClCompile Include="Object\Obstacle\ObstacleCannon.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Object\Obstacle\ObstacleManager.cpp">
@@ -135,7 +135,7 @@
     <ClCompile Include="Object\Enemy\EnemyMouseBig.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Object\Obstacle\ObstacleHeavyShot.cpp">
+    <ClCompile Include="Object\Obstacle\ObstacleCrossbow.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="ParticleDrawer.cpp">
@@ -182,7 +182,7 @@
     <ClInclude Include="Object\Obstacle\ObstacleBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Obstacle\ObstacleNormalShot.h">
+    <ClInclude Include="Object\Obstacle\ObstacleCannon.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Object\Obstacle\ObstacleManager.h">
@@ -263,7 +263,7 @@
     <ClInclude Include="Object\Enemy\EnemyMouseBig.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Object\Obstacle\ObstacleHeavyShot.h">
+    <ClInclude Include="Object\Obstacle\ObstacleCrossbow.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Util\ObstructSelectNo.h">

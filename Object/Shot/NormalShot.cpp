@@ -1,13 +1,6 @@
 #include "NormalShot.h"
 #include <cassert>
 
-namespace
-{
-	// ショットのモデルパス
-	//const char* kFileNameShot = "Data/Model/ShotCat.mv1";
-	const char* kFileNameShot = "Data/Model/Arrow.mv1";
-}
-
 NormalShot::NormalShot(VECTOR pos, int originNo, int no):
 	ShotBase(pos)
 {
@@ -27,24 +20,27 @@ NormalShot::~NormalShot()
 }
 
 // 初期化
-void NormalShot::Init(VECTOR taegetPos,VECTOR scale, VECTOR rotation, float radius, float damage,float speed, bool isTracking)
+void NormalShot::Init(int handle, int shotFrameCount,VECTOR taegetPos,VECTOR scale, VECTOR rotation, float radius, float damage,float speed, bool isTracking)
 {
 	// 3Dモデルのロード
-	m_hShot = MV1LoadModel(kFileNameShot);
+	m_hShot = MV1DuplicateModel(handle);
 	assert(m_hShot != -1);
-	// 大きさ
-	m_scale = scale;
-	// 角度
-	MV1SetRotationXYZ(m_hShot, VGet(rotation.x * DX_PI_F / 180.0f, rotation.y * DX_PI_F / 180.0f, rotation.z * DX_PI_F / 180.0f));
-	// ターゲット
-	m_targetPos = taegetPos;
-	// 速度
-	m_speed = speed;
 	// 初期位置
 	MV1SetPosition(m_hShot, m_pos);
 
+	// ターゲット
+	m_targetPos = taegetPos;
+	// 大きさ
+	MV1SetScale(m_hShot, scale);
+	// 角度
+	MV1SetRotationXYZ(m_hShot, VGet(rotation.x * DX_PI_F / 180.0f, rotation.y * DX_PI_F / 180.0f, rotation.z * DX_PI_F / 180.0f));
+	// 半径
 	m_radius = radius;
+	// ダメージ
 	m_damage = damage;
+	// 速度
+	m_speed = speed;
+	// 初期追跡位置
 	m_isTrackingNow = isTracking;
 }
 // 判定用データ

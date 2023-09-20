@@ -131,11 +131,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	while (ProcessMessage() == 0)
 	{
 		LONGLONG  time = GetNowHiPerformanceCount();
+
+		pScene->Update();
+
 		// ‰æ–Ê‚ÌƒNƒŠƒA
 		ClearDrawScreen();
 
-		pScene->Update();
-		// SetDrawScreen(m_hScreen);
 		pScene->Draw();
 		if (DxLib::CheckHitKey(KEY_INPUT_1))
 		{

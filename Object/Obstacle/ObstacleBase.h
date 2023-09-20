@@ -40,6 +40,9 @@ private:
 private:
 	struct ShotData
 	{
+		// ハンドルデータ
+		int handle;
+		// 打ち出しまでのフレームカウント
 		int shotFrameCount;
 		// ターゲット位置
 		VECTOR targetPos;
@@ -79,5 +82,8 @@ protected:
 	int m_countShotNum;
 	// 自身の生成番号
 	int m_myNo;
+
+	bool isDead = true;
+	int no = -1;
 
 };
