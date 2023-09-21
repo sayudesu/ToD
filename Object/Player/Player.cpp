@@ -17,6 +17,9 @@ namespace
 	constexpr  int kMapChipMaxZ = 13;// 行
 	constexpr  int kMapChipMaxX = 25;// 列
 
+	// 必殺技
+	const char* kFilePathShot = "Data/Model/ShotCat.mv1";
+
 #if _DEBUG
 	constexpr  int kCostPuls = 200;// 列
 #else
@@ -563,11 +566,13 @@ void Player::UpdateShot()
 {
 	if (m_isShot)
 	{
+
+		int handle = MV1LoadModel(kFilePathShot);
 		m_countShotNo++;
 		m_isTrackingShot = true;
 		// インスタンス生成
 		m_pShot = new NormalShot(VGet(m_pos.x, m_pos.y + 2000.0f, m_pos.z),0, m_countShotNo);
-		m_pShot->Init(0xffffff,0,m_targetPos, VGet(10, 10, 10), VGet(0.0f, 90.0f, 0.0f), 16.0f * 5, 10000, 30.0f, true);
+		m_pShot->Init(handle,0,m_targetPos, VGet(10, 10, 10), VGet(0.0f, 90.0f, 0.0f), 16.0f * 5, 10000, 30.0f, true);
 	}
 
 	if (m_countShotNo == 0)

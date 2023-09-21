@@ -54,13 +54,6 @@ void ObstacleBase::UpdateSetting()
 
 void ObstacleBase::UpdateShot()
 {
-	for (auto& shot : m_pShot)
-	{
-		shot->Update();
-	}
-
-	TargetPos();
-
 	m_shootFrameCount++;
 	// ショットを出すスピート
 	if (m_shootFrameCount > m_shotData.shotFrameCount && (m_isShot))
@@ -81,11 +74,17 @@ void ObstacleBase::UpdateShot()
 		m_shootFrameCount = 0;
 	}
 
+	for (auto& shot : m_pShot)
+	{
+		shot->Update();
+	}
+
+	TargetPos();
+
 	// モデルの回転行列を計算して設定
 	VECTOR dir2 = VSub(m_shotData.targetPos, m_pos);
 	const float angle2 = atan2f(dir2.x, dir2.z) + -90.0f * DX_PI_F / 180.0f;
 	MV1SetRotationXYZ(m_handle, VGet(0.0f, angle2, 0.0f));
-
 
 	// 削除処理
 	for (int i = 0; i < m_pShot.size(); i++)

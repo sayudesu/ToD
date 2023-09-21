@@ -264,6 +264,8 @@ SceneBase* SceneMain::Update()
 		}
 	}
 
+#if _DEBUG
+#else
 	if (m_pUI->GetDead())
 	{
 		// m_isChangeScene = true;
@@ -291,6 +293,7 @@ SceneBase* SceneMain::Update()
 			return new SceneGameClear(0);
 		}
 	}
+#endif
 
 	// BGM‚ª~‚Ü‚Á‚½‚ç‚à‚¤ˆê“xÄ¶
 	SoundFunctions::ReStartBgm(SoundFunctions::SoundIdBattle);

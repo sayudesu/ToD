@@ -149,6 +149,7 @@
     <ClCompile Include="Object\Enemy\EnemyMouseSpeed.cpp" />
     <ClCompile Include="Object\Map\WorldSprite.cpp" />
     <ClCompile Include="Object\Obstacle\ObstacleCrossbow.cpp" />
+    <ClCompile Include="Object\Obstacle\ObstacleHomingMissile.cpp" />
     <ClCompile Include="ParticleDrawer.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="UIDrawer.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="Object\Enemy\EnemyMouseSpeed.h" />
     <ClInclude Include="Object\Map\WorldSprite.h" />
     <ClInclude Include="Object\Obstacle\ObstacleCrossbow.h" />
+    <ClInclude Include="Object\Obstacle\ObstacleHomingMissile.h" />
     <ClInclude Include="ParticleDrawer.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="UIDrawer.h" />

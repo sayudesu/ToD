@@ -34,5 +34,7 @@ private:
 	
 	// トラッキングをおこなうかどうか
 	Tracking trackingData;
+
+	VECTOR m_tempPos;
 };
 

@@ -50,11 +50,17 @@ void Camera::Update()
 	// 入力状態を取得
 	GetJoypadDirectInputState(DX_INPUT_PAD1, &input);
 	
-	// スティックの位置からカメラ位置に変換
-	int x = (input.Rx - 0) * (500  - 0) / (1000 - 0);
-	int z = (input.Ry - 0) * (500 - 0) / (1000 - 0);
-	m_pos.x = x + kCameraPos.x;
-//	m_pos.z = z + kCameraPos.z;
+	//// スティックの位置からカメラ位置に変換
+	//int x = (input.Rx - 0) * (500  - 0) / (1000 - 0);
+	//int z = (input.Ry - 0) * (500 - 0) / (1000 - 0);
+	//m_pos.z = z + kCameraPos.z;
+	//m_pos.x = x + kCameraPos.x;
+
+	m_pos.y = m_tempPos.y + 500.0f;
+	m_pos.x = m_tempPos.x;
+
+	m_targetPos.x = m_tempPos.x;
+	m_targetPos.y = m_tempPos.y;
 
 	if (trackingData.isTracking)
 	{
@@ -82,9 +88,5 @@ void Camera::SeTrackingData(Tracking data)
 
 void Camera::SetPosPlayer(VECTOR pos)
 {
-	m_pos.y = pos.y + 500.0f;
-	m_pos.z = pos.z - 500.0f;
-
-	m_targetPos.z = pos.z;
-	m_targetPos.y = pos.y;
+	m_tempPos = pos;
 }

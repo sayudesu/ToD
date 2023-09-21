@@ -136,7 +136,6 @@ void EnemyBase::ChangeNextPos(bool& isMoveing)
 			{
 				// ”z—ñ‚Ì§Œä
 				tempX = x;
-
 				if (x >= m_mapChip.chipMaxX) { tempX = m_mapChip.chipMaxX - 1; }
 				if (x <= 0) { tempX = 0; }
 
