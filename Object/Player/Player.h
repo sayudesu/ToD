@@ -53,7 +53,7 @@ private:
 	// 特殊攻撃用
 	void UpdateSpecialAttack();
 	// 範囲外処理
-	void CheckOutSide();
+	bool CheckOutSide();
 	// ショットを生成
 	void UpdateShot();
 	// オブジェクトのコスト関連

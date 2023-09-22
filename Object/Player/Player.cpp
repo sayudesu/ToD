@@ -220,6 +220,8 @@ void Player::UpdateControl()
 	isDownRight = false;
 	isDownLeft  = false;
 
+	float speed = 25.0f/2.0f;
+
 	isPress = false;
 	if (!m_isResultObject)
 	{
@@ -392,11 +394,41 @@ void Player::UpdateControl()
 	}
 
 	// 範囲外処理
-	CheckOutSide();
+	if (!CheckOutSide())
+	{
+		VECTOR tempPos{};
+		tempPos.x = (m_checkMapChipNo.x * 50.0f);
+		tempPos.z = (m_checkMapChipNo.z * 50.0f);
 
-	// 位置に代入
-	m_pos.x = (m_checkMapChipNo.x * 50.0f);
-	m_pos.z = (m_checkMapChipNo.z * 50.0f);
+		if (m_pos.x > tempPos.x)
+		{
+			m_pos.x -= speed;
+		}
+		if (m_pos.x < tempPos.x)
+		{
+			m_pos.x += speed;
+		}
+		if (m_pos.z > tempPos.z)
+		{
+			m_pos.z -= speed;
+		}
+		if (m_pos.z < tempPos.z)
+		{
+			m_pos.z += speed;
+		}
+	}
+	else
+	{
+		// 位置に代入
+		m_pos.x = (m_checkMapChipNo.x * 50.0f);
+		m_pos.z = (m_checkMapChipNo.z * 50.0f);
+	}
+
+
+
+
+
+
 
 	// 設置用変数初期化
 	m_isSetObject    = false;
@@ -535,7 +567,7 @@ void Player::UpdateSpecialAttack()
 }
 
 // 範囲外処理
-void Player::CheckOutSide()
+bool Player::CheckOutSide()
 {
 	// マップの端まで移動させると
 	// 反対側まで移動する
@@ -543,22 +575,28 @@ void Player::CheckOutSide()
 	if (m_checkMapChipNo.x < 0)
 	{
 		m_checkMapChipNo.x = m_mapData.chipMaxX - 1;
+		return true;
 	}
 	// 右
 	if (m_checkMapChipNo.x > m_mapData.chipMaxX - 1)
 	{
 		m_checkMapChipNo.x = 0;
+		return true;
 	}
 	// 下
 	if (m_checkMapChipNo.z < 0)
 	{
 		m_checkMapChipNo.z = m_mapData.chipMaxZ - 1;
+		return true;
 	}
 	// 上
 	if (m_checkMapChipNo.z > m_mapData.chipMaxZ - 1)
 	{
-		m_checkMapChipNo.z =0;
+		m_checkMapChipNo.z = 0;
+		return true;
 	}
+
+	return false;
 }
 
 // ショットを生成
