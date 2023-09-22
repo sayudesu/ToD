@@ -57,9 +57,50 @@ void Camera::Update()
 	//m_pos.x = x + kCameraPos.x;
 
 	m_pos.y = m_tempPos.y + 500.0f;
-	m_pos.x = m_tempPos.x;
+	//m_pos.x = m_tempPos.x;
 
-	m_targetPos.x = m_tempPos.x;
+	VECTOR tempPos{};
+	tempPos.x = m_tempPos.x;
+
+	constexpr float speed = 15.0f;
+	constexpr float speedTargetCamera = 15.0f;
+
+	if (static_cast<int>(m_pos.x) > static_cast<int>(tempPos.x))
+	{
+		m_pos.x -= speed;
+		if (static_cast<int>(m_pos.x) > static_cast<int>(tempPos.x) + 300.0f)
+		{
+			m_pos.x -= speedTargetCamera * 10;
+		}
+	}
+	if(static_cast<int>(m_pos.x) < static_cast<int>(tempPos.x))
+	{
+		m_pos.x += speed;
+		if (static_cast<int>(m_pos.x) < static_cast<int>(tempPos.x) - 300.0f)
+		{
+			m_pos.x += speedTargetCamera * 10;
+		}
+	}
+
+	if (static_cast<int>(m_targetPos.x) > static_cast<int>(tempPos.x))
+	{
+		m_targetPos.x -= speedTargetCamera;
+		if (static_cast<int>(m_targetPos.x) > static_cast<int>(tempPos.x) + 300.0f)
+		{
+			m_targetPos.x -= speedTargetCamera * 10;
+		}
+	}
+	if (static_cast<int>(m_targetPos.x) < static_cast<int>(tempPos.x))
+	{
+		m_targetPos.x += speedTargetCamera;
+		if (static_cast<int>(m_targetPos.x) < static_cast<int>(tempPos.x) - 300.0f)
+		{
+			m_targetPos.x += speedTargetCamera * 10;
+		}
+	}
+
+
+//	m_targetPos.x = m_tempPos.x;
 	m_targetPos.y = m_tempPos.y;
 
 	if (trackingData.isTracking)

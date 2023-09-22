@@ -8,7 +8,7 @@ namespace
 	// ファイルデータ
 	const char* kFileNameMouse = "Data/Model/MouseB.mv1";
 	// 速度
-	constexpr float kSpeed = 3.0f;
+	constexpr float kSpeed = 8.0f;
 	// 大きさ
 	constexpr float kSize = 0.6f;
 	// 体力
