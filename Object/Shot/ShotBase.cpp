@@ -24,10 +24,11 @@ ShotBase::ShotBase(VECTOR pos):
 	m_no = 0;
 	m_isEnabled = false;
 	m_collData = {};
-//	SoundFunctions::Play(SoundFunctions::SoundIdShot);
 	m_collData.datage = 0;
 	m_collData.pos = pos;
 	m_collData.radius = 0;
+
+	m_updateFunc = &ShotBase::UpdateMain;
 }
 
 // ƒƒ‚ƒŠ‰ğ•úˆ—
@@ -39,14 +40,7 @@ void ShotBase::End()
 // XVˆ—
 void ShotBase::Update()
 {
-	// ’e‚ÌˆÚ“®
-	VecCalculation(m_targetPos, m_speed, m_isTrackingNow);
-	MV1SetPosition(m_hShot, VGet(m_pos.x, m_pos.y + 30.0f, m_pos.z));
-
-	// ƒ‚ƒfƒ‹‚Ì‰ñ“]s—ñ‚ğŒvZ‚µ‚Äİ’è
-	VECTOR dir2 = VSub(m_targetPos, m_pos);
-	const float angle2 = atan2f(dir2.x, dir2.z) + -90.0f * DX_PI_F / 180.0f;
-	MV1SetRotationXYZ(m_hShot, VGet(0.0f, angle2, 0.0f));
+	(this->*m_updateFunc)();
 }
 
 // •`‰æ
@@ -66,6 +60,18 @@ bool ShotBase::IsEnabled()const
 void ShotBase::SetEnabled(bool isEnabled)
 {
 	m_isEnabled = isEnabled;
+}
+
+void ShotBase::UpdateMain()
+{
+	// ’e‚ÌˆÚ“®
+	VecCalculation(m_targetPos, m_speed, m_isTrackingNow);
+	MV1SetPosition(m_hShot, VGet(m_pos.x, m_pos.y + 30.0f, m_pos.z));
+
+	// ƒ‚ƒfƒ‹‚Ì‰ñ“]s—ñ‚ğŒvZ‚µ‚Äİ’è
+	VECTOR dir2 = VSub(m_targetPos, m_pos);
+	const float angle2 = atan2f(dir2.x, dir2.z) + -90.0f * DX_PI_F / 180.0f;
+	MV1SetRotationXYZ(m_hShot, VGet(0.0f, angle2, 0.0f));
 }
 
 // ˆÚ“®‚ÌŒvZ‚ğ‚µ‚Ä‚¢‚Ü‚·

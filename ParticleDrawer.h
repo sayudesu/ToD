@@ -8,7 +8,7 @@ public:
 	ParticleDrawer(VECTOR pos);
 	virtual ~ParticleDrawer();
 
-	virtual void Init();
+	virtual void Init(int no);
 	virtual void End();
 	virtual void Update();
 	virtual void Draw();
@@ -32,6 +32,8 @@ private:
 	void(ParticleDrawer::* m_pFunc)();
 
 	bool m_isErase;
+
+	float m_spped;
 
 };
 

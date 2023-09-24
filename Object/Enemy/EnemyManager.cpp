@@ -68,7 +68,7 @@ void EnemyManager::Create()
 	countN++;
 	countS++;
 	countB++;
-	if (countN == 60 * 2)
+	if (countN == 60 * 1)
 	{
 		m_pEnemy.push_back(new EnemyMouse());
 		m_pEnemy.back()->Init(pos, forX, forZ);

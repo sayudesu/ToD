@@ -58,6 +58,8 @@ private:
 		float speed;
 		// 追跡
 		bool isTracking;
+		// どのショットか
+		int id;
 	};
 protected:
 	// 大砲モデルハンドル
@@ -85,5 +87,4 @@ protected:
 
 	bool isDead = true;
 	int no = -1;
-
 };

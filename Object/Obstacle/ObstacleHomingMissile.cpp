@@ -5,7 +5,7 @@
 namespace
 {
 	// ショット打ち出しまでのフレーム
-	constexpr int kShotFrameCount = 60 * 2;
+	constexpr int kShotFrameCount = 5;
 	// ショットモデルの大きさ
 	const VECTOR kShotScale = VGet(1.5, 1.5, 1.5);
 	// 角度
@@ -13,14 +13,14 @@ namespace
 	// 半径
 	constexpr float kRadius = 16.0f;
 	// 攻撃力
-	constexpr float kDamage = 200.0f;
+	constexpr float kDamage = 1.0f;
 	// 速度
-	constexpr float kSpeed = 20.0f;
+	constexpr float kSpeed = 50.0f;
 	// 追跡
-	constexpr bool kIsTracking = false;
+	constexpr bool kIsTracking = true;
 	// ファイルパス
-	const char* kFilePath = "Data/Model/Cannon1.mv1";
-	const char* kFilePathShot = "Data/Model/ShotCat.mv1";
+	const char* kFilePath = "Data/Model/Homing.mv1";
+	const char* kFilePathShot = "Data/Model/Arrow.mv1";
 
 	// モデルの大きさ
 	const VECTOR kScale = VGet(1, 1, 1);
@@ -45,6 +45,7 @@ void ObstacleHomingMissile::Init()
 	m_shotData.damage         = kDamage;
 	m_shotData.speed          = kSpeed;
 	m_shotData.isTracking     = kIsTracking;
+	m_shotData.id = 1;
 	// 設置音
 	SoundFunctions::Play(SoundFunctions::SoundIdSet);
 	// 大砲モデルのロード

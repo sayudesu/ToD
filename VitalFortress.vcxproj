@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BloodDrawer.cpp" />
+    <ClCompile Include="Object\Shot\MissileShot.cpp" />
     <ClCompile Include="Object\Enemy\EnemyMouseBig.cpp" />
     <ClCompile Include="Object\Enemy\EnemyMouseSpeed.cpp" />
     <ClCompile Include="Object\Map\WorldSprite.cpp" />
@@ -189,6 +190,7 @@
   <ItemGroup>
     <ClInclude Include="BloodDrawer.h" />
     <ClInclude Include="MapDatas.h" />
+    <ClInclude Include="Object\Shot\MissileShot.h" />
     <ClInclude Include="Object\Enemy\EnemyMouseBig.h" />
     <ClInclude Include="Object\Enemy\EnemyMouseSpeed.h" />
     <ClInclude Include="Object\Map\WorldSprite.h" />

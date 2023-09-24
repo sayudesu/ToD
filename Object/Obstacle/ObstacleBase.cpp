@@ -1,6 +1,8 @@
 #include "ObstacleBase.h"
 #include "../../Util/SoundFunctions.h"
 #include "../../Object/Shot/NormalShot.h"
+#include "../../Object/Shot/MissileShot.h"
+
 namespace
 {
 	// 設置してから打ち出しまでのフレーム
@@ -56,23 +58,53 @@ void ObstacleBase::UpdateShot()
 {
 	m_shootFrameCount++;
 	// ショットを出すスピート
-	if (m_shootFrameCount > m_shotData.shotFrameCount && (m_isShot))
-	{
-		m_countShotNum++;
-		m_pShot.push_back(new NormalShot(VGet(m_pos.x, m_pos.y + 15.0f, m_pos.z), m_myNo, m_countShotNum));
-		m_pShot.back()->Init(
-			m_shotData.handle,
-			m_shotData.shotFrameCount,
-			m_shotData.targetPos,
-			m_shotData.scale,
-			m_shotData.rotation,
-			m_shotData.radius,
-			m_shotData.damage,
-			m_shotData.speed,
-			m_shotData.isTracking);
 
-		m_shootFrameCount = 0;
+	if (m_shotData.id == 0)
+	{
+		if (m_shootFrameCount > m_shotData.shotFrameCount && (m_isShot))
+		{
+			m_countShotNum++;
+			m_pShot.push_back(new NormalShot(VGet(m_pos.x, m_pos.y + 15.0f, m_pos.z), m_myNo, m_countShotNum));
+			m_pShot.back()->Init(
+				m_shotData.handle,
+				m_shotData.shotFrameCount,
+				m_shotData.targetPos,
+				m_shotData.scale,
+				m_shotData.rotation,
+				m_shotData.radius,
+				m_shotData.damage,
+				m_shotData.speed,
+				m_shotData.isTracking);
+
+			m_shootFrameCount = 0;
+		}
+		m_countShotNum = 0;
 	}
+	if (m_shotData.id == 1)
+	{
+		if (m_shootFrameCount > m_shotData.shotFrameCount && (m_isShot))
+		{
+			for (int i = 0; i < 2; i++)
+			{
+				m_countShotNum++;
+				m_pShot.push_back(new MissileShot(VGet(m_pos.x, m_pos.y + 15.0f, m_pos.z), m_myNo, m_countShotNum));
+				m_pShot.back()->Init(
+					m_shotData.handle,
+					m_shotData.shotFrameCount,
+					m_shotData.targetPos,
+					m_shotData.scale,
+					m_shotData.rotation,
+					m_shotData.radius,
+					m_shotData.damage,
+					m_shotData.speed,
+					m_shotData.isTracking);
+
+				m_shootFrameCount = 0;
+			}
+		}
+		m_countShotNum = 0;
+	}
+
 
 	for (auto& shot : m_pShot)
 	{

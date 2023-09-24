@@ -45,6 +45,7 @@ void ObstacleCannon::Init()
 	m_shotData.damage         = kDamage;
 	m_shotData.speed          = kSpeed;
 	m_shotData.isTracking     = kIsTracking;
+	m_shotData.id	          = 0;
 	// 設置音
 	SoundFunctions::Play(SoundFunctions::SoundIdSet);
 	// 大砲モデルのロード

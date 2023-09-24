@@ -6,9 +6,7 @@ namespace
 	// 画像パス
 	const char* kFileNameMeat = "Data/Image/UI_Meat.png";
 	// 吸い込み速度
-	constexpr float kSpeed =10.0f;
-	// 重力
-	constexpr float kGravity = 0.2f;
+	constexpr float kSpeed = 0.1f;
 }
 
 ParticleDrawer::ParticleDrawer(VECTOR pos)
@@ -28,7 +26,7 @@ ParticleDrawer::~ParticleDrawer()
 {
 }
 
-void ParticleDrawer::Init()
+void ParticleDrawer::Init(int no)
 {
 	// 3D座標から2D座標に変換
 	m_posMain = ConvWorldPosToScreenPos(m_posMain);
@@ -37,10 +35,23 @@ void ParticleDrawer::Init()
 	m_hGraph = LoadGraph(kFileNameMeat);
 	// パーティクルの初期位置
 	m_pos = m_posMain;
-		
+
 	// 移動量
-	m_vec.x = static_cast<float>(GetRand(6) - 3);
-	m_vec.y = static_cast<float>(-GetRand(6) - 1);
+	if (no % 2 == 0)
+	{
+		m_vec.x = (-GetRand(6));
+	}
+	else
+	{
+		m_vec.x = (GetRand(6));
+	}
+
+	m_vec.y = (-GetRand(24));
+
+	m_vec.x += (m_vec.x * 3.0f);
+
+	m_spped = kSpeed;
+
 }
 
 void ParticleDrawer::End()
@@ -65,22 +76,21 @@ bool ParticleDrawer::IsGetErase()
 
 void ParticleDrawer::First()
 {
-	// 重力を与える
-	m_vec.y += kGravity;
+//	m_vec.x += (m_vec.x * 0.01f);
 	// ベクトルの加算
 	m_pos = VAdd(m_pos, m_vec);
 
 	m_count++;
-	if (m_count > 40)
+	if (m_count >= 1)
 	{
 		m_count = 0;
+		//m_vec.x += (m_vec.x * 3.0f);
 		m_pFunc = &ParticleDrawer::Jet;
 	}
 }
 
 void ParticleDrawer::Jet()
 {
-
 	// 移動
 	// 向きを算出
 	VECTOR dir = VSub(VGet(1500, Game::kScreenHeight - 110, 0),VGet(m_pos.x, m_pos.y,0));
@@ -91,20 +101,22 @@ void ParticleDrawer::Jet()
 	{
 		dir = VNorm(dir);
 	}
-	// 速度を求める
-	const VECTOR velecity = VScale(dir, kSpeed);
-	// 位置を変える
-	m_pos = VAdd(m_pos, velecity);		
+	
+	m_spped += 0.9f;
 
+	// 速度を求める
+	const VECTOR velecity = VScale(VGet(dir.x, dir.y, dir.z), m_spped);
+
+	// 位置を変える
+	m_pos = VAdd(m_pos, VGet(velecity.x, velecity.y, velecity.z));
+	m_pos = VAdd(m_pos, m_vec);
+	
 	// 判定処理
 	const VECTOR vec = VSub(VGet(m_pos.x, m_pos.y, 0), VGet(1500, Game::kScreenHeight - 110, 0));
 	const float  del = VSize(vec);
 
-	if (del < 5.0f + 5.0f)
+	if (del < 15.0f + 15.0f)
 	{
 		m_isErase = true;
 	}
-
-	// 重力を与える
-	m_vec.y += kGravity;
 }

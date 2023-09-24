@@ -1,5 +1,4 @@
 #include "NormalShot.h"
-#include <cassert>
 
 NormalShot::NormalShot(VECTOR pos, int originNo, int no):
 	ShotBase(pos)
@@ -41,6 +40,8 @@ void NormalShot::Init(int handle, int shotFrameCount,VECTOR taegetPos,VECTOR sca
 	m_speed = speed;
 	// 初期追跡位置
 	m_isTrackingNow = isTracking;
+
+	m_updateFunc = &ShotBase::UpdateMain;
 }
 // 判定用データ
 ObjectData NormalShot::GetCollData()

@@ -1,6 +1,6 @@
 #pragma once
 #include <DxLib.h>
-
+#include <cassert>
 #include "../../Util/ObjectData.h"
 
 // ショットクラス
@@ -15,17 +15,22 @@ public:
 	virtual void Update();
 	virtual void Draw  ();
 
+	virtual void UpdateMain();
+	// 発射され始めの動作
+	virtual void FirstMove() {};
+
 	// ショット判定データ
-	virtual ObjectData GetCollData ()  { return m_collData; }
+	virtual ObjectData GetCollData() { return m_collData; }
 	// ショットの位置
-	virtual VECTOR   SetPos      ()const      { return m_pos;      }
+	virtual VECTOR   SetPos()const{ return m_pos; }
 	// ターゲット位置
 	virtual void     SetTargetPos(VECTOR pos) { m_targetPos = pos; }
 	virtual bool     IsEnabled()const;
 	virtual void	 SetEnabled(bool isEnabled);
 protected:
+	// メイン処理
 	// 移動の計算をしています
-	void VecCalculation(VECTOR tagetPos, float speed, bool isTracking);
+	virtual void VecCalculation(VECTOR tagetPos, float speed, bool isTracking);
 protected:
 	// 3Dモデルハンドル
 	int m_hShot;
@@ -60,5 +65,7 @@ protected:
 	bool m_isEnabled;
 	// 
 	bool m_isTrackingNow;
+	// メンバ関数ポインタ
+	void (ShotBase::* m_updateFunc)();
 };
 
