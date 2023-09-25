@@ -20,6 +20,7 @@ ShotBase::ShotBase(VECTOR pos):
 	// 位置
 	m_pos = pos;
 	m_isTracking = true;
+	m_isTrackingNow = false;
 	m_originNo = 0;
 	m_no = 0;
 	m_isEnabled = false;
@@ -47,7 +48,7 @@ void ShotBase::Update()
 void ShotBase::Draw()
 {
 	MV1DrawModel(m_hShot);
-	//	DrawSphere3D(m_pos, kRadius, 4.0f, 0xffff00, 0xffff00, false);
+//	DrawSphere3D(m_pos, m_collData.radius, 4.0f, 0xffff00, 0xffff00, false);
 }
 
 // オブジェクトを消すかどうか
@@ -82,7 +83,7 @@ void ShotBase::VecCalculation(VECTOR tagetPos,float speed,bool isTracking)
 		// 向きを算出
 		m_dir = VSub(tagetPos, m_pos);
 	}
-
+	
 	// プレイヤーからエネミーまでの角度を求める
 	const float angle = atan2(m_dir.y, m_dir.x);
 

@@ -13,13 +13,13 @@ namespace
 	// 半径
 	constexpr float kRadius = 16.0f;
 	// 攻撃力
-	constexpr float kDamage = 1.0f;
+	constexpr float kDamage = 10.0f;
 	// 速度
 	constexpr float kSpeed = 50.0f;
 	// 追跡
 	constexpr bool kIsTracking = true;
 	// ファイルパス
-	const char* kFilePath = "Data/Model/Homing.mv1";
+	const char* kFilePath     = "Data/Model/Homing.mv1";
 	const char* kFilePathShot = "Data/Model/Arrow.mv1";
 
 	// モデルの大きさ
@@ -36,7 +36,7 @@ ObstacleHomingMissile::ObstacleHomingMissile(VECTOR pos,int no):
 void ObstacleHomingMissile::Init()
 {
 	// ショットデータ
-	m_shotData.handle = MV1LoadModel(kFilePathShot);
+	m_shotData.handle         = MV1LoadModel(kFilePathShot);
 	m_shotData.shotFrameCount = kShotFrameCount;
 	m_shotData.targetPos      = VGet(1000, 0, 300);
 	m_shotData.rotation       = kRotation;
@@ -46,8 +46,7 @@ void ObstacleHomingMissile::Init()
 	m_shotData.speed          = kSpeed;
 	m_shotData.isTracking     = kIsTracking;
 	m_shotData.id = 1;
-	// 設置音
-	SoundFunctions::Play(SoundFunctions::SoundIdSet);
+
 	// 大砲モデルのロード
 	m_handle = MV1LoadModel(kFilePath);
 	// 大砲モデルの位置
@@ -56,4 +55,7 @@ void ObstacleHomingMissile::Init()
 	MV1SetScale(m_handle, kScale);
 	// 設置用関数に移動
 	m_updateFunc = &ObstacleBase::UpdateSetting;
+
+	// 設置音
+	SoundFunctions::Play(SoundFunctions::SoundIdSet);
 }

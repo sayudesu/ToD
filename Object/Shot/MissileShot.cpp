@@ -43,6 +43,7 @@ void MissileShot::Init(int handle, int shotFrameCount, VECTOR taegetPos, VECTOR 
 	// ë¨ìx
 	m_speed = speed;
 	// í«ê’
+//	m_isTracking = isTracking;
 	m_isTrackingNow = isTracking;
 
 	m_updateFunc = &ShotBase::FirstMove;

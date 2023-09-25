@@ -138,7 +138,7 @@ void ObstacleBase::UpdateShot()
 		{
 			m_pShot[i]->SetEnabled(true);
 		}
-		if (m_pShot[i]->GetCollData().pos.y < 0.0f)
+		if (m_pShot[i]->GetCollData().pos.y < -100.0f)
 		{
 			m_pShot[i]->SetEnabled(true);
 		}
