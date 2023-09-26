@@ -8,6 +8,18 @@
 #include "Save/SaveDataFunctions.h"
 #include "Util/LoadGraphfunction.h"
 
+#include <iostream>
+#include <memory>
+#include <thread>
+
+#include <iostream>
+#include <thread>
+#include <exception>
+#include <mutex>
+#include <vector>
+#include <chrono>
+
+
 // プログラムは WinMain から始まります
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -87,8 +99,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 
 	SceneManager* pScene = new SceneManager;
 		
-	pScene->Init();
-
+	std::thread t0([&pScene]() {pScene->Init(); });
+	t0.join();
 
 	// 頂点データの準備
 	VERTEX2DSHADER Vert[6];
@@ -128,6 +140,12 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	SetPSConstSF(GetConstIndexToShader("alpha", m_shader), 1.0f);
 	SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), level);
 
+	CheckHandleASyncLoad(false);
+	SetAlwaysRunFlag(false);
+
+//	std::thread threadUpdate = std::thread([&pScene]() {pScene->Update(); });
+	std::thread threadDraw	  = std::thread([&pScene]() {pScene->Draw(); });
+	
 	while (ProcessMessage() == 0)
 	{
 		LONGLONG  time = GetNowHiPerformanceCount();
@@ -138,6 +156,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		ClearDrawScreen();
 
 		pScene->Draw();
+
+#if false
 		if (DxLib::CheckHitKey(KEY_INPUT_1))
 		{
 			level -= 0.3f;
@@ -147,7 +167,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 			level += 0.3f;
 		}
 		SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), level);
-
+#endif
 #if false	
 		SetDrawScreen(DX_SCREEN_BACK);
 		DrawPrimitive2DToShader(Vert, 6, DX_PRIMTYPE_TRIANGLELIST);
@@ -155,8 +175,10 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 #endif
 
 #if _DEBUG
-		DrawFormatString(0, 0, 0xffffff,  "FPS       = %1.2f",DxLib::GetFPS());
-		DrawFormatString(0, 10, 0xffffff, "DrawColl  = %d"  ,DxLib::GetDrawCallCount());
+		DrawFormatString(0, 0, 0x000000,  "FPS       = %1.2f",DxLib::GetFPS());
+		DrawFormatString(0, 10, 0x000000, "DrawColl  = %d"  ,DxLib::GetDrawCallCount());
+//		DrawFormatString(30, 300, 0x000000, "ThreadUpdate%d"  , threadUpdate.get_id());
+		DrawFormatString(30, 300 + 60, 0x000000, "ThreadDraw  %d"  , threadDraw.get_id());
 #endif
 		// 裏画面を表画面を入れ替える
 		ScreenFlip();
@@ -178,6 +200,9 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	//{
 	//	MessageBox(NULL, "remove failure", "", MB_OK);
 	//}
+
+//	threadUpdate.join();
+	threadDraw.join();
 
 	pScene->End();
 

@@ -6,6 +6,9 @@
 #include "SceneGameClear.h"
 #include "../Util/Pad.h"
 
+#include <thread>
+
+
 SceneManager::SceneManager():
 	m_pScene()
 {
