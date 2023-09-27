@@ -21,31 +21,24 @@
 #include "../Util/Pad.h"
 
 SceneMain::SceneMain():
-	m_pCamera(nullptr),
-		m_pEnemy(nullptr),
-		m_pObstacle(nullptr),
-		m_pPlayer(nullptr),
-		m_pMap(nullptr),
-		m_pColl(nullptr),
-		m_catIn(nullptr),
-		m_pUI(nullptr)
-{
-	// カメラクラスのインスタンス作成
-	m_pCamera = new Camera();
-	// 敵クラスのインスタンス作成
-	m_pEnemy = new EnemyManager();
-	// 障害物クラスのインスタンス作成
+	m_pCamera  (nullptr),
+	m_pEnemy   (nullptr),
+	m_pObstacle(nullptr),
+	m_pPlayer  (nullptr),
+	m_pMap     (nullptr),
+	m_pColl    (nullptr),
+	m_catIn    (nullptr),
+	m_pUI      (nullptr)
+{	
+	// インスタンスの生成
+	m_pCamera   = new Camera();
+	m_pEnemy    = new EnemyManager();
 	m_pObstacle = new ObstacleManager();
-	// プレイヤークラスのインスタンス作成
-	m_pPlayer = new Player();
-	// マップクラスのインスタンス作成
-	m_pMap = new MapDrawer();
-	// 3D当たり判定用のインスタンス
-	m_pColl = new Collision3D();
-	// カットインのインスタンス
-	m_catIn = new CutInDrawer();
-	// UIを描画するクラスのインスタンス
-	m_pUI = new UIDrawer();
+	m_pPlayer   = new Player();
+	m_pMap      = new MapDrawer();
+	m_pColl     = new Collision3D();
+	m_catIn     = new CutInDrawer();
+	m_pUI       = new UIDrawer();
 }
 
 SceneMain::~SceneMain()
@@ -60,34 +53,30 @@ void SceneMain::Init()
 	SoundFunctions::StartBgm(SoundFunctions::SoundIdBattle);
 	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, SaveDataFunctions::GetSoundData().Bgm);
 
-
-	m_pCamera->Init();
+	m_pCamera  ->Init();
 	m_pObstacle->Init();
-	m_pPlayer->Init();
-	m_pMap->Init();
-	m_catIn->Init();
-	m_pUI->Init();
+	m_pMap     ->Init();
+	m_pPlayer  ->Init(m_pMap->GetChip());
+	m_catIn    ->Init();
+	m_pUI      ->Init();
 
 	// マップチップをエネミーに渡す
 	// コードの処理の流れのせいでこうなっています治します
 	m_pEnemy->SetMapChip(m_pMap->GetChip());
-	m_pPlayer->SetMapChip(m_pMap->GetChip());
-
 }
 
+// 解放処理
 void SceneMain::End()
 {
-	m_pCamera->End();
-	m_pEnemy->End();
-	m_pObstacle->End();
-	m_pPlayer->End();
-	m_pMap->End();
-	m_catIn->End();
-	m_pUI->End();
-
-
 	// BGM停止
 	SoundFunctions::StopBgm(SoundFunctions::SoundIdBattle);
+	m_pCamera  ->End();
+	m_pEnemy   ->End();
+	m_pObstacle->End();
+	m_pPlayer  ->End();
+	m_pMap     ->End();
+	m_catIn	   ->End();
+	m_pUI      ->End();
 
 	// メモリの解放
 	delete m_pCamera;

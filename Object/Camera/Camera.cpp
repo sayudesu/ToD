@@ -34,9 +34,6 @@ void Camera::Init()
 	SetCameraPositionAndTarget_UpVecY(m_pos, m_targetPos);
 	// 遠近法のセットアップ( ラジアン値に変換しています )
 	SetupCamera_Perspective(kFovCalculation);
-
-	//// カメラを正射影に変更
-//	SetupCamera_Ortho(2000.0f);
 }
 
 void Camera::End()

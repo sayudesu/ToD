@@ -17,6 +17,7 @@ class StringDrawer;
 class SelectDrawer
 {
 public:
+	static int aa;
 	SelectDrawer();
 	virtual ~SelectDrawer();
 
@@ -69,7 +70,7 @@ private:
 	bool m_isSelect;
 	// ‘I‘ğˆ‚Ì”
 	int selectNum;
-	int selectNow;
+	int m_selectNow;
 	int m_selectNo;
 	// ‰~‚Ì”¼Œa
 	int selectRad;
@@ -80,6 +81,9 @@ private:
 	int m_catHandSlideY;
 
 	int m_tempPosY;
+
+	//
+	int m_stickPressFrameCount[2];
 };
 
 class StringDrawer

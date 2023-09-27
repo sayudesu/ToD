@@ -8,17 +8,6 @@
 #include "Save/SaveDataFunctions.h"
 #include "Util/LoadGraphfunction.h"
 
-#include <iostream>
-#include <memory>
-#include <thread>
-
-#include <iostream>
-#include <thread>
-#include <exception>
-#include <mutex>
-#include <vector>
-#include <chrono>
-
 
 // プログラムは WinMain から始まります
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -33,6 +22,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	SetWindowSizeChangeEnableFlag(Game::kWindowSizeChange);
 	// Log.txtでログを残すかどうか
 	SetOutApplicationLogValidFlag(Game::kLogText);
+	// 非同期処理行うかどうか
+	SetUseASyncLoadFlag(true);
 
 
 	// ＤＸライブラリ初期化処理
@@ -78,18 +69,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	//// フォントのロード
-	//LPCSTR fontPath = "Data/Fonts/Senobi-Gothic-Bold.ttf"; // 読み込むフォントファイルのパス
-	//if (AddFontResourceEx(fontPath, FR_PRIVATE, NULL) > 0) 
-	//{
-	//	ChangeFont("せのびゴシック Bold", DX_CHARSET_DEFAULT);
-	//}
-	//else 
-	//{
-	//	// フォント読込エラー処理
-	//	MessageBox(NULL, "フォント読込失敗", "", MB_OK);
-	//}
-
 	// ファイルの読み込み
 	SaveDataFunctions::Load();
 	// サウンド読み込み
@@ -98,9 +77,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	LoadGraphFunction::Load();
 
 	SceneManager* pScene = new SceneManager;
-		
-	std::thread t0([&pScene]() {pScene->Init(); });
-	t0.join();
+	pScene->Init();
 
 	// 頂点データの準備
 	VERTEX2DSHADER Vert[6];
@@ -139,12 +116,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	float level = 30.0f;
 	SetPSConstSF(GetConstIndexToShader("alpha", m_shader), 1.0f);
 	SetPSConstSF(GetConstIndexToShader("mosLv", m_shader), level);
-
-	CheckHandleASyncLoad(false);
-	SetAlwaysRunFlag(false);
-
-//	std::thread threadUpdate = std::thread([&pScene]() {pScene->Update(); });
-	std::thread threadDraw	  = std::thread([&pScene]() {pScene->Draw(); });
 	
 	while (ProcessMessage() == 0)
 	{
@@ -177,8 +148,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 #if _DEBUG
 		DrawFormatString(0, 0, 0x000000,  "FPS       = %1.2f",DxLib::GetFPS());
 		DrawFormatString(0, 10, 0x000000, "DrawColl  = %d"  ,DxLib::GetDrawCallCount());
-//		DrawFormatString(30, 300, 0x000000, "ThreadUpdate%d"  , threadUpdate.get_id());
-		DrawFormatString(30, 300 + 60, 0x000000, "ThreadDraw  %d"  , threadDraw.get_id());
+		printfDx("%d\n", GetASyncLoadNum());
 #endif
 		// 裏画面を表画面を入れ替える
 		ScreenFlip();
@@ -191,18 +161,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 		{
 		}
 	}
-
-	//// フォントのアンロード
-	//if (RemoveFontResourceEx(fontPath, FR_PRIVATE, NULL)) 
-	//{
-	//}
-	//else
-	//{
-	//	MessageBox(NULL, "remove failure", "", MB_OK);
-	//}
-
-//	threadUpdate.join();
-	threadDraw.join();
 
 	pScene->End();
 

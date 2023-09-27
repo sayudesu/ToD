@@ -13,9 +13,6 @@ namespace
 	constexpr int kSetCost = 200;
 	// 特殊攻撃する時のカーソル移動速度
 	constexpr float kSpecialAttackPosMoveSpeed = 20.0f;
-	// マップチップサイズ
-	constexpr  int kMapChipMaxZ = 13;// 行
-	constexpr  int kMapChipMaxX = 25;// 列
 
 	// 必殺技
 	const char* kFilePathShot = "Data/Model/ShotCat.mv1";
@@ -23,7 +20,7 @@ namespace
 #if _DEBUG
 	constexpr  int kCostPuls = 200;// 列
 #else
-	constexpr  int kCostPuls = 1;// 列
+	constexpr  int kCostPuls = 3;// 列
 #endif
 }
 
@@ -39,11 +36,7 @@ Player::Player() :
 	m_isTrackingShot(false),
 	m_checkMapChipNo(VGet(0,0,0))
 {
-	m_posHistory.push_back(VGet(-1.0f, -1.0f, -1.0f));
 
-	// プレイヤーの初期位置
-	m_checkMapChipNo.x = kMapChipMaxX / 2;
-	m_checkMapChipNo.z = kMapChipMaxZ / 2;
 }
 
 Player::~Player()
@@ -51,12 +44,23 @@ Player::~Player()
 }
 
 // 初期化処理
-void Player::Init()
+void Player::Init(MapDatas mapChip)
 {
 	// インスタンス生成
 	m_pObjMenu = new ObjectMenuDrawer;
 
 	m_pObjMenu->Init();
+
+	m_posHistory.push_back(VGet(-1.0f, -1.0f, -1.0f));
+
+	m_mapData = mapChip;
+	// プレイヤーの初期位置
+	m_checkMapChipNo.x = (m_mapData.chipMaxX / 2) + ((m_mapData.chipMaxX / 2)/2) + 1;
+	m_checkMapChipNo.z = m_mapData.chipMaxZ / 2;
+
+	// 位置に代入
+	m_pos.x = (m_checkMapChipNo.x * 50.0f);
+	m_pos.z = (m_checkMapChipNo.z * 50.0f);
 }
 
 // メモリ開放処理
@@ -640,12 +644,6 @@ void Player::UpdateShot()
 void Player::ObjectCost()
 {
 	m_objectCostNum += kCostPuls;
-}
-
-// マップチップの情報を受け取ります
-void Player::SetMapChip(MapDatas mapChip)
-{
-	m_mapData = mapChip;
 }
 
 ObstructSelect Player::GetObstructData()

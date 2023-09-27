@@ -18,7 +18,7 @@ public:
 	virtual ~Player();
 
 	// 初期化処理
-	void Init();
+	void Init(MapDatas mapChip);
 	// メモリ開放処理
 	void End();
 	// 更新処理
@@ -43,8 +43,6 @@ public:
 	Tracking GetTracingData();
 	// 現在のオブジェクトコストを渡す
 	int GetObjectCostNum();
-	// マップチップデータを受けとる
-	void SetMapChip(MapDatas mapChip);
 
 	ObstructSelect GetObstructData();
 private:

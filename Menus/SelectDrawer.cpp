@@ -26,17 +26,18 @@ namespace
 SelectDrawer::SelectDrawer():
 	m_isSelect(false),
 	selectNum(-1),
-	selectNow(0),
+	m_selectNow(0),
 	m_selectNo(-1),
 	selectRad(0),
 	m_catHandPosY(0),
 	m_tempPosY(0)
 {
-
-
 	// 肉球画像の位置
 	m_catHandPosX[0] = -300;
 	m_catHandPosX[1] = 300;
+
+	m_stickPressFrameCount[0] = 0;
+	m_stickPressFrameCount[1] = 0;
 }
 
 SelectDrawer::~SelectDrawer()
@@ -63,35 +64,56 @@ void SelectDrawer::Update()
 	if (!m_isSelect)
 	{
 		// 選択
-		if (Pad::isTrigger(PAD_INPUT_UP))
+		if (Pad::isPress(PAD_INPUT_UP))
 		{
+			m_stickPressFrameCount[0]++;
 			// サウンド追加
 			SoundFunctions::Play(SoundFunctions::SoundIdSelctChange);
-			if (selectNow > 0)
+
+			if (m_stickPressFrameCount[0] == 1)
 			{
-				selectNow--;
+					m_selectNow--;
 			}
-			else
+			if (m_stickPressFrameCount[0] > 30)
 			{
-				selectNow = selectNum;
+				m_selectNow--;
+			}
+
+			if (m_selectNow < 0)
+			{
+				m_selectNow = selectNum;
 			}
 
 			m_isSelect = false;
 		}
-		if (Pad::isTrigger(PAD_INPUT_DOWN))
+		else
 		{
+			m_stickPressFrameCount[0] = 0;
+		}
+		if (Pad::isPress(PAD_INPUT_DOWN))
+		{
+			m_stickPressFrameCount[1]++;
 			// サウンド追加
 			SoundFunctions::Play(SoundFunctions::SoundIdSelctChange);
-			if (selectNow < selectNum)
+			if (m_stickPressFrameCount[1] == 1)
 			{
-				selectNow++;
+					m_selectNow++;
 			}
-			else
+			if (m_stickPressFrameCount[1] > 30)
 			{
-				selectNow = 0;
+				m_selectNow++;
+			}
+
+			if (m_selectNow > selectNum)
+			{
+				m_selectNow = 0;				
 			}
 
 			m_isSelect = false;
+		}
+		else
+		{
+			m_stickPressFrameCount[1] = 0;
 		}
 	}
 	
@@ -106,11 +128,11 @@ void SelectDrawer::Update()
 	// 選択したら100フレーム後にその画面に切り替わる
 	if (m_isSelect)
 	{
-		m_pText[selectNow]->SetSelectRadius(selectRad += 6);
+		m_pText[m_selectNow]->SetSelectRadius(selectRad += 6);
 
 		if (selectRad > 100)
 		{
-			m_selectNo = selectNow;
+			m_selectNo = m_selectNow;
 			m_isSelect = false;
 		}
 	}
@@ -121,7 +143,7 @@ void SelectDrawer::Update()
 		m_pText[i]->SetBlendMode(100);
 	}
 	// 選択中の文字は選択フレームを表示させる
-	m_pText[selectNow]->SetBlendMode(255);
+	m_pText[m_selectNow]->SetBlendMode(255);
 
 #if true
 	// デバッグ用
@@ -150,17 +172,17 @@ void SelectDrawer::UpdatePos(int x, int y)
 
 void SelectDrawer::UpdateCatHandPos()
 {
-	if (m_tempPosY == selectNow)
+	if (m_tempPosY == m_selectNow)
 	{
-		m_catHandPosY = m_pText[selectNow]->GetFramePosY();
+		m_catHandPosY = m_pText[m_selectNow]->GetFramePosY();
 	}
 
-	if (m_catHandPosY < m_pText[selectNow]->GetFramePosY() + 10)
+	if (m_catHandPosY < m_pText[m_selectNow]->GetFramePosY() + 10)
 	{
 		m_catHandPosY += 60;
 		m_tempPosY++;
 	}
-	if (m_catHandPosY > m_pText[selectNow]->GetFramePosY() + 10)
+	if (m_catHandPosY > m_pText[m_selectNow]->GetFramePosY() + 10)
 	{
 		m_catHandPosY -= 60;
 		m_tempPosY--;
@@ -169,7 +191,7 @@ void SelectDrawer::UpdateCatHandPos()
 	// 選択用肉球を描画
 	for (int i = 0; i < kCatHandNum; i++)
 	{
-		DrawRotaGraph(m_pText[selectNow]->GetFramePosX() + m_catHandPosX[i],
+		DrawRotaGraph(m_pText[m_selectNow]->GetFramePosX() + m_catHandPosX[i],
 			m_catHandPosY + m_catHandSlideY,
 			0.2,
 			kAngle,
@@ -203,7 +225,7 @@ int SelectDrawer::GetSelectNo()
 /// <returns>現在選択中の番号を返す</returns>
 int SelectDrawer::GetSelectNowNo()
 {
-	return selectNow;
+	return m_selectNow;
 }
 
 ////////////////

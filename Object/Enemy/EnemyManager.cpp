@@ -3,6 +3,16 @@
 #include "EnemyMouseSpeed.h"
 #include "EnemyMouseBig.h"
 
+namespace
+{
+	// 通常のスポーンスピード
+	constexpr int kMouseSpawnFrame = 60 * 2;
+	//
+	constexpr int kMouseSpeedSpawnFrame = 60 * 5;
+	//
+	constexpr int kMouseBigSpawnFrame = 60 * 10;
+}
+
 EnemyManager::EnemyManager()
 {
 }
@@ -62,6 +72,7 @@ void EnemyManager::Create()
 			}
 		}
 	}
+
 	static int countN = 0;
 	static int countS = 0;
 	static int countB = 0;
@@ -69,19 +80,8 @@ void EnemyManager::Create()
 	countS++;
 	countB++;
 
-
-	//for (int i = 0; i < 400; i++)
-	//{
-	//	m_pEnemy.push_back(new EnemyMouse());
-	//	m_pEnemy.back()->Init(pos, forX, forZ);
-	//	if (countN == 60*2/*60 * 1*/)
-	//	{
-	//		countN = 0;
-	//	}
-	//}	
-
-
-	if(countN == 60 * 2)
+	// 通常のバランス
+	if(countN == kMouseSpawnFrame)
 	{
 		m_pEnemy.push_back(new EnemyMouse());
 		m_pEnemy.back()->Init(pos, forX, forZ);
@@ -89,14 +89,16 @@ void EnemyManager::Create()
 		countN = 0;
 	}
 
-	if(countS == 60 * 5)
+	// 
+	if(countS == kMouseSpeedSpawnFrame)
 	{
 		m_pEnemy.push_back(new EnemyMouseSpeed());
 		m_pEnemy.back()->Init(pos, forX, forZ);
 		countS = 0;
 	}
 
-	if (countB == 60 * 10)
+	// 
+	if (countB == kMouseBigSpawnFrame)
 	{
 		m_pEnemy.push_back(new EnemyMouseBig());
 		m_pEnemy.back()->Init(pos, forX, forZ);
@@ -112,6 +114,7 @@ void EnemyManager::Update()
 		enemyNormal->Update();
 	}
 
+	// 必要のないオブジェクトを削除
 	EraseObject();
 }
 
