@@ -368,7 +368,7 @@ void SceneMain::CheckColl()
 					for (int i = 0; i < 10; i++)
 					{
 						m_pBlood.push_back(new BloodDrawer(m_pEnemy->GetCollData()[enemyNum].pos));
-						m_pBlood.back()->Init();
+						m_pBlood.back()->Init(i);
 					}
 				}
 			}

@@ -91,8 +91,6 @@ private:
 	// ˆÚ“®ˆÊ’u‚ðŠm”F
 	VECTOR m_checkMapChipNo;
 
-	std::vector<VECTOR> recordChipNo{ VGet(-1, -1, -1) };
-
 	ObstructSelect m_selectObstructData;
 
 	MapDatas m_mapData;

@@ -30,6 +30,6 @@ public:
 	void SetShotErase(int objNum, int shotNum,bool erase);
 
 private:
-	std::vector<ObstacleBase*>m_pNormalObstacle;
+	std::vector<ObstacleBase*>m_pObstacle;
 };
 

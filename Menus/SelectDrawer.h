@@ -84,6 +84,7 @@ private:
 
 	//
 	int m_stickPressFrameCount[2];
+	int m_stickPressScroolFrameCount[2];
 };
 
 class StringDrawer

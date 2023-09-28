@@ -109,6 +109,7 @@ void ObstacleBase::UpdateShot()
 	for (auto& shot : m_pShot)
 	{
 		shot->Update();
+		shot->SetTargetPos(m_shotData.targetPos);
 	}
 
 	TargetPos();
@@ -217,10 +218,10 @@ int ObstacleBase::GetShotNum()
 
 void ObstacleBase::SetTarGetPos(VECTOR pos)
 {
-	for (int i = 0; i < m_pShot.size(); i++)
-	{
-		m_pShot[i]->SetTargetPos(pos);
-	}
+	//for (int i = 0; i < m_pShot.size(); i++)
+	//{
+	//	m_pShot[i]->SetTargetPos(pos);
+	//}
 }
 
 void ObstacleBase::SetShotErase(int shotNum, bool erase)

@@ -3,7 +3,7 @@
 #include "../Util/GameData.h"
 
 // 選択用クラス
-//class SelectDrawer;
+class SelectDrawer;
 class UserSettingDrawer : public PauseBase
 {
 public:

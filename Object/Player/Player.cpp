@@ -9,6 +9,7 @@
 
 namespace
 {
+	constexpr int kFirstCost = 400;
 	// オブジェクト設置する際のコスト
 	constexpr int kSetCost = 200;
 	// 特殊攻撃する時のカーソル移動速度
@@ -20,7 +21,7 @@ namespace
 #if _DEBUG
 	constexpr  int kCostPuls = 200;// 列
 #else
-	constexpr  int kCostPuls = 3;// 列
+	constexpr  int kCostPuls = 1;// 列
 #endif
 }
 
@@ -30,13 +31,14 @@ Player::Player() :
 	m_isSpecialAttack(false),
 	m_isResultObject(false),
 	m_isSetObject(false),
+	m_objectCostNum(kFirstCost),
 	m_isShot(false),
 	m_countShotNo(-1),
 	m_deleteFrameCountShot(0),
 	m_isTrackingShot(false),
 	m_checkMapChipNo(VGet(0,0,0))
 {
-
+	
 }
 
 Player::~Player()
@@ -47,11 +49,11 @@ Player::~Player()
 void Player::Init(MapDatas mapChip)
 {
 	// インスタンス生成
-	m_pObjMenu = new ObjectMenuDrawer;
+	m_pObjMenu = new ObjectMenuDrawer();
 
 	m_pObjMenu->Init();
 
-	m_posHistory.push_back(VGet(-1.0f, -1.0f, -1.0f));
+	m_posHistory.push_back(VGet(0.0f, 0.0f, 0.0f));
 
 	m_mapData = mapChip;
 	// プレイヤーの初期位置
@@ -428,50 +430,43 @@ void Player::UpdateControl()
 		m_pos.z = (m_checkMapChipNo.z * 50.0f);
 	}
 
-
-
-
-
-
-
 	// 設置用変数初期化
 	m_isSetObject    = false;
+	static bool isBreak = false;
 
-	//// 設置します
-	//if (Pad::isTrigger(PAD_INPUT_1) && m_objectCostNum > kSetCost && !m_isResultObject)
-	//{		
-	//	// 記録した場所の数
-	//	for (int i = 0; i < recordChipNo.size(); i++)
-	//	{
-	//		// マップチップデータでおける場所を確認
-	//		if (m_mapChip[m_checkMapChipNo.x + m_checkMapChipNo.z * kMapChipMaxX] == 1)
-	//		{
-	//			// 一度置いたことあるかどうか確認
-	//			if (recordChipNo[i].x != m_checkMapChipNo.x &&
-	//				recordChipNo[i].z != m_checkMapChipNo.z)
-	//			{
-	//				// 設置できる事を確認
-	//				m_isSetObject = true;
-	//			}
-	//		}
-	//	}
-	//	// 置く場所を決める
-	//	if (m_isSetObject)
-	//	{
-	//		// 設置した事を確認
-	//		m_isResultObject = true;
-	//		//// 置いた場所を記録
-	//		//recordChipNo.push_back(m_checkMapChipNo);
-	//		//// オブジェクトコストを引く
-	//		//m_objectCostNum -= kSetCost;
-	//	}
-	//}
+	if (Pad::isTrigger(PAD_INPUT_1) &&
+		!m_isResultObject)
+	{
+		// オブジェクトが設置可能なのか
+		if (m_mapData.data[m_checkMapChipNo.x + m_checkMapChipNo.z * m_mapData.chipMaxX] == m_mapData.road)
+		{
+			// オブジェクト設置命令
+			m_isResultObject = true;
+			// すでに設置しているかの確認
+			for (int i = 0; i < m_posHistory.size(); i++)
+			{
+				if (m_posHistory[i].x == m_checkMapChipNo.x &&
+					m_posHistory[i].z == m_checkMapChipNo.z)
+				{
+					isBreak = true;
+					break;
+				}
+				else
+				{
+					isBreak = false;
+				}
+			}
+		}
+
+	}
+
 	static bool isSelect1 = false;
 	if (!m_isResultObject)
 	{
 		m_selectObstructData.no = ObstructSelectNo::EMPTY_RESULT;
 	}
 
+	// 設置オブジェクトの選択
 	if (isSelect1 && m_objectCostNum > kSetCost)
 	{	
 		if (Pad::isPress(PAD_INPUT_4))
@@ -480,11 +475,15 @@ void Player::UpdateControl()
 		}
 		if (Pad::isRelase(PAD_INPUT_4))
 		{
+			// 設置オブジェクトのIDを代入
 			m_selectObstructData.no = ObstructSelectNo::HRAVY_RESULT;
 			isSelect1 = false;
+			// オブジェクト設置命令をしない
 			m_isResultObject = false;
 			// オブジェクトコストを引く
 			m_objectCostNum -= kSetCost;
+			// オブジェクト設置位置を記録
+			m_posHistory.push_back(m_checkMapChipNo);
 		}
 
 		if (Pad::isPress(PAD_INPUT_2))
@@ -493,20 +492,20 @@ void Player::UpdateControl()
 		}
 		if (Pad::isRelase(PAD_INPUT_2))
 		{
+			// 設置オブジェクトのIDを代入
 			m_selectObstructData.no = ObstructSelectNo::NORMAL_RESULT;
 			isSelect1 = false;
+			// オブジェクト設置命令をしない
 			m_isResultObject = false;
 			// オブジェクトコストを引く
 			m_objectCostNum -= kSetCost;
+			// オブジェクト設置位置を記録
+			m_posHistory.push_back(m_checkMapChipNo);
 		}
 
 	}
-	if (Pad::isRelase(PAD_INPUT_1))
-	{
-		// 設置できる事を確認
-		m_isResultObject = true;
-	}
 
+	// なにをするか
 	if (m_isResultObject && !isSelect1)
 	{	
 		// 破壊
@@ -515,15 +514,18 @@ void Player::UpdateControl()
 			m_selectObstructData.no = ObstructSelectNo::ERASE_PRESS;
 		}
 
-		// 設置
-		if (Pad::isPress(PAD_INPUT_2))
+		if (!isBreak)
 		{
-			m_selectObstructData.no = ObstructSelectNo::OBSTRUCT_PRESS;
-		}
-		if (Pad::isRelase(PAD_INPUT_2))
-		{
-			isSelect1 = true;
-			m_selectObstructData.no = ObstructSelectNo::OBSTRUCT_RESULT;
+			// 設置
+			if (Pad::isPress(PAD_INPUT_2))
+			{
+				m_selectObstructData.no = ObstructSelectNo::OBSTRUCT_PRESS;
+			}
+			if (Pad::isRelase(PAD_INPUT_2))
+			{
+				isSelect1 = true;
+				m_selectObstructData.no = ObstructSelectNo::OBSTRUCT_RESULT;
+			}
 		}
 
 		// 強化

@@ -148,7 +148,6 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 #if _DEBUG
 		DrawFormatString(0, 0, 0x000000,  "FPS       = %1.2f",DxLib::GetFPS());
 		DrawFormatString(0, 10, 0x000000, "DrawColl  = %d"  ,DxLib::GetDrawCallCount());
-		printfDx("%d\n", GetASyncLoadNum());
 #endif
 		// — ‰æ–Ê‚ð•\‰æ–Ê‚ð“ü‚ê‘Ö‚¦‚é
 		ScreenFlip();

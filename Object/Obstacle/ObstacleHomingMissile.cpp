@@ -7,7 +7,7 @@ namespace
 	// ショット打ち出しまでのフレーム
 	constexpr int kShotFrameCount = 5;
 	// ショットモデルの大きさ
-	const VECTOR kShotScale = VGet(1.5, 1.5, 1.5);
+	const VECTOR kShotScale = VGet(1, 1, 1);
 	// 角度
 	const VECTOR kRotation = VGet(0, 0, 0);
 	// 半径
@@ -20,7 +20,7 @@ namespace
 	constexpr bool kIsTracking = true;
 	// ファイルパス
 	const char* kFilePath     = "Data/Model/Homing.mv1";
-	const char* kFilePathShot = "Data/Model/Arrow.mv1";
+	const char* kFilePathShot = "Data/Model/HomingShot.mv1";
 
 	// モデルの大きさ
 	const VECTOR kScale = VGet(1, 1, 1);

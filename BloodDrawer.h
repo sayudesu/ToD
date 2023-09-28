@@ -8,7 +8,7 @@ public:
 	BloodDrawer(VECTOR pos);
 	virtual ~BloodDrawer();
 
-	virtual void Init();
+	virtual void Init(int no);
 	virtual void End();
 	virtual void Update();
 	virtual void Draw();
@@ -16,22 +16,11 @@ public:
 	virtual bool IsGetErase();
 private:
 	void First();
-	void Jet();
 private:
-	int m_hGraph;
 	VECTOR m_pos;
-	int m_posTarget;
-	VECTOR m_posMain;
 	VECTOR m_vec;
-
-	int m_count;
-
-	float m_speed;
-
+	bool m_isErase;
 	// メンバ関数ポインタ
 	void(BloodDrawer::* m_pFunc)();
-
-	bool m_isErase;
-
 };
 

@@ -20,11 +20,11 @@ void ObstacleManager::Init()
 
 void ObstacleManager::End()
 {
-	for (int i = 0; i < m_pNormalObstacle.size(); i++)
+	for (int i = 0; i < m_pObstacle.size(); i++)
 	{
-		m_pNormalObstacle[i]->End();
-		delete m_pNormalObstacle[i];
-		m_pNormalObstacle[i] = nullptr;
+		m_pObstacle[i]->End();
+		delete m_pObstacle[i];
+		m_pObstacle[i] = nullptr;
 	} 
 }
 
@@ -34,23 +34,23 @@ void ObstacleManager::Create(VECTOR pos,int obsNo,int no)
 	{
 		// インスタンスの作成
 //		m_pNormalObstacle.push_back(new ObstacleCannon(pos, no));
-		m_pNormalObstacle.push_back(new ObstacleHomingMissile(pos, no));
+		m_pObstacle.push_back(new ObstacleHomingMissile(pos, no));
 		// 初期化
-		m_pNormalObstacle.back()->Init();
+		m_pObstacle.back()->Init();
 	}
 	if (obsNo == ObstructSelectNo::HRAVY_RESULT)
 	{
 		// インスタンスの作成
-		m_pNormalObstacle.push_back(new ObstacleCrossbow(pos, no));
+		m_pObstacle.push_back(new ObstacleCrossbow(pos, no));
 		// 初期化
-		m_pNormalObstacle.back()->Init();
+		m_pObstacle.back()->Init();
 	}
 
 }
 
 void ObstacleManager::Update()
 {
-	for (auto& nomalObstacle : m_pNormalObstacle)
+	for (auto& nomalObstacle : m_pObstacle)
 	{
 		nomalObstacle->Update();
 	}
@@ -58,7 +58,7 @@ void ObstacleManager::Update()
 
 void ObstacleManager::Draw()
 {
-	for (auto& nomalObstacle : m_pNormalObstacle)
+	for (auto& nomalObstacle : m_pObstacle)
 	{
 		nomalObstacle->Draw();
 	}
@@ -67,33 +67,41 @@ void ObstacleManager::Draw()
 // オブジェクトの数を返す
 int ObstacleManager::GetNum()
 {
-	return static_cast<int>(m_pNormalObstacle.size());
+	return static_cast<int>(m_pObstacle.size());
 }
 
 // ショットの数を返します
 int ObstacleManager::GetShotNum(int objNum)
 {
-	return m_pNormalObstacle[objNum]->GetShotNum();
+	return m_pObstacle[objNum]->GetShotNum();
 }
 
 // ショットのデータを受け取る
 ObjectData ObstacleManager::GetCollShotDatas(int objNum,int shotNum)
 {
-	return m_pNormalObstacle[objNum]->GetCollShotDatas(shotNum);
+	return m_pObstacle[objNum]->GetCollShotDatas(shotNum);
 }
 
 // 敵の判定用データを受け取る
 void ObstacleManager::SetCollEnemyDatas(std::vector<ObjectData> collEnemyData)
 {
-	for (auto& normalObstacle : m_pNormalObstacle)
+	for (auto& normalObstacle : m_pObstacle)
 	{
 		normalObstacle->SetCollEnemyDatas(collEnemyData);
 	}
+
+	//if (m_pObstacle.size() != 0)
+	//{
+	//	for (int i = 0; i < m_pObstacle.size()-1; i++)
+	//	{
+	//		m_pObstacle[i]->SetTarGetPos(collEnemyData[i].pos);
+	//	}
+	//}
 }
 // 必要の無いshotの番号を受け取る
 void ObstacleManager::SetEraseShotData(std::vector<ObjectData> eraseShotData)
 {
-	for (auto& normalObstacle : m_pNormalObstacle)
+	for (auto& normalObstacle : m_pObstacle)
 	{
 		normalObstacle->SetEraseShotData(eraseShotData);
 	}
@@ -102,5 +110,5 @@ void ObstacleManager::SetEraseShotData(std::vector<ObjectData> eraseShotData)
 // 必要のないショット番号を受け取る
 void ObstacleManager::SetShotErase(int objNum,int shotNum, bool erase)
 {
-	m_pNormalObstacle[objNum]->SetShotErase(shotNum, erase);
+	m_pObstacle[objNum]->SetShotErase(shotNum, erase);
 }

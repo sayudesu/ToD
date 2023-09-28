@@ -38,6 +38,8 @@ SelectDrawer::SelectDrawer():
 
 	m_stickPressFrameCount[0] = 0;
 	m_stickPressFrameCount[1] = 0;
+	m_stickPressScroolFrameCount[0] = 0;
+	m_stickPressScroolFrameCount[1] = 0;
 }
 
 SelectDrawer::~SelectDrawer()
@@ -61,24 +63,30 @@ void SelectDrawer::End()
 
 void SelectDrawer::Update()
 {
+	int tempSelectNo = m_selectNow;
+	// 選択
 	if (!m_isSelect)
 	{
-		// 選択
 		if (Pad::isPress(PAD_INPUT_UP))
 		{
 			m_stickPressFrameCount[0]++;
-			// サウンド追加
-			SoundFunctions::Play(SoundFunctions::SoundIdSelctChange);
-
+			m_stickPressScroolFrameCount[0]++;
+			
+			// 始め押した1フレームだけ動かす
 			if (m_stickPressFrameCount[0] == 1)
 			{
 					m_selectNow--;
 			}
-			if (m_stickPressFrameCount[0] > 30)
+
+			// 30フレーム押し続けた場合10フレームごとに動かす
+			if (m_stickPressFrameCount[0] > 30 &&
+				m_stickPressScroolFrameCount[0] > 10)
 			{
 				m_selectNow--;
+				m_stickPressScroolFrameCount[0] = 0;
 			}
 
+			// 選択位置が一周するように
 			if (m_selectNow < 0)
 			{
 				m_selectNow = selectNum;
@@ -88,22 +96,30 @@ void SelectDrawer::Update()
 		}
 		else
 		{
+			// 押しやめ
 			m_stickPressFrameCount[0] = 0;
 		}
+
 		if (Pad::isPress(PAD_INPUT_DOWN))
-		{
+		{			
 			m_stickPressFrameCount[1]++;
-			// サウンド追加
-			SoundFunctions::Play(SoundFunctions::SoundIdSelctChange);
+			m_stickPressScroolFrameCount[1]++;
+
+			// 始め押した1フレームだけ動かす
 			if (m_stickPressFrameCount[1] == 1)
 			{
 					m_selectNow++;
 			}
-			if (m_stickPressFrameCount[1] > 30)
+
+			// 30フレーム押し続けた場合10フレームごとに動かす
+			if (m_stickPressFrameCount[1] > 30 &&
+				m_stickPressScroolFrameCount[1] > 10)
 			{
 				m_selectNow++;
+				m_stickPressScroolFrameCount[1] = 0;
 			}
 
+			// 選択位置が一周するように
 			if (m_selectNow > selectNum)
 			{
 				m_selectNow = 0;				
@@ -113,10 +129,17 @@ void SelectDrawer::Update()
 		}
 		else
 		{
+			// 押しやめ
 			m_stickPressFrameCount[1] = 0;
 		}
 	}
 	
+	// ひとつ前の選択位置を違う場所だったらサウンドを鳴らす
+	if (m_selectNow != tempSelectNo)
+	{
+		SoundFunctions::Play(SoundFunctions::SoundIdSelctChange);
+	}
+
 	// 選択をする
 	if (Pad::isTrigger(PAD_INPUT_1))
 	{
@@ -128,13 +151,8 @@ void SelectDrawer::Update()
 	// 選択したら100フレーム後にその画面に切り替わる
 	if (m_isSelect)
 	{
-		m_pText[m_selectNow]->SetSelectRadius(selectRad += 6);
-
-		if (selectRad > 100)
-		{
-			m_selectNo = m_selectNow;
-			m_isSelect = false;
-		}
+		m_selectNo = m_selectNow;
+		m_isSelect = false;
 	}
 
 	// 全て選択フレームを表示させない
@@ -144,20 +162,6 @@ void SelectDrawer::Update()
 	}
 	// 選択中の文字は選択フレームを表示させる
 	m_pText[m_selectNow]->SetBlendMode(255);
-
-#if true
-	// デバッグ用
-	if (selectRad > 100)
-	{
-		m_isSelect = false;
-		selectRad = 0;
-
-		for (int i = 0; i < m_pText.size(); i++)
-		{
-			m_pText[i]->SetSelectRadius(0);
-		}
-	}
-#endif
 }
 
 void SelectDrawer::UpdatePos(int x, int y)
@@ -166,6 +170,7 @@ void SelectDrawer::UpdatePos(int x, int y)
 	{
 		text->UpdatePos(x, y);
 	}
+
 	// スライドの為の値を受けとる
 	 m_catHandSlideY = y;
 }
