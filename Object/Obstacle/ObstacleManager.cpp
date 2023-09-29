@@ -28,21 +28,22 @@ void ObstacleManager::End()
 	} 
 }
 
+// 選択したオブジェクトを生成
 void ObstacleManager::Create(VECTOR pos,int obsNo,int no)
 {
 	if (obsNo == ObstructSelectNo::NORMAL_RESULT)
 	{
-		// インスタンスの作成
-//		m_pNormalObstacle.push_back(new ObstacleCannon(pos, no));
-		m_pObstacle.push_back(new ObstacleHomingMissile(pos, no));
-		// 初期化
+		m_pObstacle.push_back(new ObstacleCannon(pos, no));
 		m_pObstacle.back()->Init();
 	}
 	if (obsNo == ObstructSelectNo::HRAVY_RESULT)
 	{
-		// インスタンスの作成
 		m_pObstacle.push_back(new ObstacleCrossbow(pos, no));
-		// 初期化
+		m_pObstacle.back()->Init();
+	}
+	if (obsNo == ObstructSelectNo::MISSILE_RESULT)
+	{
+		m_pObstacle.push_back(new ObstacleHomingMissile(pos, no));
 		m_pObstacle.back()->Init();
 	}
 

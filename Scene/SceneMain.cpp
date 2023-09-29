@@ -135,7 +135,7 @@ SceneBase* SceneMain::Update()
 			m_pParticle[i] = nullptr;
 			// 要素の削除
 			m_pParticle.erase(m_pParticle.begin() + i);
-			//// メモリサイズの解放
+			// めっちゃメモリサイズの解放
 			m_pParticle.shrink_to_fit();
 		}
 	}
@@ -211,6 +211,7 @@ SceneBase* SceneMain::Update()
 	
 
 	// UI関係
+	m_pUI->Update();
 	// オブジェクト設置コストの数を受け取る
 	m_pUI->SetCostSetObject(m_pPlayer->GetObjectCostNum());
 	// プレイヤーの位置を受け取る

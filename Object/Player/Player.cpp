@@ -503,6 +503,22 @@ void Player::UpdateControl()
 			m_posHistory.push_back(m_checkMapChipNo);
 		}
 
+		if (Pad::isPress(PAD_INPUT_1))
+		{
+			m_selectObstructData.no = ObstructSelectNo::MISSILE_PRESS;
+		}
+		if (Pad::isRelase(PAD_INPUT_1))
+		{
+			// 設置オブジェクトのIDを代入
+			m_selectObstructData.no = ObstructSelectNo::MISSILE_RESULT;
+			isSelect1 = false;
+			// オブジェクト設置命令をしない
+			m_isResultObject = false;
+			// オブジェクトコストを引く
+			m_objectCostNum -= kSetCost;
+			// オブジェクト設置位置を記録
+			m_posHistory.push_back(m_checkMapChipNo);
+		}
 	}
 
 	// なにをするか

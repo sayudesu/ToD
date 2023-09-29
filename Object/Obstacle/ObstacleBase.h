@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include <vector>
 #include "../../Util/ObjectData.h"
+#include <list>
 
 class ShotBase;
 // 障害物クラスベース
@@ -75,7 +76,7 @@ protected:
 	// 最初のショット打ち出しまでのフレームカウント
 	int m_shotFirstDelayFrameCount;
 	// ショットクラス
-	std::vector<ShotBase*>m_pShot;
+	std::list<ShotBase*>m_pShot;
 	// ショット再放出までのフレームカウント
 	int m_shootFrameCount;
 	// ショットを撃つかどうか

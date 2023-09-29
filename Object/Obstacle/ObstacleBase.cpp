@@ -29,11 +29,11 @@ void ObstacleBase::End()
 	MV1DeleteModel(m_handle);
 	MV1DeleteModel(m_shotData.handle);
 
-	for (int i = 0; i < m_pShot.size(); i++)
-	{
-		delete m_pShot[i];
-		m_pShot[i] = nullptr;
-	}
+	//for (int i = 0; i < m_pShot.size(); i++)
+	//{
+	//	delete m_pShot[i];
+	//	m_pShot[i] = nullptr;
+	//}
 }
 
 void ObstacleBase::Update()
@@ -120,43 +120,71 @@ void ObstacleBase::UpdateShot()
 	MV1SetRotationXYZ(m_handle, VGet(0.0f, angle2, 0.0f));
 
 	// 削除処理
-	for (int i = 0; i < m_pShot.size(); i++)
-	{
-		// 適当な範囲外処理
-		if (m_pShot[i]->GetCollData().pos.x < -1000.0f)
-		{
-			m_pShot[i]->SetEnabled(true);
-		}
-		if (m_pShot[i]->GetCollData().pos.x > 13000.0f)
-		{
-			m_pShot[i]->SetEnabled(true);
-		}
-		if (m_pShot[i]->GetCollData().pos.z < -1000.0f)
-		{
-			m_pShot[i]->SetEnabled(true);
-		}
-		if (m_pShot[i]->GetCollData().pos.z > 7000.0f)
-		{
-			m_pShot[i]->SetEnabled(true);
-		}
-		if (m_pShot[i]->GetCollData().pos.y < 0.0f)
-		{
-			m_pShot[i]->SetEnabled(true);
-		}
+	//for (int i = 0; i < m_pShot.size(); i++)
+	//{
+	//	 適当な範囲外処理
+	//	if (m_pShot[i]->GetCollData().pos.x < -1000.0f)
+	//	{
+	//		m_pShot[i]->SetEnabled(true);
+	//	}
+	//	if (m_pShot[i]->GetCollData().pos.x > 13000.0f)
+	//	{
+	//		m_pShot[i]->SetEnabled(true);
+	//	}
+	//	if (m_pShot[i]->GetCollData().pos.z < -1000.0f)
+	//	{
+	//		m_pShot[i]->SetEnabled(true);
+	//	}
+	//	if (m_pShot[i]->GetCollData().pos.z > 7000.0f)
+	//	{
+	//		m_pShot[i]->SetEnabled(true);
+	//	}
+	//	if (m_pShot[i]->GetCollData().pos.y < 0.0f)
+	//	{
+	//		m_pShot[i]->SetEnabled(true);
+	//	}
 
-		if (m_pShot[i]->IsEnabled())
-		{
-			// エンド処理
-			m_pShot[i]->End();
-			// デリート処理
-			delete m_pShot[i];
-			m_pShot[i] = nullptr;
-			// 要素の削除
-			m_pShot.erase(m_pShot.begin() + i);
-			// メモリサイズの解放
-			m_pShot.shrink_to_fit();
-		}
-	}
+	//	if (m_pShot[i]->IsEnabled())
+	//	{
+	//		 エンド処理
+	//		m_pShot[i]->End();
+	//		 デリート処理
+	//		delete m_pShot[i];
+	//		m_pShot[i] = nullptr;
+	//		 要素の削除
+	//		m_pShot.erase(m_pShot.begin() + i);
+	//	}
+
+	//}
+
+	//for (auto& shot : m_pShot)
+	//{
+	//	if (shot->IsEnabled())
+	//	{
+	//	}
+	//}
+
+		// いなくなった敵は消す
+	   // 消す命令だが、実際には消してなくて、うしろによけているだけ
+		auto rmIt = std::remove_if        // 条件に合致したものを消す
+		   (m_pShot.begin(),			// 対象はenemies_の最初から
+		    m_pShot.end(),			// 最後まで
+		   // 消えてもらう条件を表すラムダ式
+		   // trueだと消える。falseだと消えない
+			[](const ShotBase* shot)
+			{
+				return !shot->IsEnabled();
+
+			});
+
+	//m_pShot.remove_if
+	//([](int erase)
+	//	{
+	//		return erase == 0;
+	//	}
+	//); // 値1の要素を全て削除
+
+//	std::vector<ShotBase*>(m_pShot).swap(m_pShot);//使用してないヒープ領域を開放
 }
 
 // 誰を狙うか
@@ -203,7 +231,14 @@ VECTOR ObstacleBase::GetPos() const
 
 ObjectData ObstacleBase::GetCollShotDatas(int shotNum)
 {
-	return m_pShot[shotNum]->GetCollData();
+//	auto itr = std::find(m_pShot.begin(), m_pShot.end(), shotNum);
+
+	m_pShot.front()->GetCollData();
+
+//	return m_pShot[shotNum]->GetCollData();
+//	std::distance(m_pShot.begin(), itr);
+//	return (*itr)->GetCollData();
+//	return ObjectData();
 }
 
 void ObstacleBase::SetCollEnemyDatas(std::vector<ObjectData> collEnemyData)
@@ -226,7 +261,7 @@ void ObstacleBase::SetTarGetPos(VECTOR pos)
 
 void ObstacleBase::SetShotErase(int shotNum, bool erase)
 {
-	m_pShot[shotNum]->SetEnabled(erase);
+//	m_pShot[shotNum]->SetEnabled(erase);
 }
 
 void ObstacleBase::Draw()

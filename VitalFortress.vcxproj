@@ -197,6 +197,7 @@
     <ClInclude Include="Object\Obstacle\ObstacleCrossbow.h" />
     <ClInclude Include="Object\Obstacle\ObstacleHomingMissile.h" />
     <ClInclude Include="ParticleDrawer.h" />
+    <ClInclude Include="SelectData.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="UIDrawer.h" />
     <ClInclude Include="Util\ObjectData.h" />

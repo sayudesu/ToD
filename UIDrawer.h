@@ -1,6 +1,7 @@
 #pragma once
 #include <DxLib.h>
 #include "Util/ObstructSelectNo.h"
+#include "SelectData.h"
 
 class UIDrawer
 {
@@ -31,6 +32,7 @@ private:
 	void Time();
 	void meat();
 
+
 private:
 	// 画像ハンドル
 	// 自身の体力や設置コスト数の背景
@@ -50,7 +52,7 @@ private:
 	// オブジェクト設置用
 	int m_hSelectObjectBg;
 	int m_hSelectObject;
-	int m_hSelectObjectState[5];
+	int m_hSelectObjectState[static_cast<int>(SelectData::MAX)];
 
 
 	// 現在のコスト数
@@ -60,7 +62,7 @@ private:
 	VECTOR m_playerPos;
 
 	// 選択画像用位置
-	VECTOR m_selectPos[5];
+	VECTOR m_selectPos[static_cast<int>(SelectData::MAX)];
 	VECTOR m_selectPressPos[5];
 
 

@@ -12,6 +12,12 @@ public:
 
 	void Init();
 	void End();
+	/// <summary>
+	/// 選択したオブジェクトを生成
+	/// </summary>
+	/// <param name="pos">  設置位置</param>
+	/// <param name="obsNo">設置するオブジェクトID</param>
+	/// <param name="no">   設置順番の番号</param>
 	void Create(VECTOR pos, int obsNo, int no);
 	void Update();
 	void Draw();
