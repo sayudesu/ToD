@@ -8,7 +8,7 @@ class ShotBase
 {
 public:
 	ShotBase(VECTOR pos);
-	virtual~ShotBase() {};
+	virtual~ShotBase();
 
 	virtual void Init  (int handle,int shotFrameCount,VECTOR taegetPos, VECTOR scale, VECTOR rotation, float radius, float damage, float speed, bool isTracking) {};
 	virtual void End   ();

@@ -9,8 +9,8 @@ NormalShot::NormalShot(VECTOR pos, int originNo, int no):
 	m_originNo  = originNo;
 	// 固有の生成番号
 	m_no	    = no;
-	// オブジェクトを消したい際にtrue
-	m_isEnabled = false;
+	// オブジェクトを消したい際にfalse
+	m_isEnabled = true;
 }
 
 NormalShot::~NormalShot()

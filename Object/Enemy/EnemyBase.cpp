@@ -85,7 +85,7 @@ void EnemyBase::SetHitDamage(int damage)
 	m_hp -= damage;
 }
 
-bool EnemyBase::GetErase()
+bool EnemyBase::GetErase()const
 {
 	// Ç†Ç∆Ç≈èCê≥
 	if (m_hp <= 0)

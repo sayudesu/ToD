@@ -6,7 +6,7 @@ namespace
 	// 画像パス
 	const char* kFileNameMeat = "Data/Image/UI_Meat.png";
 	// 吸い込み速度
-	constexpr float kSpeed = 0.1f;
+	constexpr float kSpeed = 5.0f;
 }
 
 ParticleDrawer::ParticleDrawer(VECTOR pos)
@@ -49,9 +49,6 @@ void ParticleDrawer::Init(int no)
 	m_vec.y = (-GetRand(24));
 
 	m_vec.x += (m_vec.x * 3.0f);
-
-	m_spped = kSpeed;
-
 }
 
 void ParticleDrawer::End()
@@ -102,10 +99,10 @@ void ParticleDrawer::Jet()
 		dir = VNorm(dir);
 	}
 	
-	m_spped += 0.9f;
+	m_speed += 0.9f;
 
 	// 速度を求める
-	const VECTOR velecity = VScale(VGet(dir.x, dir.y, dir.z), m_spped);
+	const VECTOR velecity = VScale(VGet(dir.x, dir.y, dir.z), m_speed);
 
 	// 位置を変える
 	m_pos = VAdd(m_pos, VGet(velecity.x, velecity.y, velecity.z));

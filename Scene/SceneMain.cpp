@@ -361,11 +361,13 @@ void SceneMain::CheckColl()
 					m_pEnemy   ->GetCollData     ()[enemyNum]     .radius,
 					m_pObstacle->GetCollShotDatas(objNum, shotNum).radius))
 				{
-					// ショットのメモリ解放用関数
-					m_pObstacle->SetShotErase(objNum, shotNum, true);
-					// ダメージを与える
+					// ショットを削除
+					m_pObstacle->SetShotErase(objNum, shotNum, false);
+					// エネミーにダメージを与える
 					m_pEnemy->SetHitDamage(enemyNum, m_pObstacle->GetCollShotDatas(objNum, shotNum).datage);
-						
+
+					// あとで変える
+					// 血が出る演出
 					for (int i = 0; i < 10; i++)
 					{
 						m_pBlood.push_back(new BloodDrawer(m_pEnemy->GetCollData()[enemyNum].pos));

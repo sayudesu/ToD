@@ -30,7 +30,7 @@ public:
 	// 与えられるダメージを受け取る
 	virtual void SetHitDamage(int damage);
 	// そのデータが必要なのかどうか
-	virtual bool GetErase();
+	virtual bool GetErase()const;
 	// 動く位置を探して移動
 	virtual void ChangeNextPos(bool& isMoveing);
 

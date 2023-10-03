@@ -33,7 +33,5 @@ private:
 
 	bool m_isErase;
 
-	float m_spped;
-
 };
 

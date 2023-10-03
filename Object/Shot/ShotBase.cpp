@@ -23,13 +23,18 @@ ShotBase::ShotBase(VECTOR pos):
 	m_isTrackingNow = false;
 	m_originNo = 0;
 	m_no = 0;
-	m_isEnabled = false;
+	m_isEnabled = true;
 	m_collData = {};
 	m_collData.datage = 0;
 	m_collData.pos = pos;
 	m_collData.radius = 0;
 
 	m_updateFunc = &ShotBase::UpdateMain;
+}
+
+ShotBase::~ShotBase()
+{
+	
 }
 
 // ƒƒ‚ƒŠ‰ğ•úˆ—

@@ -18,7 +18,6 @@ struct ObjectData
 	float hp;
 	// ”»’è‚ğ‚İ‚é‚©‚Ç‚¤‚©
 	bool isHit;
-
 	// UŒ‚‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©S
 	bool isAttack;
 };

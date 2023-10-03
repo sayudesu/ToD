@@ -63,12 +63,12 @@ private:
 
 	// 選択画像用位置
 	VECTOR m_selectPos[static_cast<int>(SelectData::MAX)];
-	VECTOR m_selectPressPos[5];
+	VECTOR m_selectPressPos[static_cast<int>(SelectData::MAX)];
 
 
 	ObstructSelect m_obstructData;
 	bool m_isSelect;
-	bool m_isSelectNo[5];
+	bool m_isSelectNo[static_cast<int>(SelectData::MAX)];
 
 	// デバッグ用
 	int m_hpBarX;

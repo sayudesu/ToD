@@ -1,8 +1,8 @@
 #pragma once
 #include <DxLib.h>
-#include <vector>
 #include "../../Util/ObjectData.h"
 #include "../../MapDatas.h"
+#include <list>
 
 class EnemyBase;
 class EnemyManager
@@ -35,7 +35,7 @@ private:
 	virtual void EraseObject();
 private:
 	// ノーマルエネミー
-	std::vector<EnemyBase*>m_pEnemy;
+	std::list<EnemyBase*>m_pEnemy;
 	// マップチップのデータ
 	MapDatas m_mapChip;
 };

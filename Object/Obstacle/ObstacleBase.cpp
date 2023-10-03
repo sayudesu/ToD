@@ -3,6 +3,8 @@
 #include "../../Object/Shot/NormalShot.h"
 #include "../../Object/Shot/MissileShot.h"
 
+#include <stack>
+
 namespace
 {
 	// 設置してから打ち出しまでのフレーム
@@ -29,11 +31,15 @@ void ObstacleBase::End()
 	MV1DeleteModel(m_handle);
 	MV1DeleteModel(m_shotData.handle);
 
-	//for (int i = 0; i < m_pShot.size(); i++)
-	//{
-	//	delete m_pShot[i];
-	//	m_pShot[i] = nullptr;
-	//}
+	for (auto& shot : m_pShot)
+	{
+		shot->End();
+		delete shot;
+		if (shot != nullptr)
+		{
+			shot = nullptr;
+		}
+	}
 }
 
 void ObstacleBase::Update()
@@ -118,73 +124,58 @@ void ObstacleBase::UpdateShot()
 	VECTOR dir2 = VSub(m_shotData.targetPos, m_pos);
 	const float angle2 = atan2f(dir2.x, dir2.z) + -90.0f * DX_PI_F / 180.0f;
 	MV1SetRotationXYZ(m_handle, VGet(0.0f, angle2, 0.0f));
+	
+	// 適当な範囲外処理
+	for (auto& shot: m_pShot)
+	{
+		if (shot->GetCollData().pos.x < -1000.0f)
+		{
+			shot->SetEnabled(false);
+		}
+		if (shot->GetCollData().pos.x > 13000.0f)
+		{
+			shot->SetEnabled(false);
+		}
+		if (shot->GetCollData().pos.z < -1000.0f)
+		{
+			shot->SetEnabled(false);
+		}
+		if (shot->GetCollData().pos.z > 7000.0f)
+		{
+			shot->SetEnabled(false);
+		}
+		if (shot->GetCollData().pos.y < 0.0f)
+		{
+			shot->SetEnabled(false);
+		}
+	}
 
-	// 削除処理
-	//for (int i = 0; i < m_pShot.size(); i++)
-	//{
-	//	 適当な範囲外処理
-	//	if (m_pShot[i]->GetCollData().pos.x < -1000.0f)
-	//	{
-	//		m_pShot[i]->SetEnabled(true);
-	//	}
-	//	if (m_pShot[i]->GetCollData().pos.x > 13000.0f)
-	//	{
-	//		m_pShot[i]->SetEnabled(true);
-	//	}
-	//	if (m_pShot[i]->GetCollData().pos.z < -1000.0f)
-	//	{
-	//		m_pShot[i]->SetEnabled(true);
-	//	}
-	//	if (m_pShot[i]->GetCollData().pos.z > 7000.0f)
-	//	{
-	//		m_pShot[i]->SetEnabled(true);
-	//	}
-	//	if (m_pShot[i]->GetCollData().pos.y < 0.0f)
-	//	{
-	//		m_pShot[i]->SetEnabled(true);
-	//	}
-
-	//	if (m_pShot[i]->IsEnabled())
-	//	{
-	//		 エンド処理
-	//		m_pShot[i]->End();
-	//		 デリート処理
-	//		delete m_pShot[i];
-	//		m_pShot[i] = nullptr;
-	//		 要素の削除
-	//		m_pShot.erase(m_pShot.begin() + i);
-	//	}
-
-	//}
-
-	//for (auto& shot : m_pShot)
-	//{
-	//	if (shot->IsEnabled())
-	//	{
-	//	}
-	//}
-
-		// いなくなった敵は消す
-	   // 消す命令だが、実際には消してなくて、うしろによけているだけ
-		auto rmIt = std::remove_if        // 条件に合致したものを消す
-		   (m_pShot.begin(),			// 対象はenemies_の最初から
-		    m_pShot.end(),			// 最後まで
-		   // 消えてもらう条件を表すラムダ式
-		   // trueだと消える。falseだと消えない
-			[](const ShotBase* shot)
+	// 一度衝突反転があったショットはいらない
+	// 消す命令だが、実際には消してなくて、うしろによけているだけ
+	// 条件に合致したものを消す
+	// 対象はm_pShotの最初から最後まで
+	// 消えてもらう条件を表すラムダ式
+	// falseだと消える。trueだと消えない
+	auto rmIt = std::remove_if        
+	(m_pShot.begin(),			
+		m_pShot.end(),			
+		[](const ShotBase* shot)
+		{
+			return !shot->IsEnabled();
+		});
+	for (auto& shot : m_pShot)
+	{
+		if (shot != nullptr)
+		{
+			if (!shot->IsEnabled())
 			{
-				return !shot->IsEnabled();
-
-			});
-
-	//m_pShot.remove_if
-	//([](int erase)
-	//	{
-	//		return erase == 0;
-	//	}
-	//); // 値1の要素を全て削除
-
-//	std::vector<ShotBase*>(m_pShot).swap(m_pShot);//使用してないヒープ領域を開放
+				shot->End();
+				delete shot;
+				shot = nullptr;					
+			}
+		}
+	}
+	m_pShot.erase(rmIt, m_pShot.end());
 }
 
 // 誰を狙うか
@@ -231,14 +222,10 @@ VECTOR ObstacleBase::GetPos() const
 
 ObjectData ObstacleBase::GetCollShotDatas(int shotNum)
 {
-//	auto itr = std::find(m_pShot.begin(), m_pShot.end(), shotNum);
-
-	m_pShot.front()->GetCollData();
-
-//	return m_pShot[shotNum]->GetCollData();
-//	std::distance(m_pShot.begin(), itr);
-//	return (*itr)->GetCollData();
-//	return ObjectData();
+	std::list<ShotBase*>::iterator it = m_pShot.begin();
+	std::advance(it, shotNum); 
+	ObjectData objData = (*it)->GetCollData();
+	return objData;	
 }
 
 void ObstacleBase::SetCollEnemyDatas(std::vector<ObjectData> collEnemyData)
@@ -253,15 +240,17 @@ int ObstacleBase::GetShotNum()
 
 void ObstacleBase::SetTarGetPos(VECTOR pos)
 {
-	//for (int i = 0; i < m_pShot.size(); i++)
-	//{
-	//	m_pShot[i]->SetTargetPos(pos);
-	//}
+	for (auto& shot : m_pShot)
+	{
+		shot->SetTargetPos(pos);
+	}
 }
 
 void ObstacleBase::SetShotErase(int shotNum, bool erase)
 {
-//	m_pShot[shotNum]->SetEnabled(erase);
+	std::list<ShotBase*>::iterator it = m_pShot.begin();
+	std::advance(it, shotNum);
+    (*it)->SetEnabled(erase);
 }
 
 void ObstacleBase::Draw()

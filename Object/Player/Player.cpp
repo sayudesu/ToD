@@ -80,8 +80,12 @@ void Player::Update()
 	// オブジェクトメニューを開いている場合
 	if (!m_pObjMenu->IsSetMenu() && (m_pObjMenu->SelectNo() == -1))
 	{
-		// 操作の制御
-		UpdateControl();
+		if (!m_isResultObject)
+		{
+			// 操作の制御
+			UpdateControl();
+		}
+		UpdateObjSelect();
 		// プレイヤーの位置を渡す
 		m_specialAttackPos = m_pos;
 	}
@@ -229,25 +233,23 @@ void Player::UpdateControl()
 	float speed = 25.0f/2.0f;
 
 	isPress = false;
-	if (!m_isResultObject)
+
+	// 設置場を指定
+	if (Pad::isPress(PAD_INPUT_UP))
 	{
-		// 設置場を指定
-		if (Pad::isPress(PAD_INPUT_UP))
-		{
-			isUp = true;
-		}
-		if (Pad::isPress(PAD_INPUT_DOWN))
-		{
-			isDown = true;
-		}
-		if (Pad::isPress(PAD_INPUT_LEFT))
-		{
-			isLeft = true;
-		}
-		if (Pad::isPress(PAD_INPUT_RIGHT))
-		{
-			isRight = true;
-		}
+		isUp = true;
+	}
+	if (Pad::isPress(PAD_INPUT_DOWN))
+	{
+		isDown = true;
+	}
+	if (Pad::isPress(PAD_INPUT_LEFT))
+	{
+		isLeft = true;
+	}
+	if (Pad::isPress(PAD_INPUT_RIGHT))
+	{
+		isRight = true;
 	}
 
 	// 右上
@@ -429,10 +431,19 @@ void Player::UpdateControl()
 		m_pos.x = (m_checkMapChipNo.x * 50.0f);
 		m_pos.z = (m_checkMapChipNo.z * 50.0f);
 	}
+}
 
+void Player::UpdateObjSelect()
+{
 	// 設置用変数初期化
-	m_isSetObject    = false;
+	m_isSetObject = false;
 	static bool isBreak = false;
+
+	if (!m_isResultObject &&
+		m_selectObstructData.no != ObstructSelectNo::SELECT_RESULT)
+	{
+		m_selectObstructData.no = ObstructSelectNo::EMPTY_RESULT;
+	}
 
 	if (Pad::isTrigger(PAD_INPUT_1) &&
 		!m_isResultObject)
@@ -453,6 +464,7 @@ void Player::UpdateControl()
 				}
 				else
 				{
+					m_selectObstructData.no = ObstructSelectNo::SELECT_RESULT;
 					isBreak = false;
 				}
 			}
@@ -461,14 +473,10 @@ void Player::UpdateControl()
 	}
 
 	static bool isSelect1 = false;
-	if (!m_isResultObject)
-	{
-		m_selectObstructData.no = ObstructSelectNo::EMPTY_RESULT;
-	}
-
+	
 	// 設置オブジェクトの選択
 	if (isSelect1 && m_objectCostNum > kSetCost)
-	{	
+	{
 		if (Pad::isPress(PAD_INPUT_4))
 		{
 			m_selectObstructData.no = ObstructSelectNo::HRAVY_PRESS;
@@ -523,11 +531,11 @@ void Player::UpdateControl()
 
 	// なにをするか
 	if (m_isResultObject && !isSelect1)
-	{	
+	{
 		// 破壊
-		if (Pad::isPress(PAD_INPUT_1))
+		if (Pad::isRelase(PAD_INPUT_1))
 		{
-			m_selectObstructData.no = ObstructSelectNo::ERASE_PRESS;
+		//	m_selectObstructData.no = ObstructSelectNo::ERASE_RESULT;
 		}
 
 		if (!isBreak)
@@ -545,9 +553,9 @@ void Player::UpdateControl()
 		}
 
 		// 強化
-		if (Pad::isPress(PAD_INPUT_4))
+		if (Pad::isRelase(PAD_INPUT_4))
 		{
-			m_selectObstructData.no = ObstructSelectNo::POWER_UP_PRESS;
+			m_selectObstructData.no = ObstructSelectNo::POWER_UP_RESULT;
 		}
 	}
 
@@ -555,8 +563,8 @@ void Player::UpdateControl()
 	if (Pad::isTrigger(PAD_INPUT_3))
 	{
 		m_selectObstructData.no = ObstructSelectNo::EMPTY_RESULT;
-		m_isResultObject = false;	
-		isSelect1 = false;	
+		m_isResultObject = false;
+		isSelect1 = false;
 	}
 }
 

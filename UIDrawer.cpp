@@ -34,7 +34,13 @@ namespace
 	
 	// 強化
 	const VECTOR kPwoerUpPos = VGet(10.0f, -10.0f, 0.0f);
-	const VECTOR kPwoerUpStopPos = VGet(30.0f, -100.0f, 0.0f);
+	const VECTOR kPwoerUpStopPos = VGet(20.0f, -100.0f, 0.0f);
+	// 設置
+	const VECTOR kSetObjPos = VGet(10.0f, -5.0f, 0.0f);
+	const VECTOR kSetObjStopPos = VGet(40.0f, -35.0f, 0.0f);
+	// 破壊
+	const VECTOR kDeleteObjPos = VGet(10.0f, 10.0f, 0.0f);
+	const VECTOR kDeleteObjStopPos = VGet(20.0f, 30.0f, 0.0f);
 
 	VECTOR kStopPos[static_cast<int>(SelectData::MAX)];
 }
@@ -59,17 +65,13 @@ UIDrawer::~UIDrawer()
 
 void UIDrawer::Init()
 {
-
-	for (int i = 0; i < 5; i++)
-	{
-		m_selectPressPos[i].x = 10;
-		m_selectPressPos[i].y = 10;
-		m_selectPressPos[i].z = 0;
-	}
-
 	for (int i = 0; i < static_cast<int>(SelectData::MAX); i++)
 	{
 		m_selectPos[i] = VGet(0,0,0);
+
+		m_selectPressPos[i].x = 10;
+		m_selectPressPos[i].y = 10;
+		m_selectPressPos[i].z = 0;
 	}
 
 	// 画像をロード
@@ -87,8 +89,19 @@ void UIDrawer::Init()
 	m_hSelectObjectState[static_cast<int>(SelectData::OBJ_SET) ] = LoadGraph(kFileNameSelectCreate);
 	m_hSelectObjectState[static_cast<int>(SelectData::POWER_UP)] = LoadGraph(kFileNameSelectPowerUp);
 	m_hSelectObjectState[static_cast<int>(SelectData::OBJ_END) ] = LoadGraph(kFileNameSelectDelete);
+
+	m_hSelectObjectState[static_cast<int>(SelectData::SHOT_DAMAGE)] = LoadGraph(kFileNameSelectPowerUp);
+	m_hSelectObjectState[static_cast<int>(SelectData::SHOT_SPEED)] = LoadGraph(kFileNameSelectDelete);
+
 	m_hSelectObjectState[static_cast<int>(SelectData::HRAVY)   ] = LoadGraph(kFileNameSelectObstructHevy);
-	m_hSelectObjectState[static_cast<int>(SelectData::NORMAL)  ] = LoadGraph(kFileNameSelectObstructNormal);
+	m_hSelectObjectState[static_cast<int>(SelectData::NORMAL)] = LoadGraph(kFileNameSelectObstructNormal);
+	m_hSelectObjectState[static_cast<int>(SelectData::MISSILE)] = LoadGraph(kFileNameSelectObstructNormal);
+
+	for (auto& selectNo : m_isSelectNo)
+	{
+		selectNo = false;
+	}
+	
 
 	GetGraphSize(m_hBgHp, &m_hpBarX, &m_hpBarY);
 }
@@ -103,35 +116,206 @@ void UIDrawer::Update()
 	select[0] = ObstructSelectNo::OBSTRUCT_PRESS;
 	select[1] = ObstructSelectNo::POWER_UP_PRESS;
 	select[2] = ObstructSelectNo::ERASE_PRESS;
+
+
+
 	select[3] = ObstructSelectNo::HRAVY_PRESS;
 	select[4] = ObstructSelectNo::NORMAL_PRESS;
 
-	// 選択画面を操作している場合
-	for (int i = 0; i < static_cast<int>(SelectData::MAX); i++)
-	{
-		if(m_obstructData.no == select[i])
-		{
-			if (static_cast<int>(m_playerPos.x) + static_cast<int>(kPwoerUpStopPos.x) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::POWER_UP)].x))
-			{
-				m_selectPos[static_cast<int>(SelectData::POWER_UP)].x += kPwoerUpPos.x;
-			}
 
-			if (static_cast<int>(m_playerPos.y) + static_cast<int>(kPwoerUpStopPos.y) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::POWER_UP)].y))
-			{
-				m_selectPos[static_cast<int>(SelectData::POWER_UP)].y += kPwoerUpPos.y;
-				printfDx("X++\n");
-			}
-			else
-			{
-				clsDx();
-			}
-		}
-	}
+	//  POWER_UP,
+	//	OBJ_SET,
+	//	OBJ_END,
 
+	//	SHOT_SPEED,
+	//	SHOT_DAMAGE,
+
+	//	HRAVY,
+	//	NORMAL,
+	//	MISSILE,
+
+	//	OBJ_DELETE,
+	printfDx("m_obstructData = %d\n", m_obstructData.no);
 	// オブジェクト選択していない場合
 	if (m_obstructData.no == ObstructSelectNo::EMPTY_RESULT)
 	{
 		m_selectPos[static_cast<int>(SelectData::POWER_UP)] = m_playerPos;
+		m_selectPos[static_cast<int>(SelectData::OBJ_SET)] = m_playerPos;
+		m_selectPos[static_cast<int>(SelectData::OBJ_END)] = m_playerPos;
+
+		m_selectPos[static_cast<int>(SelectData::SHOT_DAMAGE)] = m_playerPos;
+		m_selectPos[static_cast<int>(SelectData::SHOT_SPEED)] = m_playerPos;
+
+		m_selectPos[static_cast<int>(SelectData::HRAVY)] = m_playerPos;
+		m_selectPos[static_cast<int>(SelectData::NORMAL)] = m_playerPos;
+		m_selectPos[static_cast<int>(SelectData::MISSILE)] = m_playerPos;
+	}
+
+	// 選択
+	if (m_obstructData.no == ObstructSelectNo::SELECT_RESULT)
+	{
+		m_isSelectNo[static_cast<int>(SelectData::POWER_UP)] = true;
+		m_isSelectNo[static_cast<int>(SelectData::OBJ_SET)] = true;
+		m_isSelectNo[static_cast<int>(SelectData::OBJ_END)] = true;
+		// パワーアップの場合
+		if (static_cast<int>(m_playerPos.x) + static_cast<int>(kPwoerUpStopPos.x) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::POWER_UP)].x))
+		{
+			m_selectPos[static_cast<int>(SelectData::POWER_UP)].x += kPwoerUpPos.x;
+		}
+		if (static_cast<int>(m_playerPos.y) + static_cast<int>(kPwoerUpStopPos.y) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::POWER_UP)].y))
+		{
+			m_selectPos[static_cast<int>(SelectData::POWER_UP)].y += kPwoerUpPos.y;
+		}
+
+		// オブジェクト設置の場合
+		if (static_cast<int>(m_playerPos.x) + static_cast<int>(kSetObjStopPos.x) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::OBJ_SET)].x))
+		{
+			m_selectPos[static_cast<int>(SelectData::OBJ_SET)].x += kSetObjPos.x;
+		}
+		if (static_cast<int>(m_playerPos.y) + static_cast<int>(kSetObjStopPos.y) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::OBJ_SET)].y))
+		{
+			m_selectPos[static_cast<int>(SelectData::OBJ_SET)].y += kSetObjPos.y;
+		}
+
+		// オブジェクト破壊
+		if (static_cast<int>(m_playerPos.x) + static_cast<int>(kDeleteObjStopPos.x) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::OBJ_END)].x))
+		{
+			m_selectPos[static_cast<int>(SelectData::OBJ_END)].x += kDeleteObjPos.x;
+		}
+		if (static_cast<int>(m_playerPos.y) + static_cast<int>(kDeleteObjStopPos.y) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::OBJ_END)].y))
+		{
+			m_selectPos[static_cast<int>(SelectData::OBJ_END)].y += kDeleteObjPos.y;
+		}
+	}
+	else
+	{
+		m_isSelectNo[static_cast<int>(SelectData::POWER_UP)] = false;
+		m_isSelectNo[static_cast<int>(SelectData::OBJ_SET)] = false;
+		m_isSelectNo[static_cast<int>(SelectData::OBJ_END)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::SHOT_DAMAGE)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::SHOT_SPEED)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::HRAVY)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::NORMAL)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::MISSILE)] = false;
+	}
+
+	// オブジェクト強化選択
+	if (m_obstructData.no == ObstructSelectNo::POWER_UP_RESULT)
+	{
+		m_isSelectNo[static_cast<int>(SelectData::SHOT_DAMAGE)] = true;
+		m_isSelectNo[static_cast<int>(SelectData::SHOT_SPEED)] = true;
+
+		// ダメージ強化
+		if (static_cast<int>(m_playerPos.x) + static_cast<int>(kPwoerUpStopPos.x) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::SHOT_DAMAGE)].x))
+		{
+			m_selectPos[static_cast<int>(SelectData::SHOT_DAMAGE)].x += kPwoerUpPos.x;
+		}
+		if (static_cast<int>(m_playerPos.y) + static_cast<int>(kPwoerUpStopPos.y) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::SHOT_DAMAGE)].y))
+		{
+			m_selectPos[static_cast<int>(SelectData::SHOT_DAMAGE)].y += kPwoerUpPos.y;
+		}
+
+		// スピード強化
+		if (static_cast<int>(m_playerPos.x) + static_cast<int>(kSetObjStopPos.x) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::SHOT_SPEED)].x))
+		{
+			m_selectPos[static_cast<int>(SelectData::SHOT_SPEED)].x += kSetObjPos.x;
+		}
+		if (static_cast<int>(m_playerPos.y) + static_cast<int>(kSetObjStopPos.y) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::SHOT_SPEED)].y))
+		{
+			m_selectPos[static_cast<int>(SelectData::SHOT_SPEED)].y += kSetObjPos.y;
+		}
+
+		//// オブジェクト強化
+		//if (static_cast<int>(m_playerPos.x) + static_cast<int>(kSetObjStopPos.x) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::SHOT_SPEED)].x))
+		//{
+		//	m_selectPos[static_cast<int>(SelectData::SHOT_SPEED)].x += kSetObjPos.x;
+		//}
+		//if (static_cast<int>(m_playerPos.y) + static_cast<int>(kSetObjStopPos.y) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::SHOT_SPEED)].y))
+		//{
+		//	m_selectPos[static_cast<int>(SelectData::SHOT_SPEED)].y += kSetObjPos.y;
+		//}
+	}
+	else
+	{
+		//m_isSelectNo[static_cast<int>(SelectData::POWER_UP)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::OBJ_SET)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::OBJ_END)] = false;
+		m_isSelectNo[static_cast<int>(SelectData::SHOT_DAMAGE)] = false;
+		m_isSelectNo[static_cast<int>(SelectData::SHOT_SPEED)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::HRAVY)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::NORMAL)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::MISSILE)] = false;
+	}
+	// オブジェクト設置
+	if (m_obstructData.no == ObstructSelectNo::OBSTRUCT_RESULT)
+	{
+		m_isSelectNo[static_cast<int>(SelectData::HRAVY)] = true;
+		m_isSelectNo[static_cast<int>(SelectData::NORMAL)] = true;
+		m_isSelectNo[static_cast<int>(SelectData::MISSILE)] = true;
+		// クロスボウ
+		if (static_cast<int>(m_playerPos.x) + static_cast<int>(kPwoerUpStopPos.x) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::HRAVY)].x))
+		{
+			m_selectPos[static_cast<int>(SelectData::HRAVY)].x += kPwoerUpPos.x;
+		}
+		else
+		{
+			m_selectPos[static_cast<int>(SelectData::HRAVY)].x = static_cast<int>(m_playerPos.x) + static_cast<int>(kPwoerUpStopPos.x);
+		}
+		if (static_cast<int>(m_playerPos.y) + static_cast<int>(kPwoerUpStopPos.y) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::HRAVY)].y))
+		{
+			m_selectPos[static_cast<int>(SelectData::HRAVY)].y += kPwoerUpPos.y;
+		}
+		else
+		{
+			m_selectPos[static_cast<int>(SelectData::HRAVY)].y = static_cast<int>(m_playerPos.y) + static_cast<int>(kPwoerUpStopPos.y);
+		}
+
+		// 大砲
+		if (static_cast<int>(m_playerPos.x) + static_cast<int>(kSetObjStopPos.x) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::NORMAL)].x))
+		{
+			m_selectPos[static_cast<int>(SelectData::NORMAL)].x += kSetObjPos.x;
+		}
+		else
+		{
+			m_selectPos[static_cast<int>(SelectData::NORMAL)].x = static_cast<int>(m_playerPos.x) + static_cast<int>(kSetObjStopPos.x);
+		}
+		if (static_cast<int>(m_playerPos.y) + static_cast<int>(kSetObjStopPos.y) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::NORMAL)].y))
+		{
+			m_selectPos[static_cast<int>(SelectData::NORMAL)].y += kSetObjPos.y;
+		}
+		else
+		{
+			m_selectPos[static_cast<int>(SelectData::NORMAL)].y = static_cast<int>(m_playerPos.y) + static_cast<int>(kSetObjStopPos.y);
+		}
+
+		// ミサイル
+		if (static_cast<int>(m_playerPos.x) + static_cast<int>(kDeleteObjStopPos.x) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::MISSILE)].x))
+		{
+			m_selectPos[static_cast<int>(SelectData::MISSILE)].x += kDeleteObjPos.x;
+		}
+		else
+		{
+			m_selectPos[static_cast<int>(SelectData::MISSILE)].x = static_cast<int>(m_playerPos.x) + static_cast<int>(kDeleteObjStopPos.x);
+		}
+		if (static_cast<int>(m_playerPos.y) + static_cast<int>(kDeleteObjStopPos.y) != static_cast<int>(m_selectPos[static_cast<int>(SelectData::MISSILE)].y))
+		{
+			m_selectPos[static_cast<int>(SelectData::MISSILE)].y += kDeleteObjPos.y;
+		}
+		else
+		{
+			m_selectPos[static_cast<int>(SelectData::MISSILE)].y = static_cast<int>(m_playerPos.y) + static_cast<int>(kDeleteObjStopPos.y);
+		}
+	}
+	else
+	{
+		//m_isSelectNo[static_cast<int>(SelectData::POWER_UP)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::OBJ_SET)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::OBJ_END)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::SHOT_DAMAGE)] = false;
+		//m_isSelectNo[static_cast<int>(SelectData::SHOT_SPEED)] = false;
+		m_isSelectNo[static_cast<int>(SelectData::HRAVY)] = false;
+		m_isSelectNo[static_cast<int>(SelectData::NORMAL)] = false;
+		m_isSelectNo[static_cast<int>(SelectData::MISSILE)] = false;
 	}
 }
 
@@ -169,14 +353,23 @@ void UIDrawer::Draw()
 	// オブジェクト選択
 	for (int i = 0; i < static_cast<int>(SelectData::MAX); i++)
 	{
-		if (true/*m_isSelectNo[i]*/)
+		if (m_isSelectNo[i])
 		{
 			// 背景
-			DrawGraph(m_selectPos[i].x, m_selectPos[i].y, m_hSelectObjectBg, true);
+			DrawGraph(
+				m_selectPos[i].x,
+				m_selectPos[i].y,
+				m_hSelectObjectBg, true);
 			// 文字の背景
-			DrawGraph(m_selectPos[i].x - m_selectPressPos[i].x, m_selectPos[i].y - m_selectPressPos[i].y, m_hSelectObject, true);
+			DrawGraph(
+				m_selectPos[i].x - m_selectPressPos[i].x,
+				m_selectPos[i].y - m_selectPressPos[i].y, 
+				m_hSelectObject, true);
 			// 文字
-			DrawGraph(m_selectPos[i].x - m_selectPressPos[i].x + 10, m_selectPos[i].y - m_selectPressPos[i].y + 10, m_hSelectObjectState[i], true);
+			DrawGraph(
+				m_selectPos[i].x - m_selectPressPos[i].x + 10,
+				m_selectPos[i].y - m_selectPressPos[i].y + 10,
+				m_hSelectObjectState[i], true);
 		}
 	}
 

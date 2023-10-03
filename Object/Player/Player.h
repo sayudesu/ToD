@@ -48,6 +48,7 @@ public:
 private:
 	// ‘€ì‚ğ§Œä
 	void UpdateControl();
+	void UpdateObjSelect();
 	// “ÁêUŒ‚—p
 	void UpdateSpecialAttack();
 	// ”ÍˆÍŠOˆ—

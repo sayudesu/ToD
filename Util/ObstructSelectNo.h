@@ -4,6 +4,9 @@ enum ObstructSelectNo
 	// 何も選択していない状態
 	EMPTY_PRESS,
 	EMPTY_RESULT,
+	// 選択画面を開いた状態
+	SELECT_PRESS,
+	SELECT_RESULT,
 	// オブジェクトを設置する状態
 	OBSTRUCT_PRESS,
 	OBSTRUCT_RESULT,
