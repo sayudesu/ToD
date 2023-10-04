@@ -473,6 +473,7 @@ void Player::UpdateObjSelect()
 	}
 
 	static bool isSelect1 = false;
+	static int  selectDeleteFrameCount = 0;
 	
 	// 設置オブジェクトの選択
 	if (isSelect1 && m_objectCostNum > kSetCost)
@@ -533,9 +534,13 @@ void Player::UpdateObjSelect()
 	if (m_isResultObject && !isSelect1)
 	{
 		// 破壊
+		if (Pad::isPress(PAD_INPUT_1))
+		{
+			m_selectObstructData.no = ObstructSelectNo::ERASE_PRESS;
+		}
 		if (Pad::isRelase(PAD_INPUT_1))
 		{
-		//	m_selectObstructData.no = ObstructSelectNo::ERASE_RESULT;
+			m_selectObstructData.no = ObstructSelectNo::ERASE_RESULT;
 		}
 
 		if (!isBreak)

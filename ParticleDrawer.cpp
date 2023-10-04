@@ -4,7 +4,8 @@
 namespace
 {
 	// ‰æ‘œƒpƒX
-	const char* kFileNameMeat = "Data/Image/UI_Meat.png";
+	//const char* kFileNameMeat = "Data/Image/UI_Meat.png";
+	const char* kFileNameMeat = "Data/Image/icon_jewel.png";
 	// ‹z‚¢‚İ‘¬“x
 	constexpr float kSpeed = 5.0f;
 }

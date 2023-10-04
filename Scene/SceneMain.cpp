@@ -30,7 +30,6 @@ SceneMain::SceneMain():
 	m_catIn    (nullptr),
 	m_pUI      (nullptr)
 {	
-	// インスタンスの生成
 	m_pCamera   = new Camera();
 	m_pEnemy    = new EnemyManager();
 	m_pObstacle = new ObstacleManager();
@@ -48,11 +47,6 @@ SceneMain::~SceneMain()
 
 void SceneMain::Init()
 {
-	//SaveDataFunctions::Load();
-	// BGM再生
-	SoundFunctions::StartBgm(SoundFunctions::SoundIdBattle);
-	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, SaveDataFunctions::GetSoundData().Bgm);
-
 	m_pCamera  ->Init();
 	m_pObstacle->Init();
 	m_pMap     ->Init();
@@ -60,6 +54,10 @@ void SceneMain::Init()
 	m_catIn    ->Init();
 	m_pUI      ->Init();
 
+	//SaveDataFunctions::Load();
+	// BGM再生
+	SoundFunctions::StartBgm(SoundFunctions::SoundIdBattle);
+	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, SaveDataFunctions::GetSoundData().Bgm);
 	// マップチップをエネミーに渡す
 	// コードの処理の流れのせいでこうなっています治します
 	m_pEnemy->SetMapChip(m_pMap->GetChip());
@@ -70,6 +68,7 @@ void SceneMain::End()
 {
 	// BGM停止
 	SoundFunctions::StopBgm(SoundFunctions::SoundIdBattle);
+
 	m_pCamera  ->End();
 	m_pEnemy   ->End();
 	m_pObstacle->End();
@@ -96,7 +95,6 @@ void SceneMain::End()
 	delete m_pUI;
 	m_pUI = nullptr;
 
-
 	for (int i = 0; i < m_pParticle.size(); i++)
 	{
 		m_pParticle[i]->End();
@@ -117,7 +115,7 @@ SceneBase* SceneMain::Update()
 	{
 		if (m_pEnemy->GetCollData()[enemyNum].isHit)
 		{
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 100; i++)
 			{
 				m_pParticle.push_back(new ParticleDrawer(m_pEnemy->GetCollData()[enemyNum].pos));
 				m_pParticle.back()->Init(i);
