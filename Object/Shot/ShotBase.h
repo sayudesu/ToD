@@ -27,6 +27,7 @@ public:
 	virtual void     SetTargetPos(VECTOR pos) { m_targetPos = pos; }
 	virtual bool     IsEnabled()const;
 	virtual void	 SetEnabled(bool isEnabled);
+
 protected:
 	// ƒƒCƒ“ˆ—
 	// ˆÚ“®‚ÌŒvZ‚ğ‚µ‚Ä‚¢‚Ü‚·

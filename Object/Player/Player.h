@@ -1,10 +1,11 @@
 #pragma once
 #include <DxLib.h>
+#include <vector>
 #include "../../Util/Vec2.h"
 #include "../../Util/Tracking.h"
-#include <vector>
 #include "../../Util/ObstructSelectNo.h"
 #include "../../MapDatas.h"
+#include "../../Util/ObjectData.h"
 
 class ObjectMenuDrawer;
 class NormalShot;
@@ -44,7 +45,11 @@ public:
 	// 現在のオブジェクトコストを渡す
 	int GetObjectCostNum();
 
+	// 選択中の状態を渡す
 	ObstructSelect GetObstructData();
+
+	ObjectData GetCollShotDatas();
+
 private:
 	// 操作を制御
 	void UpdateControl();
@@ -57,6 +62,9 @@ private:
 	void UpdateShot();
 	// オブジェクトのコスト関連
 	void ObjectCost();
+
+	// オブジェクト強化
+	void ObjectUp();
 private:
 	// プレイヤーの位置
 	VECTOR m_pos;
@@ -95,5 +103,9 @@ private:
 	ObstructSelect m_selectObstructData;
 
 	MapDatas m_mapData;
+
+	ObjectData m_collShotData;
+
+	bool m_isSelectPowerUp;
 };
 

@@ -6,6 +6,7 @@
 #include "../../Util/SoundFunctions.h"
 #include "ObjectMenuDrawer.h"
 #include "../Shot/NormalShot.h"
+#include "../../Util/ObstructSelectNo.h"
 
 namespace
 {
@@ -113,6 +114,9 @@ void Player::Update()
 	}
 
 	m_pObjMenu->Update();
+
+	// 強化
+	ObjectUp();
 }
 
 // 描画
@@ -142,6 +146,8 @@ void Player::Draw()
 	if (m_countShotNo == 0)
 	{
 		m_pShot->Draw();
+		DrawSphere3D(m_pShot->GetCollData().pos,m_pShot->GetCollData().radius, 8, 0xffffff, 0xffffff, false);
+		
 	}
 
 
@@ -473,6 +479,8 @@ void Player::UpdateObjSelect()
 	}
 
 	static bool isSelect1 = false;
+	static bool isSelectUp = false;
+
 	static int  selectDeleteFrameCount = 0;
 	
 	// 設置オブジェクトの選択
@@ -530,17 +538,31 @@ void Player::UpdateObjSelect()
 		}
 	}
 
+	if (isSelectUp)
+	{
+		if (Pad::isTrigger(PAD_INPUT_2))
+		{
+			m_selectObstructData.no = ObstructSelectNo::SPEED_PRESS;
+			isSelectUp = false;
+		}
+		if (Pad::isTrigger(PAD_INPUT_4))
+		{
+			m_selectObstructData.no = ObstructSelectNo::DAMAGE_PRESS;
+			isSelectUp = false;
+		}
+	}
+
 	// なにをするか
 	if (m_isResultObject && !isSelect1)
 	{
 		// 破壊
 		if (Pad::isPress(PAD_INPUT_1))
 		{
-			m_selectObstructData.no = ObstructSelectNo::ERASE_PRESS;
+		//	m_selectObstructData.no = ObstructSelectNo::ERASE_PRESS;
 		}
 		if (Pad::isRelase(PAD_INPUT_1))
 		{
-			m_selectObstructData.no = ObstructSelectNo::ERASE_RESULT;
+		//	m_selectObstructData.no = ObstructSelectNo::ERASE_RESULT;
 		}
 
 		if (!isBreak)
@@ -561,6 +583,8 @@ void Player::UpdateObjSelect()
 		if (Pad::isRelase(PAD_INPUT_4))
 		{
 			m_selectObstructData.no = ObstructSelectNo::POWER_UP_RESULT;
+			m_isSelectPowerUp = true;
+			isSelectUp = true;
 		}
 	}
 
@@ -640,17 +664,21 @@ void Player::UpdateShot()
 	if (m_isShot)
 	{
 
-		int handle = MV1LoadModel(kFilePathShot);
+		const int handle = MV1LoadModel(kFilePathShot);
+
+		const int damage = 1000;
+
 		m_countShotNo++;
 		m_isTrackingShot = true;
 		// インスタンス生成
-		m_pShot = new NormalShot(VGet(m_pos.x, m_pos.y + 2000.0f, m_pos.z),0, m_countShotNo);
-		m_pShot->Init(handle,0,m_targetPos, VGet(10, 10, 10), VGet(0.0f, 90.0f, 0.0f), 16.0f * 5, 10000, 30.0f, true);
+		m_pShot = new NormalShot(VGet(m_pos.x, m_pos.y + 10000.0f, m_pos.z),0, m_countShotNo);
+		m_pShot->Init(handle,0,m_targetPos, VGet(10, 10, 10), VGet(0.0f, 90.0f, 0.0f), 16.0f * 7, damage, 30.0f, true);
 	}
 
 	if (m_countShotNo == 0)
 	{
 		m_pShot->Update();
+		m_collShotData = m_pShot->GetCollData();
 
 		if (false)
 		{
@@ -661,6 +689,8 @@ void Player::UpdateShot()
 				m_isTrackingShot = false;
 				m_countShotNo--;
 				m_pShot->End();
+				delete m_pShot;
+				m_pShot = nullptr;
 			}
 		}
 
@@ -677,7 +707,28 @@ void Player::ObjectCost()
 	m_objectCostNum += kCostPuls;
 }
 
+void Player::ObjectUp()
+{
+	if (m_selectObstructData.no == ObstructSelectNo::POWER_UP_RESULT)
+	{
+		printfDx("強化中\n");
+		if (m_selectObstructData.no == ObstructSelectNo::SPEED_RESULT)
+		{
+			printfDx("スピード強化\n");
+		}
+		if (m_selectObstructData.no == ObstructSelectNo::DAMAGE_RESULT)
+		{
+			printfDx("攻撃力強化\n");
+		}
+	}
+}
+
 ObstructSelect Player::GetObstructData()
 {
 	return m_selectObstructData;
+}
+
+ObjectData Player::GetCollShotDatas()
+{
+	return m_collShotData;
 }

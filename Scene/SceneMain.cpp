@@ -115,7 +115,7 @@ SceneBase* SceneMain::Update()
 	{
 		if (m_pEnemy->GetCollData()[enemyNum].isHit)
 		{
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < 10; i++)
 			{
 				m_pParticle.push_back(new ParticleDrawer(m_pEnemy->GetCollData()[enemyNum].pos));
 				m_pParticle.back()->Init(i);
@@ -133,8 +133,6 @@ SceneBase* SceneMain::Update()
 			m_pParticle[i] = nullptr;
 			// 要素の削除
 			m_pParticle.erase(m_pParticle.begin() + i);
-			// めっちゃメモリサイズの解放
-			m_pParticle.shrink_to_fit();
 		}
 	}
 	for (int i = 0; i < m_pBlood.size(); i++)
@@ -148,8 +146,6 @@ SceneBase* SceneMain::Update()
 			m_pBlood[i] = nullptr;
 			// 要素の削除
 			m_pBlood.erase(m_pBlood.begin() + i);
-			//// メモリサイズの解放
-			m_pBlood.shrink_to_fit();
 		}
 	}
 
@@ -371,6 +367,15 @@ void SceneMain::CheckColl()
 						m_pBlood.push_back(new BloodDrawer(m_pEnemy->GetCollData()[enemyNum].pos));
 						m_pBlood.back()->Init(i);
 					}
+				}
+
+				if (m_pColl->UpdateCheck(
+					m_pEnemy->GetCollData()[enemyNum].pos,
+					m_pPlayer->GetCollShotDatas().pos,
+					m_pEnemy->GetCollData()[enemyNum].radius,
+					m_pPlayer->GetCollShotDatas().radius))
+				{
+					printfDx("aaa");
 				}
 			}
 		}

@@ -4,15 +4,15 @@
 namespace
 {
 	// 画像パス
-	//const char* kFileNameMeat = "Data/Image/UI_Meat.png";
-	const char* kFileNameMeat = "Data/Image/icon_jewel.png";
+	const char* kFileNameMeat = "Data/Image/UI_Meat.png";
+	//const char* kFileNameMeat = "Data/Image/icon_jewel.png";
 	// 吸い込み速度
 	constexpr float kSpeed = 5.0f;
 }
 
 ParticleDrawer::ParticleDrawer(VECTOR pos)
 {
-	m_posMain = pos;
+	m_pos = pos;
 
 	m_pFunc = &ParticleDrawer::First;
 
@@ -30,12 +30,11 @@ ParticleDrawer::~ParticleDrawer()
 void ParticleDrawer::Init(int no)
 {
 	// 3D座標から2D座標に変換
-	m_posMain = ConvWorldPosToScreenPos(m_posMain);
+	// パーティクルの初期位置
+	m_pos = ConvWorldPosToScreenPos(m_pos);
 
 	// 画像の読み込み
 	m_hGraph = LoadGraph(kFileNameMeat);
-	// パーティクルの初期位置
-	m_pos = m_posMain;
 
 	// 移動量
 	if (no % 2 == 0)
@@ -113,7 +112,7 @@ void ParticleDrawer::Jet()
 	const VECTOR vec = VSub(VGet(m_pos.x, m_pos.y, 0), VGet(1500, Game::kScreenHeight - 110, 0));
 	const float  del = VSize(vec);
 
-	if (del < 15.0f + 15.0f)
+	if (del < 20.0f + 20.0f)
 	{
 		m_isErase = true;
 	}

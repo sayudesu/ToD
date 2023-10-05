@@ -20,8 +20,6 @@ private:
 private:
 	int m_hGraph;
 	VECTOR m_pos;
-	int m_posTarget;
-	VECTOR m_posMain;
 	VECTOR m_vec;
 
 	int m_count;

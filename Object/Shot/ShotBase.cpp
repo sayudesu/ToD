@@ -53,7 +53,6 @@ void ShotBase::Update()
 void ShotBase::Draw()
 {
 	MV1DrawModel(m_hShot);
-//	DrawSphere3D(m_pos, m_collData.radius, 4.0f, 0xffff00, 0xffff00, false);
 }
 
 // オブジェクトを消すかどうか

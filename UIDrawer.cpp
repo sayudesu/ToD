@@ -145,7 +145,7 @@ void UIDrawer::Update()
 		m_selectPos[static_cast<int>(SelectData::NORMAL)]  = m_playerPos;
 		m_selectPos[static_cast<int>(SelectData::MISSILE)] = m_playerPos;
 
-		m_selectPos[static_cast<int>(SelectData::OBJ_DELETE)] = m_playerPos;
+	//	m_selectPos[static_cast<int>(SelectData::OBJ_DELETE)] = m_playerPos;
 	}
 
 	// ‘I‘ð

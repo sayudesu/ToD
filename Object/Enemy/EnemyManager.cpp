@@ -144,7 +144,6 @@ VECTOR EnemyManager::SetNormalPos(int num)
 {
 	std::list<EnemyBase*>::iterator it = m_pEnemy.begin();
 	std::advance(it, num);
-
 	return (*it)->GetPos();
 }
 
@@ -211,6 +210,7 @@ void EnemyManager::EraseObject()
 		{
 			return enemy->GetErase();
 		});
+
 	// ƒfƒŠ[ƒgˆ—
 	for (auto& enemy : m_pEnemy)
 	{

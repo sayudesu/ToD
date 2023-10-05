@@ -1,5 +1,8 @@
 #include "SceneGameClear.h"
 #include "../Util/game.h"
+#include "../Util/Pad.h"
+#include "../Scene/SceneTitle.h"
+
 
 #include <cassert>
 
@@ -36,12 +39,21 @@ void SceneGameClear::End()
 
 SceneBase* SceneGameClear::Update()
 {
-
+	// シーンを切り替えます
+	if (Pad::isTrigger(PAD_INPUT_8))
+	{
+		m_isChangeScene = true;
+		m_isSliderOpen = true;
+	}
+	if (m_isChangeScene)
+	{
+		if (SceneBase::UpdateSliderClose())
+		{
+			return new SceneTitle;
+		}
+	}
 	// スライドを開ける
 	SceneBase::UpdateSlider(m_isSliderOpen);
-
-	
-
 	return this;
 }
 
