@@ -6,7 +6,7 @@
 class ObstacleHomingMissile : public ObstacleBase
 {
 public:
-	ObstacleHomingMissile(VECTOR pos,int no);
+	ObstacleHomingMissile(VECTOR pos,int no, int mapCihpX, int mapCihpY);
 	virtual ~ObstacleHomingMissile() {};
 	void Init()override;
 };

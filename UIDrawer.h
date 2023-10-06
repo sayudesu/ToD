@@ -42,9 +42,6 @@ private:
 	// 肉の画像
 	int m_hCatFood;
 	int m_hMeat;
-	// 必殺技ボタンの説明
-	int m_hTopicSpecialAttack;
-	int m_hBarTopicSpecialAttack;
 	// HPバーの背景
 	int m_hBgHp;
 	// HPバー

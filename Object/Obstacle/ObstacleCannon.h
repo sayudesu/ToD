@@ -6,7 +6,7 @@
 class ObstacleCannon : public ObstacleBase
 {
 public:
-	ObstacleCannon(VECTOR pos,int no);
+	ObstacleCannon(VECTOR pos,int no, int mapCihpX, int mapCihpY);
 	virtual ~ObstacleCannon() {};
 	void Init()override;
 };

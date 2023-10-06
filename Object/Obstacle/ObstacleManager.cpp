@@ -29,21 +29,21 @@ void ObstacleManager::End()
 }
 
 // 選択したオブジェクトを生成
-void ObstacleManager::Create(VECTOR pos,int obsNo,int no)
+void ObstacleManager::Create(VECTOR pos,int obsNo,int no,int mapCihpX, int mapCihpY)
 {
 	if (obsNo == ObstructSelectNo::NORMAL_RESULT)
 	{
-		m_pObstacle.push_back(new ObstacleCannon(pos, no));
+		m_pObstacle.push_back(new ObstacleCannon(pos, no, mapCihpX, mapCihpY));
 		m_pObstacle.back()->Init();
 	}
 	if (obsNo == ObstructSelectNo::HRAVY_RESULT)
 	{
-		m_pObstacle.push_back(new ObstacleCrossbow(pos, no));
+		m_pObstacle.push_back(new ObstacleCrossbow(pos, no, mapCihpX, mapCihpY));
 		m_pObstacle.back()->Init();
 	}
 	if (obsNo == ObstructSelectNo::MISSILE_RESULT)
 	{
-		m_pObstacle.push_back(new ObstacleHomingMissile(pos, no));
+		m_pObstacle.push_back(new ObstacleHomingMissile(pos, no, mapCihpX, mapCihpY));
 		m_pObstacle.back()->Init();
 	}
 
@@ -112,4 +112,12 @@ void ObstacleManager::SetEraseShotData(std::vector<ObjectData> eraseShotData)
 void ObstacleManager::SetShotErase(int objNum,int shotNum, bool erase)
 {
 	m_pObstacle[objNum]->SetShotErase(shotNum, erase);
+}
+
+void ObstacleManager::SetPowerUpPos(ObstructSelectNo no, int mapChipX, int mapChipY)
+{
+	for (auto& obj : m_pObstacle)
+	{
+		obj->SetPowerUpPos(no,mapChipX, mapChipY);
+	}
 }

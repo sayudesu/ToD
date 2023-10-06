@@ -156,7 +156,6 @@
     <ClCompile Include="UIDrawer.cpp" />
     <ClCompile Include="Util\CutInDrawer.cpp" />
     <ClCompile Include="Object\Shot\NormalShot.cpp" />
-    <ClCompile Include="Object\Player\ObjectMenuDrawer.cpp" />
     <ClCompile Include="Save\SaveDataFunctions.cpp" />
     <ClCompile Include="Util\Collision3D.cpp" />
     <ClCompile Include="Effeck\EffekseerDrawer.cpp" />
@@ -203,7 +202,6 @@
     <ClInclude Include="Util\ObjectData.h" />
     <ClInclude Include="Util\CutInDrawer.h" />
     <ClInclude Include="Object\Shot\NormalShot.h" />
-    <ClInclude Include="Object\Player\ObjectMenuDrawer.h" />
     <ClInclude Include="Util\ObstructSelectNo.h" />
     <ClInclude Include="Util\Tracking.h" />
     <ClInclude Include="Save\SaveDataFunctions.h" />

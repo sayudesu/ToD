@@ -1,8 +1,9 @@
 #pragma once
 #include <DxLib.h>
 #include <vector>
-#include "../../Util/ObjectData.h"
 #include <list>
+#include "../../Util/ObjectData.h"
+#include "../../Util/ObstructSelectNo.h"
 
 class ShotBase;
 // 障害物クラスベース
@@ -10,7 +11,7 @@ class ObstacleBase
 {
 
 public:
-	ObstacleBase(VECTOR pos, int no);
+	ObstacleBase(VECTOR pos, int no, int mapCihpX, int mapCihpZ);
 	virtual ~ObstacleBase() {};
 
 	virtual void Init() = 0;
@@ -34,6 +35,8 @@ public:
 	virtual void SetTarGetPos(VECTOR pos);
 	// 必要のないショット番号を受け取る
 	virtual void SetShotErase(int shotNum, bool erase);
+	// 強化するオブジェクトを探す
+	virtual void SetPowerUpPos(ObstructSelectNo objNo,int mapChipX, int mapChipY);
 
 private:
 	// 誰を狙うか
@@ -88,4 +91,7 @@ protected:
 
 	bool isDead = true;
 	int no = -1;
+
+	int m_mapCihpX;
+	int m_mapCihpZ;
 };

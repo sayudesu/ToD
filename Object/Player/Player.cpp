@@ -4,8 +4,6 @@
 #include "../../Util/game.h"
 #include "../../Save/SaveDataFunctions.h"
 #include "../../Util/SoundFunctions.h"
-#include "ObjectMenuDrawer.h"
-#include "../Shot/NormalShot.h"
 #include "../../Util/ObstructSelectNo.h"
 
 namespace
@@ -28,8 +26,6 @@ namespace
 
 Player::Player() :
 	m_pos(VGet(0.0f, 0.0f, 0.0f)),
-	m_specialAttackPos(VGet(0.0f, 0.0f, 0.0f)),
-	m_isSpecialAttack(false),
 	m_isResultObject(false),
 	m_isSetObject(false),
 	m_objectCostNum(kFirstCost),
@@ -49,11 +45,6 @@ Player::~Player()
 // 初期化処理
 void Player::Init(MapDatas mapChip)
 {
-	// インスタンス生成
-	m_pObjMenu = new ObjectMenuDrawer();
-
-	m_pObjMenu->Init();
-
 	m_posHistory.push_back(VGet(0.0f, 0.0f, 0.0f));
 
 	m_mapData = mapChip;
@@ -69,40 +60,18 @@ void Player::Init(MapDatas mapChip)
 // メモリ開放処理
 void Player::End()
 {
-	m_pObjMenu->End();
-	// メモリ解放
-	delete m_pObjMenu;
-	m_pObjMenu = nullptr;
 }
 
 // 更新処理
 void Player::Update()
 {	
-	// オブジェクトメニューを開いている場合
-	if (!m_pObjMenu->IsSetMenu() && (m_pObjMenu->SelectNo() == -1))
-	{
-		if (!m_isResultObject)
-		{
-			// 操作の制御
-			UpdateControl();
-		}
-		UpdateObjSelect();
-		// プレイヤーの位置を渡す
-		m_specialAttackPos = m_pos;
-	}
-	if (m_pObjMenu->SelectNo() != -1)
-	{
-		UpdateSpecialAttack();
-		// 技を出した後
-		if (m_isSpecialAttack)
-		{
-			// 選択した番号をリセット
-			m_pObjMenu->ResetSelectNo();
-		}
-	}
-	// ショット
-	UpdateShot();
 
+	if (!m_isResultObject)
+	{
+		// 操作の制御
+		UpdateControl();
+	}
+	UpdateObjSelect();
 
 	static int count = 0;
 	count++;
@@ -112,11 +81,6 @@ void Player::Update()
 		ObjectCost();
 		count = 0;
 	}
-
-	m_pObjMenu->Update();
-
-	// 強化
-	ObjectUp();
 }
 
 // 描画
@@ -130,63 +94,6 @@ void Player::Draw()
 		0x0000ff,
 		0x0000ff,
 		true);
-
-	if (m_pObjMenu->SelectNo() == 0)
-	{
-		DrawCapsule3D(
-			m_specialAttackPos,
-			VGet(m_specialAttackPos.x, m_specialAttackPos.y, m_specialAttackPos.z),
-			100.0f,
-			8,
-			0x0000ff,
-			0x0000ff,
-			false);
-	}
-
-	if (m_countShotNo == 0)
-	{
-		m_pShot->Draw();
-		DrawSphere3D(m_pShot->GetCollData().pos,m_pShot->GetCollData().radius, 8, 0xffffff, 0xffffff, false);
-		
-	}
-
-
-}
-
-// UI専用描画
-void Player::DrawUI()
-{
-	// 特殊攻撃のメニュー
-	m_pObjMenu->Draw();
-}
-
-// ゲームの進行を止めるかどうか
-bool Player::IsGetGameStop()
-{
-	if (m_pObjMenu->SelectNo()!= -1)
-	{
-		return true;
-	}
-
-	return false;
-}
-
-// 特殊攻撃をおこなったかどうか
-bool Player::isSpecialAttack()
-{
-	return m_isSpecialAttack;
-}
-
-// 特殊攻撃の状態をリセットする
-void Player::SpecialAttackReset()
-{
-	m_isSpecialAttack = false;
-}
-
-// ショットを撃つかどうか
-void Player::IsSetShot(bool isShot)
-{
-	m_isShot = isShot;
 }
 
 // カメラクラスに渡す
@@ -538,22 +445,32 @@ void Player::UpdateObjSelect()
 		}
 	}
 
-	if (isSelectUp)
+	if (m_isSelectPowerUp)
 	{
-		if (Pad::isTrigger(PAD_INPUT_2))
+		// すでに設置しているかの確認
+		for (int i = 0; i < m_posHistory.size(); i++)
 		{
-			m_selectObstructData.no = ObstructSelectNo::SPEED_PRESS;
-			isSelectUp = false;
-		}
-		if (Pad::isTrigger(PAD_INPUT_4))
-		{
-			m_selectObstructData.no = ObstructSelectNo::DAMAGE_PRESS;
-			isSelectUp = false;
+			if (m_posHistory[i].x == m_checkMapChipNo.x &&
+				m_posHistory[i].z == m_checkMapChipNo.z)
+			{
+				if (Pad::isTrigger(PAD_INPUT_2))
+				{
+					m_selectObstructData.no = ObstructSelectNo::SPEED_RESULT;
+					m_isSelectPowerUp = false;
+					m_isResultObject = false;
+				}
+				if (Pad::isTrigger(PAD_INPUT_4))
+				{
+					m_selectObstructData.no = ObstructSelectNo::DAMAGE_RESULT;
+					m_isSelectPowerUp = false;
+					m_isResultObject = false;
+				}
+			}
 		}
 	}
 
 	// なにをするか
-	if (m_isResultObject && !isSelect1)
+	if (m_isResultObject && !isSelect1 && !m_isSelectPowerUp)
 	{
 		// 破壊
 		if (Pad::isPress(PAD_INPUT_1))
@@ -578,13 +495,11 @@ void Player::UpdateObjSelect()
 				m_selectObstructData.no = ObstructSelectNo::OBSTRUCT_RESULT;
 			}
 		}
-
 		// 強化
 		if (Pad::isRelase(PAD_INPUT_4))
 		{
 			m_selectObstructData.no = ObstructSelectNo::POWER_UP_RESULT;
 			m_isSelectPowerUp = true;
-			isSelectUp = true;
 		}
 	}
 
@@ -593,35 +508,8 @@ void Player::UpdateObjSelect()
 	{
 		m_selectObstructData.no = ObstructSelectNo::EMPTY_RESULT;
 		m_isResultObject = false;
+		m_isSelectPowerUp = false;
 		isSelect1 = false;
-	}
-}
-
-// 特殊攻撃用
-void Player::UpdateSpecialAttack()
-{
-	m_isSpecialAttack = false;	
-	if (Pad::isPress(PAD_INPUT_UP))
-	{
-		m_specialAttackPos.z += kSpecialAttackPosMoveSpeed;
-	}
-	if (Pad::isPress(PAD_INPUT_DOWN))
-	{
-		m_specialAttackPos.z -= kSpecialAttackPosMoveSpeed;
-	}
-	if (Pad::isPress(PAD_INPUT_LEFT))
-	{
-		m_specialAttackPos.x -= kSpecialAttackPosMoveSpeed;
-	}
-	if (Pad::isPress(PAD_INPUT_RIGHT))
-	{
-		m_specialAttackPos.x += kSpecialAttackPosMoveSpeed;
-	}
-
-	if (Pad::isTrigger(PAD_INPUT_1))
-	{
-		m_isSpecialAttack = true;
-		m_targetPos = m_specialAttackPos;
 	}
 }
 
@@ -658,69 +546,10 @@ bool Player::CheckOutSide()
 	return false;
 }
 
-// ショットを生成
-void Player::UpdateShot()
-{
-	if (m_isShot)
-	{
-
-		const int handle = MV1LoadModel(kFilePathShot);
-
-		const int damage = 1000;
-
-		m_countShotNo++;
-		m_isTrackingShot = true;
-		// インスタンス生成
-		m_pShot = new NormalShot(VGet(m_pos.x, m_pos.y + 10000.0f, m_pos.z),0, m_countShotNo);
-		m_pShot->Init(handle,0,m_targetPos, VGet(10, 10, 10), VGet(0.0f, 90.0f, 0.0f), 16.0f * 7, damage, 30.0f, true);
-	}
-
-	if (m_countShotNo == 0)
-	{
-		m_pShot->Update();
-		m_collShotData = m_pShot->GetCollData();
-
-		if (false)
-		{
-			m_deleteFrameCountShot++;
-			if (m_deleteFrameCountShot > 30)
-			{
-				m_deleteFrameCountShot = 0;
-				m_isTrackingShot = false;
-				m_countShotNo--;
-				m_pShot->End();
-				delete m_pShot;
-				m_pShot = nullptr;
-			}
-		}
-
-		// トラッキングデータの保存
-		m_trackingData.pos = m_pShot->SetPos();
-		m_trackingData.isTracking = m_isTrackingShot;
-	}
-	
-}
-
 // オブジェクトのコスト関連
 void Player::ObjectCost()
 {
 	m_objectCostNum += kCostPuls;
-}
-
-void Player::ObjectUp()
-{
-	if (m_selectObstructData.no == ObstructSelectNo::POWER_UP_RESULT)
-	{
-		printfDx("強化中\n");
-		if (m_selectObstructData.no == ObstructSelectNo::SPEED_RESULT)
-		{
-			printfDx("スピード強化\n");
-		}
-		if (m_selectObstructData.no == ObstructSelectNo::DAMAGE_RESULT)
-		{
-			printfDx("攻撃力強化\n");
-		}
-	}
 }
 
 ObstructSelect Player::GetObstructData()
@@ -731,4 +560,14 @@ ObstructSelect Player::GetObstructData()
 ObjectData Player::GetCollShotDatas()
 {
 	return m_collShotData;
+}
+
+int Player::GetMapChipX()
+{
+	return m_checkMapChipNo.x;
+}
+
+int Player::GetMapChipZ()
+{
+	return m_checkMapChipNo.z;
 }

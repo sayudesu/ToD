@@ -14,9 +14,7 @@ namespace
 	// 肉画像
 	const char* const kFileNameMeat             = "Data/Image/UI_Meat.png";
 	const char* const kFileNameCatFood          = "Data/Image/CatFood.png";
-	// 特殊攻撃のボタン説明
-	const char* const kFileNameSpecialAttack    = "Data/Image/UI_SpecialAttack.png";
-	const char* const kFileNameBarSpecialAttack = "Data/Image/m_hBarTopicSpecialAttack.png";
+
 	const char* const kFileNameBgHp             = "Data/Image/UI_BgHP.png";
 	const char* const kFileNameHp               = "Data/Image/UI_HP.png";
 	// オブジェクト設置時
@@ -56,8 +54,6 @@ UIDrawer::UIDrawer() :
 	m_hBgUtil(-1),
 	m_hObjectCost(-1),
 	m_hMeat(-1),
-	m_hTopicSpecialAttack(-1),
-	m_hBarTopicSpecialAttack(-1),
 	m_hBgHp(-1),
 	m_hHp(-1),
 	m_hSelectObject(-1),
@@ -86,8 +82,6 @@ void UIDrawer::Init()
 	m_hObjectCost	            = LoadGraph(kFileNameBgCost);
 	m_hMeat                     = LoadGraph(kFileNameMeat);
 	m_hCatFood                  = LoadGraph(kFileNameCatFood);
-	m_hTopicSpecialAttack       = LoadGraph(kFileNameSpecialAttack);
-	m_hBarTopicSpecialAttack    = LoadGraph(kFileNameBarSpecialAttack);
 	m_hBgHp		                = LoadGraph(kFileNameBgHp);
 	m_hHp	                    = LoadGraph(kFileNameHp);
 	m_hSelectObjectBg           = LoadGraph(kFileNameSelectObjectBg);
@@ -350,9 +344,6 @@ void UIDrawer::Draw()
 
 	meat();
 
-	// 特殊攻撃のボタン説明
-	DrawGraph(1150, Game::kScreenHeight - 150 , m_hTopicSpecialAttack, true);
-	DrawGraph(1150, Game::kScreenHeight - 150 , m_hTopicSpecialAttack, true);
 	// 体力関係
 	DrawGraph(120, 20, m_hBgHp, true);
 

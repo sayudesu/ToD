@@ -54,7 +54,7 @@ void SceneMain::Init()
 	m_catIn    ->Init();
 	m_pUI      ->Init();
 
-	//SaveDataFunctions::Load();
+	SaveDataFunctions::Load();
 	// BGM再生
 	SoundFunctions::StartBgm(SoundFunctions::SoundIdBattle);
 	SoundFunctions::SetVolume(SoundFunctions::SoundIdBattle, SaveDataFunctions::GetSoundData().Bgm);
@@ -169,12 +169,15 @@ SceneBase* SceneMain::Update()
 	m_pEnemy->Create();
 	m_pEnemy->SetMapChip(m_pMap->GetChip());
 #endif
-	bool isOn = m_pPlayer->GetObjCreate();
+	const bool isOn = m_pPlayer->GetObjCreate();
 
 	// オブジェクトを生成
 	ObstructSelect data = m_pPlayer->GetObstructData();
 	m_pUI->SetObstructData(data);
-	m_pObstacle->Create(m_pPlayer->SetPos(), data.no, 0);
+	m_pObstacle->Create(m_pPlayer->SetPos(), data.no, 0,m_pPlayer->GetMapChipX(), m_pPlayer->GetMapChipZ());
+
+	m_pObstacle->SetPowerUpPos(data.no,m_pPlayer->GetMapChipX(), m_pPlayer->GetMapChipZ());
+
 	m_pUI->SetObstructSelect(isOn);
 
 	// 判定情報	
@@ -214,24 +217,6 @@ SceneBase* SceneMain::Update()
 	// 演出関係
 	// 演出の為にカメラのターゲット位置変更
 	m_pCamera->SeTrackingData(m_pPlayer->GetTracingData());
-	// カットインが終わっているかどうかの判定を渡す
-	m_pPlayer->IsSetShot(m_catIn->IsGetEnd());
-	// カットインを続てけしない為に
-	m_catIn->IsSetEndReset();
-	// 特殊攻撃をするかどうか
-	if (m_pPlayer->isSpecialAttack())
-	{
-		// 演出開始
-		m_catIn->Update();
-		if (m_catIn->IsGetEnd())
-		{
-			// ショットを撃てるかどうか
-			m_pPlayer->SpecialAttackReset();
-			// 演出リセット
-			m_catIn->Reset();
-		}
-	}
-
 
 	// シーンを切り替えます
 	if (Pad::isTrigger(PAD_INPUT_8))
@@ -310,7 +295,6 @@ void SceneMain::Draw()
 
 	// オブジェクトのUI
 	m_pEnemy->DrawUI();
-	m_pPlayer->DrawUI();
 	// UI
 	m_pUI->Draw();
 	// 演出UI
@@ -322,16 +306,6 @@ void SceneMain::Draw()
 		par->Draw();
 	}
 
-#if _DEBUG
-	// 枠線
-	float y = 30.0f;
-	// 横線
-	DrawLine3D(VGet(-100, y, -100),   VGet(1300.0f, y, -100),   0xff0000);
-	DrawLine3D(VGet(-100, y,  700),    VGet(1300.0f, y, 700),   0xffff00);
-	// 縦線
-	DrawLine3D(VGet(-100,    y, 0), VGet(-100,    y, 600), 0xff0000);
-	DrawLine3D(VGet(1300.0f, y, 0), VGet(1300.0f, y, 600), 0xffff00);
-#endif
 	SceneBase::DrawSliderDoor();
 }
 
@@ -367,15 +341,6 @@ void SceneMain::CheckColl()
 						m_pBlood.push_back(new BloodDrawer(m_pEnemy->GetCollData()[enemyNum].pos));
 						m_pBlood.back()->Init(i);
 					}
-				}
-
-				if (m_pColl->UpdateCheck(
-					m_pEnemy->GetCollData()[enemyNum].pos,
-					m_pPlayer->GetCollShotDatas().pos,
-					m_pEnemy->GetCollData()[enemyNum].radius,
-					m_pPlayer->GetCollShotDatas().radius))
-				{
-					printfDx("aaa");
 				}
 			}
 		}

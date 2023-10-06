@@ -9,9 +9,16 @@ namespace
 {
 	// 設置してから打ち出しまでのフレーム
 	constexpr int kShotFirstFrameMax = 60;
+
+	// ショットの打ち出し速度強化用
+	constexpr int kShotSpeedChange = 2;
+	constexpr float kShotDamageChange = 0.2f;
+
+	// オブジェクトの攻撃範囲
+	constexpr float kObjectAttackRadius = 300.0f;
 }
 
-ObstacleBase::ObstacleBase(VECTOR pos, int no)
+ObstacleBase::ObstacleBase(VECTOR pos, int no, int mapCihpX, int mapCihpY)
 {
 	m_pos  = pos;
 	m_myNo = no;
@@ -23,6 +30,9 @@ ObstacleBase::ObstacleBase(VECTOR pos, int no)
 	m_shotData.damage         = 0.0f;
 	m_shotData.speed          = 0.0f;
 	m_shotData.isTracking     = false;
+
+	m_mapCihpX = mapCihpX;
+	m_mapCihpZ = mapCihpY;
 }
 
 void ObstacleBase::End()
@@ -181,37 +191,48 @@ void ObstacleBase::UpdateShot()
 // 誰を狙うか
 void ObstacleBase::TargetPos()
 {
+	m_isShot = false;
 	// ここは後できれいにします。
 	// 敵の数分
-	m_isShot = false;
 	for (int i = 0; i < m_collEnemyData.size(); i++)
 	{
 		// 近い敵を見る
 		const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[i].pos);
 		const float length = sqrtf((toPlayer.x * toPlayer.x) + (toPlayer.y * toPlayer.y) + (toPlayer.z * toPlayer.z));
-		if (length < 300 && isDead)
-		{
+		if (length < kObjectAttackRadius && isDead)
+		{	
 			no = i;
+			isDead = false;
+			m_isShot = true;
+			printfDx("範囲中\n");
 		}
-
-		if (i == no)
+	}
+	for (int i = 0; i < m_collEnemyData.size(); i++)
+	{
+		// 近い敵を見る
+		const VECTOR toPlayer = VSub(m_pos, m_collEnemyData[i].pos);
+		const float length = sqrtf((toPlayer.x * toPlayer.x) + (toPlayer.y * toPlayer.y) + (toPlayer.z * toPlayer.z));
+		if (length < kObjectAttackRadius)
 		{
-			if (!m_collEnemyData[no].isHit)
+			// その番号が存在するなら
+			if (i == no)
 			{
-				if (length < 300)
+				printfDx("ターゲット範囲中\n");
+				// ターゲット指定
+				m_shotData.targetPos = m_collEnemyData[i].pos;
+				m_isShot = true;
+				// 狙っている敵が死んだ場合
+				if (m_collEnemyData[i].isHit)
 				{
-					// ターゲット指定
-					m_shotData.targetPos = m_collEnemyData[no].pos;
-					m_isShot = true;
-					isDead = false;
-					break;
+					isDead = true;
+				
 				}
 			}
-			no = -1;
-			isDead = true;
-
 		}
-
+		else
+		{
+			isDead = true;
+		}
 	}
 }
 
@@ -253,11 +274,30 @@ void ObstacleBase::SetShotErase(int shotNum, bool erase)
     (*it)->SetEnabled(erase);
 }
 
+void ObstacleBase::SetPowerUpPos(ObstructSelectNo objNo,int mapChipX, int mapChipZ)
+{
+	// 引数から受け取ったマップチップ座標の位置にオブジェクトが設置されていたら
+	if ((m_mapCihpX == mapChipX) && (m_mapCihpZ == mapChipZ))
+	{
+		if (objNo == ObstructSelectNo::SPEED_RESULT)
+		{
+			// ショットの再打ち出し開始速度を早くする
+			m_shotData.shotFrameCount -= (m_shotData.shotFrameCount / kShotSpeedChange);
+
+		}
+		if (objNo == ObstructSelectNo::DAMAGE_RESULT)
+		{
+			// ダメージを強化する
+			m_shotData.damage += (m_shotData.damage * kShotDamageChange);
+		}
+	}
+}
+
 void ObstacleBase::Draw()
 {
 #if _DEBUG
 	// 攻撃範囲
-//	DrawSphere3D(m_pos, 300, 4, m_objColor, m_objColor, false);
+	DrawSphere3D(m_pos, 300, 4, 0xffffff, 0xffffff, false);
 #endif
 #if true
 	for (auto& shot : m_pShot)

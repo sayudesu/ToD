@@ -73,7 +73,6 @@ bool ParticleDrawer::IsGetErase()
 
 void ParticleDrawer::First()
 {
-//	m_vec.x += (m_vec.x * 0.01f);
 	// ベクトルの加算
 	m_pos = VAdd(m_pos, m_vec);
 
@@ -81,7 +80,6 @@ void ParticleDrawer::First()
 	if (m_count >= 1)
 	{
 		m_count = 0;
-		//m_vec.x += (m_vec.x * 3.0f);
 		m_pFunc = &ParticleDrawer::Jet;
 	}
 }
@@ -90,7 +88,7 @@ void ParticleDrawer::Jet()
 {
 	// 移動
 	// 向きを算出
-	VECTOR dir = VSub(VGet(1500, Game::kScreenHeight - 110, 0),VGet(m_pos.x, m_pos.y,0));
+	VECTOR dir = VSub(VGet(1500, 110, 0),VGet(m_pos.x, m_pos.y,0));
 	// プレイヤーからエネミーまでの角度を求める
 	const float angle = atan2(dir.y, dir.x);
 	// 斜めになったとき((1, 1, 0)など)にいったん長さ１に戻す(正規化)
@@ -109,7 +107,7 @@ void ParticleDrawer::Jet()
 	m_pos = VAdd(m_pos, m_vec);
 	
 	// 判定処理
-	const VECTOR vec = VSub(VGet(m_pos.x, m_pos.y, 0), VGet(1500, Game::kScreenHeight - 110, 0));
+	const VECTOR vec = VSub(VGet(m_pos.x, m_pos.y, 0), VGet(1500, 110, 0));
 	const float  del = VSize(vec);
 
 	if (del < 20.0f + 20.0f)

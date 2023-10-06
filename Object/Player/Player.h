@@ -7,10 +7,6 @@
 #include "../../MapDatas.h"
 #include "../../Util/ObjectData.h"
 
-class ObjectMenuDrawer;
-class NormalShot;
-
-
 // プレイヤークラス
 class Player
 {
@@ -26,20 +22,10 @@ public:
 	void Update();
 	// 描画
 	void Draw();
-	// UI専用描画
-	void DrawUI();
 	// プレイヤーの位置を渡す
 	VECTOR SetPos() { return m_pos; }
 	// マウスが押されているかどうか
 	bool GetObjCreate() { return m_isResultObject; }
-	// ゲームの進行を止めるかどうか
-	bool IsGetGameStop();
-	// 特殊攻撃をおこなったかどうか
-	bool isSpecialAttack();
-	// 特殊攻撃の状態をリセットする
-	void SpecialAttackReset();
-	// ショットを撃つかどうか
-	void IsSetShot(bool isShot);
 	// カメラクラスに渡す
 	Tracking GetTracingData();
 	// 現在のオブジェクトコストを渡す
@@ -50,30 +36,23 @@ public:
 
 	ObjectData GetCollShotDatas();
 
+	// マップチップ上の座標を渡す
+	int GetMapChipX();
+	int GetMapChipZ();
+
 private:
 	// 操作を制御
 	void UpdateControl();
 	void UpdateObjSelect();
-	// 特殊攻撃用
-	void UpdateSpecialAttack();
 	// 範囲外処理
 	bool CheckOutSide();
-	// ショットを生成
-	void UpdateShot();
 	// オブジェクトのコスト関連
 	void ObjectCost();
-
-	// オブジェクト強化
-	void ObjectUp();
 private:
 	// プレイヤーの位置
 	VECTOR m_pos;
-	// 特殊攻撃指定場所
-	VECTOR m_specialAttackPos;
 	// ターゲット位置
 	VECTOR m_targetPos;
-	// 特殊攻撃をおこなったかどうか
-	bool m_isSpecialAttack;
 	// 画面から3D空間に変換用
 	VECTOR m_start3DPos;
 	VECTOR m_end3DPos;
@@ -93,10 +72,6 @@ private:
 	bool m_isShot;
 	// カメラに渡す用のデータ
 	Tracking m_trackingData;
-	// メニュー表記
-	ObjectMenuDrawer* m_pObjMenu;
-	// 必殺技(ショット)
-	NormalShot* m_pShot;
 	// 移動位置を確認
 	VECTOR m_checkMapChipNo;
 

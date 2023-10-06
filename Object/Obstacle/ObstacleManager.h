@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include <vector>
 #include "../../Util/ObjectData.h"
+#include "../../Util/ObstructSelectNo.h"
 
 class ObstacleBase;
 class ObstacleManager
@@ -18,7 +19,9 @@ public:
 	/// <param name="pos">  設置位置</param>
 	/// <param name="obsNo">設置するオブジェクトID</param>
 	/// <param name="no">   設置順番の番号</param>
-	void Create(VECTOR pos, int obsNo, int no);
+	/// <param name="mapCihpX">   マップチップ上でのX番号</param>
+	/// <param name="mapCihpY">   マップチップ上でのY番号</param>
+	void Create(VECTOR pos, int obsNo, int no, int mapCihpX, int mapCihpY);
 	void Update();
 	void Draw();
 
@@ -34,6 +37,8 @@ public:
 	void SetEraseShotData(std::vector<ObjectData> eraseShotData);
 	// 必要のないショット番号を受け取る
 	void SetShotErase(int objNum, int shotNum,bool erase);
+	// 強化するオブジェクトを探す
+	void SetPowerUpPos(ObstructSelectNo no,int mapChipX, int mapChipY);
 
 private:
 	std::vector<ObstacleBase*>m_pObstacle;

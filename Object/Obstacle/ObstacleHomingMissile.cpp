@@ -26,8 +26,8 @@ namespace
 	const VECTOR kScale = VGet(1, 1, 1);
 }
 
-ObstacleHomingMissile::ObstacleHomingMissile(VECTOR pos,int no):
-	ObstacleBase::ObstacleBase(pos,no)
+ObstacleHomingMissile::ObstacleHomingMissile(VECTOR pos,int no, int mapCihpX, int mapCihpY):
+	ObstacleBase::ObstacleBase(pos,no,mapCihpX,mapCihpY)
 {
 	m_pos = pos;
 	m_myNo = no;
