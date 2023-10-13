@@ -12,7 +12,7 @@ BloodDrawer::BloodDrawer(VECTOR pos)
 	// パーティクルの初期位置
 	m_pos = pos;
 	m_vec = VGet(0, 0, 0);
-	m_pFunc = &BloodDrawer::First;
+	m_pFunc = &BloodDrawer::FirstMove;
 
 	m_isErase = false;
 }
@@ -37,10 +37,6 @@ void BloodDrawer::Init(int no)
 	m_vec.y = static_cast<float>(GetRand(12) + 1);
 }
 
-void BloodDrawer::End()
-{
-}
-
 void BloodDrawer::Update()
 {
 	(this->*m_pFunc)();
@@ -58,7 +54,7 @@ bool BloodDrawer::IsGetErase()
 	return m_isErase;
 }
 
-void BloodDrawer::First()
+void BloodDrawer::FirstMove()
 {
 	// 重力を与える
 	m_vec.y -= kGravity;

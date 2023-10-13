@@ -5,20 +5,27 @@ namespace
 {
 	// 画像パス
 	const char* kFileNameMeat = "Data/Image/UI_Meat.png";
-	//const char* kFileNameMeat = "Data/Image/icon_jewel.png";
+	// 画像サイズ
+	constexpr float kMeatSize = 0.5f;
+	// 画像角度
+	constexpr float kMeatRota = DX_PI_F * 180.0f;
 	// 吸い込み速度
 	constexpr float kSpeed = 5.0f;
+	// 画像の半径
+	constexpr float kMeatRadius = 20.0f;
+	// コスト画像位置の半径
+	constexpr float kCostRadius = 20.0f;
+	// コスト画像位置
+	const VECTOR kCostPos = VGet(1500, 110, 0);
 }
 
 ParticleDrawer::ParticleDrawer(VECTOR pos)
 {
 	m_pos = pos;
 
-	m_pFunc = &ParticleDrawer::First;
+	m_pFunc = &ParticleDrawer::FirstMove;
 
 	m_speed = kSpeed;
-
-	m_count = 0;
 
 	m_isErase = false;
 }
@@ -63,7 +70,7 @@ void ParticleDrawer::Update()
 
 void ParticleDrawer::Draw()
 {
-	DrawRotaGraph(m_pos.x, m_pos.y, 0.5f, DX_PI_F * 180.0f, m_hGraph, true);
+	DrawRotaGraph(m_pos.x, m_pos.y, kMeatSize, kMeatRota, m_hGraph, true);
 }
 
 bool ParticleDrawer::IsGetErase()
@@ -71,24 +78,19 @@ bool ParticleDrawer::IsGetErase()
 	return m_isErase;
 }
 
-void ParticleDrawer::First()
+void ParticleDrawer::FirstMove()
 {
 	// ベクトルの加算
 	m_pos = VAdd(m_pos, m_vec);
 
-	m_count++;
-	if (m_count >= 1)
-	{
-		m_count = 0;
-		m_pFunc = &ParticleDrawer::Jet;
-	}
+	m_pFunc = &ParticleDrawer::Suction;
 }
 
-void ParticleDrawer::Jet()
+void ParticleDrawer::Suction()
 {
 	// 移動
 	// 向きを算出
-	VECTOR dir = VSub(VGet(1500, 110, 0),VGet(m_pos.x, m_pos.y,0));
+	VECTOR dir = VSub(kCostPos,VGet(m_pos.x, m_pos.y,0));
 	// プレイヤーからエネミーまでの角度を求める
 	const float angle = atan2(dir.y, dir.x);
 	// 斜めになったとき((1, 1, 0)など)にいったん長さ１に戻す(正規化)
@@ -107,10 +109,10 @@ void ParticleDrawer::Jet()
 	m_pos = VAdd(m_pos, m_vec);
 	
 	// 判定処理
-	const VECTOR vec = VSub(VGet(m_pos.x, m_pos.y, 0), VGet(1500, 110, 0));
+	const VECTOR vec = VSub(VGet(m_pos.x, m_pos.y, 0), kCostPos);
 	const float  del = VSize(vec);
 
-	if (del < 20.0f + 20.0f)
+	if (del < kMeatRadius + kCostRadius)
 	{
 		m_isErase = true;
 	}

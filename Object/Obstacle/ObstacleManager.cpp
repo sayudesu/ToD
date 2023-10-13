@@ -90,14 +90,6 @@ void ObstacleManager::SetCollEnemyDatas(std::vector<ObjectData> collEnemyData)
 	{
 		normalObstacle->SetCollEnemyDatas(collEnemyData);
 	}
-
-	//if (m_pObstacle.size() != 0)
-	//{
-	//	for (int i = 0; i < m_pObstacle.size()-1; i++)
-	//	{
-	//		m_pObstacle[i]->SetTarGetPos(collEnemyData[i].pos);
-	//	}
-	//}
 }
 // •K—v‚Ì–³‚¢shot‚Ì”Ô†‚ğó‚¯æ‚é
 void ObstacleManager::SetEraseShotData(std::vector<ObjectData> eraseShotData)

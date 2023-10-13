@@ -28,7 +28,7 @@ void EnemyBase::Init(VECTOR firstPos, int x, int z)
 	MV1SetRotationXYZ(m_hModel, VGet(0, 90.0f * DX_PI_F / 18.0f, 0));
 	// ‘å‚«‚³
 	MV1SetScale(m_hModel, VGet(m_collData.size, m_collData.size, m_collData.size));
-
+	// ‘Ì—Í
 	m_hp = m_collData.hp;
 }
 
@@ -43,12 +43,9 @@ void EnemyBase::Update()
 	Move();
 }
 
+// “G‚ð•`‰æ
 void EnemyBase::Draw()
 {
-	// “G‚ð•`‰æ
-#if _DEBUG
-	DrawSphere3D(m_pos, m_collData.radius, 6, 0xff0000, 0xff0000, false);
-#endif
 	MV1DrawModel(m_hModel);
 }
 

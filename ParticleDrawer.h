@@ -12,23 +12,25 @@ public:
 	virtual void End();
 	virtual void Update();
 	virtual void Draw();
-
+	// 画像を消すかどうか
 	virtual bool IsGetErase();
 private:
-	void First();
-	void Jet();
+	// 始めにどう動くか
+	void FirstMove();
+	// どこに移動するか
+	void Suction();
 private:
+	// 画像ハンドル
 	int m_hGraph;
+	// 位置
 	VECTOR m_pos;
+	// 移動量
 	VECTOR m_vec;
-
-	int m_count;
-
+	// 速度
 	float m_speed;
-
 	// メンバ関数ポインタ
 	void(ParticleDrawer::* m_pFunc)();
-
+	// 画像を消すかどうか
 	bool m_isErase;
 
 };

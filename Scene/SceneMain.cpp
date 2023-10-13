@@ -103,7 +103,6 @@ void SceneMain::End()
 	}
 	for (int i = 0; i < m_pBlood.size(); i++)
 	{
-		m_pBlood[i]->End();
 		delete m_pBlood[i];
 		m_pBlood[i] = nullptr;
 	}
@@ -139,8 +138,6 @@ SceneBase* SceneMain::Update()
 	{
 		if (m_pBlood[i]->IsGetErase())
 		{
-			// ƒƒ‚ƒŠ‰ğ•ú
-			m_pBlood[i]->End();
 			// ƒfƒŠ[ƒgˆ—
 			delete m_pBlood[i];
 			m_pBlood[i] = nullptr;
